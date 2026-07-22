@@ -10,13 +10,24 @@ import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
 
+import urllib.parse
+from sqlalchemy.engine import make_url
+
 DATABASE_URL = os.getenv("DATABASE_URL")
 
 if DATABASE_URL:
     # SQLAlchemy requires 'postgresql://' instead of legacy 'postgres://'
     if DATABASE_URL.startswith("postgres://"):
         DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
-    engine = create_engine(DATABASE_URL, pool_pre_ping=True)
+    
+    try:
+        url_obj = make_url(DATABASE_URL)
+        if url_obj.password and "+" in url_obj.password:
+            encoded_password = urllib.parse.quote_plus(url_obj.password)
+            url_obj = url_obj._replace(password=encoded_password)
+        engine = create_engine(url_obj, pool_pre_ping=True)
+    except Exception:
+        engine = create_engine(DATABASE_URL, pool_pre_ping=True)
 else:
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     DB_PATH = os.path.join(BASE_DIR, "..", "auto_parts.db")
