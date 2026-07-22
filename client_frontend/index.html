@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Міністерство Запчастин — Мій Гараж</title>
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="mobile-frame">
+
+        <!-- 🔒 ЕКРАН 1: АВТОРИЗАЦІЯ ТА РЕЄСТРАЦІЯ -->
+        <div id="authScreen" class="screen active">
+            <div class="auth-header">
+                <h1>Міністерство Запчастин</h1>
+                <p>Державний стандарт якості та підбору автозапчастин</p>
+            </div>
+
+            <div class="auth-card">
+                <div class="auth-tabs">
+                    <button class="tab-btn active" id="tabRegisterBtn" onclick="switchAuthTab('register')">Реєстрація</button>
+                    <button class="tab-btn" id="tabLoginBtn" onclick="switchAuthTab('login')">Увійти</button>
+                </div>
+
+                <form id="registerForm" class="auth-form active" autocomplete="off">
+                    <div class="form-group">
+                        <label for="regFirstName">Ім'я <span class="req">*</span></label>
+                        <input type="text" id="regFirstName" placeholder="Іван" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regLastName">Прізвище <span class="req">*</span></label>
+                        <input type="text" id="regLastName" placeholder="Петренко" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regPhone">Номер телефону <span class="req">*</span></label>
+                        <input type="tel" id="regPhone" placeholder="+380931234567" required>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="regHasMessenger" checked>
+                            <span>Є Viber / Telegram на цьому номері</span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="regSubmitBtn">
+                        <span>Зареєструватися та увійти</span>
+                    </button>
+                </form>
+
+                <form id="loginForm" class="auth-form" autocomplete="off">
+                    <div class="form-group">
+                        <label for="loginPhone">Ваш номер телефону <span class="req">*</span></label>
+                        <input type="tel" id="loginPhone" placeholder="+380931234567" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="loginSubmitBtn">
+                        <span>Увійти в особистий кабінет</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <!-- 🔓 ЕКРАН 2: НА ТИВНИЙ ГОЛОВНИЙ ЕКРАН З НИЖНЬОЮ НАВІГАЦІЄЮ -->
+        <div id="mainScreen" class="screen">
+            <header class="client-header">
+                <div class="user-info">
+                    <div class="user-avatar" id="userAvatar">M</div>
+                    <div>
+                        <h2 id="userNameDisplay">Клієнт</h2>
+                        <p id="userPhoneDisplay" class="user-sub">+380...</p>
+                    </div>
+                </div>
+                <button class="logout-btn" onclick="handleLogout()">Вийти</button>
+            </header>
+
+            <div class="shipping-banner">
+                <span class="banner-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                </span>
+                <div class="banner-text">
+                    <span class="banner-label">Доставка Новою Поштою:</span>
+                    <span id="userShippingDisplay" class="banner-value">Не вказано</span>
+                </div>
+            </div>
+
+            <!-- ЗМІННІ ВКЛАДКИ З НИЖНЬОЇ НАВІГАЦІЇ -->
+            <div class="content-scroll">
+                
+                <!-- ВКЛАДКА 1: МІЙ ГАРАЖ ТА СЕРВІСНА КНИЖКА -->
+                <div id="viewGarage" class="view-content active">
+                    <section class="section">
+                        <div class="section-header">
+                            <h3>Мій Гараж</h3>
+                            <span class="cars-badge" id="garageCountBadge">0 авто</span>
+                        </div>
+
+                        <div class="garage-carousel" id="garageContainer">
+                            <div class="loading-state">Завантаження гаража...</div>
+                        </div>
+                    </section>
+
+                    <!-- Хронологічна Сервісна книжка обслуговування -->
+                    <section class="section" style="margin-top: 16px;">
+                        <div class="section-header">
+                            <h3>Хронологія Сервісної Книжки</h3>
+                        </div>
+                        <div class="timeline" id="serviceTimelineContainer">
+                            <div class="timeline-item">
+                                <div class="timeline-dot"></div>
+                                <div style="font-size: 12px; color: var(--text-muted);">Історія обслуговування заповнюється після першого замовлення</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Прийняти авто за PIN-кодом -->
+                    <section class="section" style="margin-top: 16px;">
+                        <div class="card claim-card">
+                            <h4>Прийняти куплене авто за PIN-кодом</h4>
+                            <p class="card-desc">Введіть 6-значний код від продавця для переносу авто та всієї його сервісної книжки</p>
+                            
+                            <form id="claimPinForm" style="display: flex; gap: 8px; margin-top: 10px;">
+                                <input type="text" id="pinInput" placeholder="748-291" required style="font-family: monospace; text-transform: uppercase; flex: 1;">
+                                <button type="submit" class="btn btn-accent" style="width: 120px; padding: 10px;">Прийняти</button>
+                            </form>
+                        </div>
+                    </section>
+
+                    <!-- Зареєструвати нове авто -->
+                    <section class="section" style="margin-top: 16px;">
+                        <div class="card add-car-card">
+                            <h4>Додати авто в гараж</h4>
+                            <form id="addGarageCarForm" autocomplete="off" style="margin-top: 10px; display:flex; flex-direction:column; gap:10px;">
+                                <div class="form-group">
+                                    <label for="clientVinInput">VIN-код (17 символів) <span class="req">*</span></label>
+                                    <div class="vin-input-wrapper">
+                                        <input type="text" id="clientVinInput" placeholder="3G1BE6SM7JS652422" maxlength="17" required>
+                                        <span class="vin-counter" id="clientVinCounter">0/17</span>
+                                    </div>
+                                </div>
+
+                                <div class="form-row" style="display:flex; gap:8px;">
+                                    <div class="form-group" style="flex:1;">
+                                        <label for="clientBrandInput">Марка <span class="req">*</span></label>
+                                        <input type="text" id="clientBrandInput" placeholder="Audi, BMW..." required>
+                                    </div>
+                                    <div class="form-group" style="flex:1;">
+                                        <label for="clientModelInput">Модель <span class="req">*</span></label>
+                                        <input type="text" id="clientModelInput" placeholder="A6, Cruze..." required>
+                                    </div>
+                                </div>
+
+                                <div class="form-row" style="display:flex; gap:8px;">
+                                    <div class="form-group" style="flex:1;">
+                                        <label for="clientEngineInput">Двигун</label>
+                                        <input type="text" id="clientEngineInput" placeholder="2.4 tfsi...">
+                                    </div>
+                                    <div class="form-group" style="flex:1;">
+                                        <label for="clientTransInput">Тип КПП</label>
+                                        <select id="clientTransInput">
+                                            <option value="">Не обрано</option>
+                                            <option value="АКПП">АКПП (Автомат)</option>
+                                            <option value="МКПП">МКПП (Механіка)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-primary" style="margin-top:4px;">
+                                    <span>Зберегти в Мій Гараж</span>
+                                </button>
+                            </form>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- ВКЛАДКА 2: ЗАПИТИ ТА ШВИДКІ КОМПЛЕКТИ ТО -->
+                <div id="viewRequests" class="view-content" style="display: none;">
+                    <section class="section">
+                        <div class="card action-card">
+                            <h4>Замовити підбір запчастин експерту</h4>
+                            <p class="card-desc">Опишіть деталі або оберіть готовий комплект нижче</p>
+                            
+                            <form id="requestForm" autocomplete="off" style="margin-top:10px; display:flex; flex-direction:column; gap:10px;">
+                                <div class="form-group">
+                                    <label for="requestCarSelect">Оберіть авто з гаража <span class="req">*</span></label>
+                                    <select id="requestCarSelect" required>
+                                        <option value="">Спочатку додайте авто в гараж</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="requestText">Текст запиту <span class="req">*</span></label>
+                                    <textarea id="requestText" rows="3" placeholder="наприклад: передні гальмівні диски та масляний фільтр" required></textarea>
+                                </div>
+
+                                <!-- Пресети швидких комплектів ТО -->
+                                <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                                    <button type="button" class="btn btn-secondary" style="padding:6px 10px; font-size:11px; width:auto;" onclick="applyPreset('Комплект ТО: Масляний, Повітряний, Салонний фільтр та Олива 5w-40')">Комплект ТО</button>
+                                    <button type="button" class="btn btn-secondary" style="padding:6px 10px; font-size:11px; width:auto;" onclick="applyPreset('Гальмівна система: Передні диски та передні колодки')">Гальма</button>
+                                    <button type="button" class="btn btn-secondary" style="padding:6px 10px; font-size:11px; width:auto;" onclick="applyPreset('Ходова частина: Сійки стабілізатора та сайлентблоки')">Ходова</button>
+                                </div>
+
+                                <button type="submit" class="btn btn-accent" id="sendRequestBtn" style="margin-top:4px;">
+                                    <span>Надіслати запит експерту</span>
+                                </button>
+                            </form>
+                        </div>
+                    </section>
+
+                    <section class="section" style="margin-top: 16px;">
+                        <div class="section-header">
+                            <h3>Мої Запити та Коштописи</h3>
+                        </div>
+                        <div id="requestsHistoryContainer">
+                            <div class="loading-state">Завантаження...</div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- ВКЛАДКА 3: МОЇ ЗАМОВЛЕННЯ ТА ТРЕКІНГ НП -->
+                <div id="viewOrders" class="view-content" style="display: none;">
+                    <section class="section">
+                        <div class="section-header">
+                            <h3>Мої Замовлення та Трекінг НП</h3>
+                        </div>
+                        <div id="myOrdersContainer">
+                            <div class="loading-state">Завантаження замовлень...</div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- ВКЛАДКА 4: ПРОФІЛЬ ТА НАЛАШТУВАННЯ -->
+                <div id="viewProfile" class="view-content" style="display: none;">
+                    <section class="section">
+                        <div class="card">
+                            <h4>Особисті Дані Клієнта</h4>
+                            <div style="margin-top: 12px; display:flex; flex-direction:column; gap:10px; font-size:13px;">
+                                <div><span style="color:var(--text-muted);">Ім'я та Прізвище:</span> <strong id="profileFullName">Клієнт</strong></div>
+                                <div><span style="color:var(--text-muted);">Телефон:</span> <strong id="profilePhone">+380...</strong></div>
+                                <div><span style="color:var(--text-muted);">Email (сповіщення):</span> <strong id="profileEmail">Не вказано</strong></div>
+                                <div><span style="color:var(--text-muted);">Адреса Нової Пошти:</span> <strong id="profileShipping">Не вказано</strong></div>
+                            </div>
+                            <div style="display:flex; gap:8px; margin-top:16px;">
+                                <button class="btn btn-primary" style="flex:1;" onclick="openEditProfileModal()">
+                                    Редагувати профіль
+                                </button>
+                                <button class="btn btn-secondary" style="flex:1;" onclick="handleLogout()">
+                                    Вийти
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+            </div>
+
+            <!-- 📱 ПЛАВАЮЧА НИЖНЯ НАВІГАЦІЙНА ПАНЕЛЬ (BOTTOM NAV BAR) -->
+            <nav class="bottom-nav" id="bottomNav">
+                <button class="nav-item active" onclick="switchNavTab('garage')">
+                    <span class="nav-item-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.5 2.8C1.4 11.2 1 12 1 12.8V16c0 .6.4 1 1 1h2"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg>
+                    </span>
+                    <span>Гараж</span>
+                </button>
+                <button class="nav-item" onclick="switchNavTab('requests')">
+                    <span class="nav-item-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                    </span>
+                    <span>Підбір</span>
+                </button>
+                <button class="nav-item" onclick="switchNavTab('orders')">
+                    <span class="nav-item-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+                    </span>
+                    <span>Замовлення</span>
+                </button>
+                <button class="nav-item" onclick="switchNavTab('profile')">
+                    <span class="nav-item-icon">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    </span>
+                    <span>Профіль</span>
+                </button>
+            </nav>
+
+        </div>
+    </div>
+
+    <!-- Модальне вікно Повернення товару -->
+    <div id="returnModal" class="modal-backdrop" style="display: none;">
+        <div class="card modal-content" style="max-width: 450px; width: 90%;">
+            <div class="card-header" style="display: flex; justify-content: space-between;">
+                <div>
+                    <h2>Повернення Замовлення #<span id="returnOrderId">0</span></h2>
+                    <p id="returnPolicyHint">Заявка на повернення</p>
+                </div>
+                <button onclick="closeReturnModal()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
+            </div>
+
+            <form id="returnForm" style="margin-top: 10px;">
+                <div class="form-group">
+                    <label for="returnReasonText">Причина повернення <span class="req">*</span></label>
+                    <textarea id="returnReasonText" rows="3" placeholder="не знадобилось, не підійшов розмір..." required></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="margin-top: 10px;">
+                    <span>Надіслати заявку</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальне вікно Чат з Експертом -->
+    <div id="chatModal" class="modal-backdrop" style="display: none;">
+        <div class="card modal-content" style="max-width: 500px; width: 90%; height: 80vh; display:flex; flex-direction:column;">
+            <div class="card-header" style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                <div>
+                    <h2>Чат з Експертом (Запит #<span id="chatRequestId">0</span>)</h2>
+                </div>
+                <button onclick="closeChatModal()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
+            </div>
+
+            <div id="chatMessagesContainer" style="flex: 1; overflow-y: auto; padding: 12px 0; display: flex; flex-direction: column; gap: 8px;"></div>
+
+            <form id="chatSendForm" style="display: flex; gap: 8px; margin-top: 10px;">
+                <input type="text" id="chatInput" placeholder="Напишіть повідомлення..." required style="flex: 1;">
+                <button type="submit" class="btn btn-accent" style="width: 100px; padding: 10px;">Надіслати</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальне вікно Редагування Профілю -->
+    <div id="editProfileModal" class="modal-backdrop" style="display: none;">
+        <div class="card modal-content" style="max-width: 450px; width: 90%;">
+            <div class="card-header" style="display: flex; justify-content: space-between;">
+                <div>
+                    <h2>Редагувати Профіль</h2>
+                    <p>Зміна імені, Email та адреси Нової Пошти</p>
+                </div>
+                <button onclick="closeEditProfileModal()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
+            </div>
+
+            <form id="editProfileForm" style="margin-top: 10px; display:flex; flex-direction:column; gap:12px;">
+                <div class="form-group">
+                    <label for="editFirstName">Ім'я <span class="req">*</span></label>
+                    <input type="text" id="editFirstName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editLastName">Прізвище <span class="req">*</span></label>
+                    <input type="text" id="editLastName" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editEmail">Email (для сповіщень)</label>
+                    <input type="email" id="editEmail" placeholder="client@example.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="editShipping">Адреса доставки Нової Пошти</label>
+                    <input type="text" id="editShipping" placeholder="м. Дніпро, Відділення №12">
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="margin-top: 6px;">
+                    <span>Зберегти зміни</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Сповіщення Toast -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
+

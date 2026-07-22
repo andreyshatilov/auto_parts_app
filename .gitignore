@@ -1,0 +1,15 @@
+# Python & Venv
+.venv/
+venv/
+__pycache__/
+*.pyc
+
+# Local SQLite DB & Backups
+*.db
+backend/auto_parts.db
+backend/backups/
+
+# OS / IDE
+.DS_Store
+.vscode/
+.idea/

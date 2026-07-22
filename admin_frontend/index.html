@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Міністерство Запчастин — Панель Адміністратора</title>
+    <!-- Гугл шрифты Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Шапка панелі -->
+        <header class="app-header">
+            <div class="logo-area">
+                <div>
+                    <h1>Міністерство Запчастин</h1>
+                    <p class="subtitle">Панель експертів | Реєстри, Запити, Коштописи, Замовлення, Повернення та P&L Аналітика</p>
+                </div>
+            </div>
+
+            <!-- Навігаційні вкладки -->
+            <nav class="admin-nav">
+                <button class="nav-btn active" id="tabCarsBtn" onclick="switchAdminTab('cars')">База Авто</button>
+                <button class="nav-btn" id="tabClientsBtn" onclick="switchAdminTab('clients')">Клієнти</button>
+                <button class="nav-btn" id="tabRequestsBtn" onclick="switchAdminTab('requests')">Запити <span id="pendingBadge" class="badge badge-engine">0</span></button>
+                <button class="nav-btn" id="tabOrdersBtn" onclick="switchAdminTab('orders')">Замовлення <span id="ordersBadge" class="badge badge-trans">0</span></button>
+                <button class="nav-btn" id="tabReturnsBtn" onclick="switchAdminTab('returns')">Повернення <span id="returnsBadge" class="badge badge-trans">0</span></button>
+                <button class="nav-btn" id="tabAnalyticsBtn" onclick="switchAdminTab('analytics')">Прибуток P&L</button>
+            </nav>
+
+            <div class="header-status">
+                <span class="status-indicator online" id="serverStatusDot"></span>
+                <span id="serverStatusText">Підключення до API...</span>
+            </div>
+        </header>
+
+        <!-- ВКЛАДКА 1: Управління Автомобілями -->
+        <main class="main-grid admin-tab-content active" id="carsTabContent">
+            <section class="card form-section">
+                <div class="card-header">
+                    <h2>Внести автомобіль у базу</h2>
+                    <p>Заповніть картку автомобіля для точності майбутніх підборів</p>
+                </div>
+
+                <form id="addCarForm" autocomplete="off">
+                    <div class="form-group full-width">
+                        <label for="vinInput">VIN-код автомобіля <span class="req">*</span></label>
+                        <div class="vin-input-wrapper">
+                            <input type="text" id="vinInput" placeholder="3G1BE6SM7JS652422" maxlength="17" required>
+                            <span class="vin-counter" id="vinCounter">0/17</span>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="brandInput">Марка авто <span class="req">*</span></label>
+                            <input type="text" id="brandInput" placeholder="BMW, Audi..." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="modelInput">Модель <span class="req">*</span></label>
+                            <input type="text" id="modelInput" placeholder="523i, A6..." required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="modificationInput">Модифікація / Кузов</label>
+                            <input type="text" id="modificationInput" placeholder="F10, C5...">
+                        </div>
+                        <div class="form-group">
+                            <label for="releaseDateInput">Рік / Дата випуску</label>
+                            <input type="text" id="releaseDateInput" placeholder="2018 або 05.2010">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="engineCodeInput">Код двигуна</label>
+                            <input type="text" id="engineCodeInput" placeholder="LE2, N52N..." class="accent-input">
+                        </div>
+                        <div class="form-group">
+                            <label for="driveTypeSelect">Привід</label>
+                            <select id="driveTypeSelect">
+                                <option value="">Не вказано</option>
+                                <option value="FWD (Передній)">FWD (Передній)</option>
+                                <option value="RWD (Задній)">RWD (Задній)</option>
+                                <option value="AWD (Повний)">AWD (Повний)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="transmissionTypeSelect">Тип КПП</label>
+                            <select id="transmissionTypeSelect">
+                                <option value="">Не вказано</option>
+                                <option value="АКПП (Автомат)">АКПП (Автомат)</option>
+                                <option value="МКПП (Механіка)">МКПП (Механіка)</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="transmissionCodeInput">Код КПП</label>
+                            <input type="text" id="transmissionCodeInput" placeholder="6T35, S75...">
+                        </div>
+                    </div>
+
+                    <div class="form-group full-width">
+                        <label for="notesInput">Замітки експерта</label>
+                        <input type="text" id="notesInput" placeholder="наприклад: Биток зі США">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" id="submitBtn">
+                        <span>Зберегти автомобіль у базі</span>
+                    </button>
+                </form>
+            </section>
+
+            <section class="card list-section">
+                <div class="list-header">
+                    <div>
+                        <h2>Реєстр автомобілів у БД</h2>
+                        <p>Знайдено автомобілів: <strong id="carsCount">0</strong></p>
+                    </div>
+                    <div class="search-box">
+                        <input type="text" id="searchInput" placeholder="Пошук за VIN, маркою...">
+                    </div>
+                </div>
+
+                <div class="cars-grid" id="carsContainer">
+                    <div class="loading-spinner">Завантаження авто...</div>
+                </div>
+            </section>
+        </main>
+
+        <!-- ВКЛАДКА 2: Клієнти -->
+        <main class="admin-tab-content" id="clientsTabContent">
+            <section class="card list-section" style="width: 100%;">
+                <div class="list-header" style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <h2>Реєстр Зареєстрованих Клієнтів</h2>
+                        <p>Знайдено клієнтів: <strong id="clientsCount">0</strong></p>
+                    </div>
+                    <div style="display:flex; gap:12px;">
+                        <a href="http://localhost:8000/api/v1/exports/clients/csv" target="_blank" class="btn btn-secondary" style="font-size:12px; padding:8px 12px; text-decoration:none;">Експорт CSV</a>
+                        <div class="search-box">
+                            <input type="text" id="searchClientsInput" placeholder="Пошук за ім'ям, телефоном...">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cars-grid" id="clientsContainer">
+                    <div class="loading-spinner">Завантаження списку клієнтів...</div>
+                </div>
+            </section>
+        </main>
+
+        <!-- ВКЛАДКА 3: Вхідні Запити -->
+        <main class="admin-tab-content" id="requestsTabContent">
+            <section class="card list-section" style="width: 100%;">
+                <div class="list-header">
+                    <div>
+                        <h2>Черга Вхідних Запитів клієнтів</h2>
+                        <p>Натисніть "Скласти кошторис" для відповіді клієнту</p>
+                    </div>
+                </div>
+
+                <div class="cars-grid" id="requestsQueueContainer">
+                    <div class="loading-spinner">Завантаження запитів...</div>
+                </div>
+            </section>
+        </main>
+
+        <!-- ВКЛАДКА 4: Замовлення та ТТН -->
+        <main class="admin-tab-content" id="ordersTabContent">
+            <section class="card list-section" style="width: 100%;">
+                <div class="list-header" style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <h2>Управління Замовленнями та Збіркою</h2>
+                        <p>Контролюйте етапи збірки, завантажуйте фото та ТТН Нової Пошти</p>
+                    </div>
+                    <a href="http://localhost:8000/api/v1/exports/orders/csv" target="_blank" class="btn btn-secondary" style="font-size:12px; padding:8px 12px; text-decoration:none;">Експорт Замовлень CSV</a>
+                </div>
+
+                <div class="cars-grid" id="ordersContainer">
+                    <div class="loading-spinner">Завантаження замовлень...</div>
+                </div>
+            </section>
+        </main>
+
+        <!-- ВКЛАДКА 5: Повернення -->
+        <main class="admin-tab-content" id="returnsTabContent">
+            <section class="card list-section" style="width: 100%;">
+                <div class="list-header">
+                    <div>
+                        <h2>Реєстр Заявок на Повернення Товарів</h2>
+                        <p>Заявки за правилом 10-14 днів та гарантійні випадки</p>
+                    </div>
+                </div>
+
+                <div class="cars-grid" id="returnsContainer">
+                    <div class="loading-spinner">Завантаження заявок на повернення...</div>
+                </div>
+            </section>
+        </main>
+
+        <!-- ВКЛАДКА 6: Фінансова Аналітика P&L -->
+        <main class="admin-tab-content" id="analyticsTabContent">
+            <section class="card list-section" style="width: 100%;">
+                <div class="list-header">
+                    <div>
+                        <h2>Фінансовий Дашборд P&L (Виторг та Прибуток)</h2>
+                        <p>Аналітика продажів, маржинальності та закупівельних витрат</p>
+                    </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; margin: 16px 0;">
+                    <div class="card" style="background: rgba(59,130,246,0.15); border: 1px solid rgba(59,130,246,0.4);">
+                        <div style="font-size:12px; color:var(--text-muted);">ЗАГАЛЬНИЙ ВИ ТОРГ (грн)</div>
+                        <div style="font-size:24px; font-weight:700; color:#60a5fa;" id="valTotalRevenue">0.00 грн</div>
+                    </div>
+                    <div class="card" style="background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4);">
+                        <div style="font-size:12px; color:var(--text-muted);">ЗАКУПІВЕЛЬНА ВАРТІСТЬ</div>
+                        <div style="font-size:24px; font-weight:700; color:#f87171;" id="valTotalCost">0.00 грн</div>
+                    </div>
+                    <div class="card" style="background: rgba(16,185,129,0.15); border: 1px solid rgba(16,185,129,0.4);">
+                        <div style="font-size:12px; color:var(--text-muted);">ЧИСТИЙ ПРИБУТОК (МАРЖА)</div>
+                        <div style="font-size:24px; font-weight:700; color:#34d399;" id="valNetProfit">0.00 грн</div>
+                    </div>
+                    <div class="card" style="background: rgba(245,158,11,0.15); border: 1px solid rgba(245,158,11,0.4);">
+                        <div style="font-size:12px; color:var(--text-muted);">СЕРЕДНІЙ ЧЕК</div>
+                        <div style="font-size:24px; font-weight:700; color:#fbbf24;" id="valAvgOrder">0.00 грн</div>
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 16px;">
+                    <h3>Топ-Клієнти за сумою покупок</h3>
+                    <div id="topClientsContainer" style="margin-top: 12px;"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Модальне вікно Конструктора Кошторису -->
+    <div id="proposalModal" class="modal-backdrop" style="display: none;">
+        <div class="card modal-content" style="max-width: 700px; width: 90%;">
+            <div class="card-header" style="display: flex; justify-content: space-between;">
+                <div>
+                    <h2>Конструктор Кошторису з Авто-кросами #<span id="modalRequestId">0</span></h2>
+                    <p id="modalCarTitle">Автомобіль</p>
+                </div>
+                <button onclick="closeProposalModal()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
+            </div>
+
+            <form id="proposalForm">
+                <div class="form-group">
+                    <label for="managerCommentInput">Коментар експерта</label>
+                    <input type="text" id="managerCommentInput" placeholder="Всі запчастини в наявності, термін 1-2 дні">
+                </div>
+
+                <div id="proposalItemsContainer" style="display: flex; flex-direction: column; gap: 16px; margin: 16px 0;"></div>
+
+                <button type="button" class="btn btn-secondary" onclick="addProposalItemBlock()" style="margin-bottom: 16px;">
+                    Додати ще деталь у кошторис
+                </button>
+
+                <button type="submit" class="btn btn-primary">
+                    <span>Надіслати кошторис клієнту</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальне вікно управління Статусом та ТТН -->
+    <div id="orderStatusModal" class="modal-backdrop" style="display: none;">
+        <div class="card modal-content" style="max-width: 500px; width: 90%;">
+            <div class="card-header" style="display: flex; justify-content: space-between;">
+                <div>
+                    <h2>Обробка Замовлення #<span id="modalOrderId">0</span></h2>
+                    <p>Зміна статусу, фотофіксація та Нова Пошта</p>
+                </div>
+                <button onclick="closeOrderStatusModal()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
+            </div>
+
+            <form id="orderStatusForm">
+                <div class="form-group">
+                    <label for="orderStatusSelect">Етап виконання замовлення</label>
+                    <select id="orderStatusSelect">
+                        <option value="sent_to_preparation">В підготовці</option>
+                        <option value="assembling">Збирається у постачальників</option>
+                        <option value="ready_for_shipping">Зібрано, готується до відправки</option>
+                        <option value="shipped">Відправлено Новою Поштою</option>
+                        <option value="delivered">Отримано клієнтом</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="orderPhotoInput">Посилання на фотофіксацію зібраних деталей</label>
+                    <input type="text" id="orderPhotoInput" placeholder="наприклад: https://imgur.com/photo_123.jpg">
+                </div>
+
+                <div class="form-group">
+                    <label for="orderTtnInput">Номер Експрес-Накладної Нової Пошти (ТТН)</label>
+                    <input type="text" id="orderTtnInput" placeholder="наприклад: 20450897123456" style="font-family: monospace;">
+                </div>
+
+                <div class="form-group">
+                    <label for="orderPurchaseCostInput">Закупівельна вартість (грн) — для розрахунку прибутку</label>
+                    <input type="number" step="0.01" id="orderPurchaseCostInput" placeholder="наприклад: 1200.00">
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="margin-top: 12px;">
+                    <span>Оновити статус та ТТН Нової Пошти</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальне вікно Чат Адміністратора -->
+    <div id="adminChatModal" class="modal-backdrop" style="display: none;">
+        <div class="card modal-content" style="max-width: 500px; width: 90%; height: 80vh; display:flex; flex-direction:column;">
+            <div class="card-header" style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                <div>
+                    <h2>Чат з Клієнтом (Запит #<span id="adminChatRequestId">0</span>)</h2>
+                </div>
+                <button onclick="closeAdminChatModal()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
+            </div>
+
+            <div id="adminChatMessagesContainer" style="flex: 1; overflow-y: auto; padding: 12px 0; display: flex; flex-direction: column; gap: 8px;"></div>
+
+            <form id="adminChatSendForm" style="display: flex; gap: 8px; margin-top: 10px;">
+                <input type="text" id="adminChatInput" placeholder="Відповідь клієнту..." required style="flex: 1;">
+                <button type="submit" class="btn btn-accent" style="width: 100px; padding: 10px;">Надіслати</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Контейнер Toast -->
+    <div id="toastContainer" class="toast-container"></div>
+
+</body>
+</html>
+
