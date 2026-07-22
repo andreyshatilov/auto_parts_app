@@ -4,10 +4,17 @@
 Підключає всі 14 роутерів системи.
 """
 
+import os
+import sys
+
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+BACKEND_DIR = os.path.dirname(BASE_DIR)
+if BACKEND_DIR not in sys.path:
+    sys.path.insert(0, BACKEND_DIR)
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-import os
 
 from app.database import engine, Base
 from app.routers import cars, auth, clients, requests, proposals, transfers, orders, returns, chat, payments, crosses, analytics, novaposhta, exports, vin_decoder, invoices
