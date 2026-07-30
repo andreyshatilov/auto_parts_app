@@ -147,12 +147,27 @@
 
                                 <div class="form-row" style="display:flex; gap:8px;">
                                     <div class="form-group" style="flex:1;">
-                                        <label for="clientBrandInput">Марка <span class="req">*</span></label>
-                                        <input type="text" id="clientBrandInput" placeholder="Audi, BMW..." required>
+                                        <label for="clientBrandSelect">Марка авто <span class="req">*</span></label>
+                                        <select id="clientBrandSelect" required>
+                                            <option value="">Завантаження марок...</option>
+                                        </select>
                                     </div>
                                     <div class="form-group" style="flex:1;">
-                                        <label for="clientModelInput">Модель <span class="req">*</span></label>
-                                        <input type="text" id="clientModelInput" placeholder="A6, Cruze..." required>
+                                        <label for="clientModelSelect">Модель авто <span class="req">*</span></label>
+                                        <select id="clientModelSelect" required disabled>
+                                            <option value="">Спочатку оберіть марку</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-row" id="customBrandModelRow" style="display:none; gap:8px; margin-top:8px;">
+                                    <div class="form-group" id="customBrandGroup" style="flex:1; display:none;">
+                                        <label for="clientCustomBrandInput">Власний бренд / Марка <span class="req">*</span></label>
+                                        <input type="text" id="clientCustomBrandInput" placeholder="наприклад: Lada, Bugatti">
+                                    </div>
+                                    <div class="form-group" id="customModelGroup" style="flex:1; display:none;">
+                                        <label for="clientCustomModelInput">Власна модель <span class="req">*</span></label>
+                                        <input type="text" id="clientCustomModelInput" placeholder="наприклад: 2107, Chiron">
                                     </div>
                                 </div>
 

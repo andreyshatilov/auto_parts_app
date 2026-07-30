@@ -44,7 +44,43 @@ let currentClient = null;
 let activeReturnOrderId = null;
 let activeChatRequestId = null;
 
+const CAR_DATABASE = {
+    "Alfa Romeo": ["Giulia", "Stelvio", "159", "Giulietta", "Tonale", "Mito", "Brera"],
+    "Audi": ["A3", "A4", "A5", "A6", "A7", "A8", "Q3", "Q5", "Q7", "Q8", "E-Tron", "TT", "R8", "RS6", "RS7", "80 / 100"],
+    "BMW": ["1 Series", "2 Series", "3 Series", "4 Series", "5 Series", "6 Series", "7 Series", "8 Series", "X1", "X2", "X3", "X4", "X5", "X6", "X7", "Z4", "i3", "i4", "iX", "M3", "M5"],
+    "Chevrolet": ["Cruze", "Aveo", "Captiva", "Lacetti", "Camaro", "Tahoe", "Bolt", "Equinox", "Trax", "Epica", "Orlando"],
+    "Citroen": ["C4", "C5", "C3", "Berlingo", "Jumper", "SpaceTourer", "C-Elysee", "C4 Picasso"],
+    "Dodge": ["Challenger", "Charger", "Durango", "Journey", "Ram 1500", "Caliber", "Dart"],
+    "Fiat": ["500", "Doblo", "Ducato", "Punto", "Tipo", "Panda", "Fiorino"],
+    "Ford": ["Focus", "Fusion (US)", "Mondeo", "Fiesta", "Kuga", "Escape", "Explorer", "Edge", "Mustang", "Transit", "Custom", "C-Max", "S-Max"],
+    "Genesis": ["G70", "G80", "GV70", "GV80"],
+    "Honda": ["Civic", "CR-V", "Accord", "HR-V", "Pilot", "Fit", "Insight", "Odyssey"],
+    "Hyundai": ["Tucson", "Santa Fe", "Elantra", "Sonata", "Accent", "i30", "Kona", "Palisade", "Getz", "IX35", "Ioniq"],
+    "Infiniti": ["FX35 / QX70", "Q50", "Q60", "QX60", "QX80", "EX35 / QX50", "G35 / G37"],
+    "Jeep": ["Grand Cherokee", "Cherokee", "Compass", "Renegade", "Wrangler", "Patriot"],
+    "Kia": ["Sportage", "Ceed", "Optima", "Sorento", "Rio", "K5", "Stinger", "Telluride", "Soul", "Cerato", "Niro"],
+    "Land Rover": ["Range Rover", "Range Rover Sport", "Range Rover Evoque", "Discovery", "Discovery Sport", "Defender", "Velar"],
+    "Lexus": ["RX", "NX", "GX", "LX", "ES", "IS", "GS", "UX", "LS", "CT"],
+    "Mazda": ["3", "6", "CX-3", "CX-5", "CX-7", "CX-9", "CX-30", "CX-60", "MX-5"],
+    "Mercedes-Benz": ["A-Class", "B-Class", "C-Class", "E-Class", "S-Class", "CLA", "CLS", "GLA", "GLB", "GLC", "GLE", "GLS", "G-Class", "Vito", "Sprinter", "W124 / W210"],
+    "Mitsubishi": ["Outlander", "Lancer", "Pajero", "Pajero Sport", "ASX", "L200", "Eclipse Cross", "Galant"],
+    "Nissan": ["Qashqai", "X-Trail", "Rogue", "Juke", "Leaf", "Almera", "Teana", "Patrol", "Navara", "Murano", "Micra", "Note"],
+    "Opel": ["Astra", "Insignia", "Vectra", "Zafira", "Mokka", "Vivaro", "Corsa", "Omega", "Meriva"],
+    "Peugeot": ["308", "508", "2008", "3008", "5008", "Partner", "Boxer", "Expert", "206 / 207"],
+    "Porsche": ["Cayenne", "Macan", "Panamera", "911", "Taycan", "Boxster", "Cayman"],
+    "Renault": ["Megane", "Duster", "Logan", "Sandero", "Kadjar", "Koleos", "Scenic", "Fluence", "Trafic", "Master", "Clio", "Kangoo"],
+    "SEAT": ["Leon", "Ibiza", "Ateca", "Tarraco", "Alhambra", "Altea"],
+    "Skoda": ["Octavia", "Superb", "Kodiaq", "Karoq", "Fabia", "Rapid", "Scala", "Kamiq", "Yeti"],
+    "Subaru": ["Forester", "Outback", "Legacy", "Impreza", "XV / Crosstrek", "Tribeca", "BRZ"],
+    "Suzuki": ["Grand Vitara", "Vitara", "SX4", "Jimny", "Swift"],
+    "Tesla": ["Model 3", "Model Y", "Model S", "Model X", "Cybertruck"],
+    "Toyota": ["Camry", "Corolla", "RAV4", "Land Cruiser 200/300", "Land Cruiser Prado", "Highlander", "C-HR", "Yaris", "Avensis", "Hilux", "Prius", "Venza", "Sequoia", "Tundra"],
+    "Volkswagen": ["Golf", "Passat", "Tiguan", "Touareg", "Jetta", "Polo", "Arteon", "Transporter", "Multivan", "Caddy", "ID.4", "CC", "Amarok", "Bora"],
+    "Volvo": ["XC60", "XC90", "XC40", "S60", "S90", "V60", "V90", "V40", "S80", "V50"]
+};
+
 document.addEventListener('DOMContentLoaded', () => {
+    initBrandAndModelSelects();
     initApp();
     setupEventListeners();
 });
@@ -181,10 +217,27 @@ function setupEventListeners() {
     addGarageCarForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const token = localStorage.getItem(TOKEN_STORAGE_KEY);
+
+        const selectedBrand = document.getElementById('clientBrandSelect').value;
+        const selectedModel = document.getElementById('clientModelSelect').value;
+
+        const finalBrand = (selectedBrand === '__custom__') 
+            ? document.getElementById('clientCustomBrandInput').value.trim() 
+            : selectedBrand;
+            
+        const finalModel = (selectedModel === '__custom__') 
+            ? document.getElementById('clientCustomModelInput').value.trim() 
+            : selectedModel;
+
+        if (!finalBrand || !finalModel) {
+            showToast('⚠️ Будь ласка, оберіть або вкажіть марку та модель авто!', 'error');
+            return;
+        }
+
         const carData = {
             vin: clientVinInput.value.trim(),
-            brand: document.getElementById('clientBrandInput').value.trim(),
-            model: document.getElementById('clientModelInput').value.trim(),
+            brand: finalBrand,
+            model: finalModel,
             engine_code: document.getElementById('clientEngineInput').value.trim() || null,
             transmission_type: document.getElementById('clientTransInput').value || null
         };
@@ -199,6 +252,7 @@ function setupEventListeners() {
 
             showToast(`🚘 ${data.brand} ${data.model} додано у ваш Гараж!`);
             addGarageCarForm.reset();
+            initBrandAndModelSelects();
             clientVinCounter.textContent = '0/17';
             await refreshGarage(token);
         } catch (err) {
@@ -351,8 +405,106 @@ function openEditProfileModal() {
     document.getElementById('editProfileModal').style.display = 'flex';
 }
 
-function closeEditProfileModal() {
-    document.getElementById('editProfileModal').style.display = 'none';
+function initBrandAndModelSelects() {
+    const brandSelect = document.getElementById('clientBrandSelect');
+    const modelSelect = document.getElementById('clientModelSelect');
+    const customRow = document.getElementById('customBrandModelRow');
+    const customBrandGroup = document.getElementById('customBrandGroup');
+    const customModelGroup = document.getElementById('customModelGroup');
+    const customBrandInput = document.getElementById('clientCustomBrandInput');
+    const customModelInput = document.getElementById('clientCustomModelInput');
+
+    if (!brandSelect || !modelSelect) return;
+
+    brandSelect.innerHTML = '<option value="">Оберіть марку...</option>';
+    const sortedBrands = Object.keys(CAR_DATABASE).sort((a, b) => a.localeCompare(b, 'uk'));
+
+    sortedBrands.forEach(brand => {
+        const opt = document.createElement('option');
+        opt.value = brand;
+        opt.textContent = brand;
+        brandSelect.appendChild(opt);
+    });
+
+    const otherBrandOpt = document.createElement('option');
+    otherBrandOpt.value = '__custom__';
+    otherBrandOpt.textContent = '➕ Інша марка (вказати вручну)';
+    brandSelect.appendChild(otherBrandOpt);
+
+    function updateCustomFieldsVisibility() {
+        const isCustomBrand = brandSelect.value === '__custom__';
+        const isCustomModel = modelSelect.value === '__custom__';
+
+        if (isCustomBrand) {
+            customRow.style.display = 'flex';
+            customBrandGroup.style.display = 'block';
+            customBrandInput.required = true;
+        } else {
+            customBrandGroup.style.display = 'none';
+            customBrandInput.required = false;
+            customBrandInput.value = '';
+        }
+
+        if (isCustomModel || isCustomBrand) {
+            customRow.style.display = 'flex';
+            customModelGroup.style.display = 'block';
+            customModelInput.required = true;
+        } else {
+            customModelGroup.style.display = 'none';
+            customModelInput.required = false;
+            customModelInput.value = '';
+        }
+
+        if (!isCustomBrand && !isCustomModel) {
+            customRow.style.display = 'none';
+        }
+    }
+
+    brandSelect.onchange = () => {
+        const selectedBrand = brandSelect.value;
+        modelSelect.innerHTML = '';
+
+        if (!selectedBrand) {
+            modelSelect.disabled = true;
+            modelSelect.innerHTML = '<option value="">Спочатку оберіть марку</option>';
+            updateCustomFieldsVisibility();
+            return;
+        }
+
+        modelSelect.disabled = false;
+
+        if (selectedBrand === '__custom__') {
+            const optCustom = document.createElement('option');
+            optCustom.value = '__custom__';
+            optCustom.textContent = '➕ Інша модель (вказати вручну)';
+            modelSelect.appendChild(optCustom);
+            modelSelect.value = '__custom__';
+        } else {
+            const defaultOpt = document.createElement('option');
+            defaultOpt.value = '';
+            defaultOpt.textContent = 'Оберіть модель...';
+            modelSelect.appendChild(defaultOpt);
+
+            const models = CAR_DATABASE[selectedBrand] || [];
+            models.forEach(m => {
+                const opt = document.createElement('option');
+                opt.value = m;
+                opt.textContent = m;
+                modelSelect.appendChild(opt);
+            });
+
+            const optCustom = document.createElement('option');
+            optCustom.value = '__custom__';
+            optCustom.textContent = '➕ Інша модель (вказати вручну)';
+            modelSelect.appendChild(optCustom);
+        }
+
+        updateCustomFieldsVisibility();
+    };
+
+    modelSelect.onchange = () => {
+        updateCustomFieldsVisibility();
+    };
 }
 
 function getBrandEmblem(brandName) {
