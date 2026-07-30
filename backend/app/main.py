@@ -17,6 +17,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
 from app.database import engine, Base
+from app.routers import cars, auth, clients, requests, proposals, transfers, orders, returns, chat, payments, crosses, analytics, novaposhta, exports, vin_decoder, invoices
+
 try:
     Base.metadata.create_all(bind=engine)
 except Exception as err:
