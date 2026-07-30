@@ -226,6 +226,71 @@ function setupEventListeners() {
         }
     });
 
+    const addVinInputEl = document.getElementById('addVinInput');
+    if (addVinInputEl) {
+        let modalDecodedVin = '';
+        addVinInputEl.addEventListener('input', async (e) => {
+            let val = e.target.value.replace(/\s+/g, '').toUpperCase();
+            e.target.value = val;
+            document.getElementById('addVinCounter').textContent = `${val.length}/17`;
+
+            if (val.length === 17 && val !== modalDecodedVin) {
+                modalDecodedVin = val;
+                try {
+                    const res = await fetch(`${API_BASE_URL}/vin/decode?vin=${val}`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.is_decoded && data.brand) {
+                            showToast(`⚡ ${data.brand} ${data.model || ''} (${data.release_year || ''}) розпізнано за VIN!`);
+                        }
+                    }
+                } catch (err) {}
+            }
+        });
+    }
+
+    const addVinFormEl = document.getElementById('addVinForm');
+    if (addVinFormEl) {
+        addVinFormEl.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const carId = document.getElementById('addVinCarId').value;
+            const newVin = document.getElementById('addVinInput').value.trim();
+            const token = localStorage.getItem(TOKEN_STORAGE_KEY);
+
+            if (newVin.length !== 17) {
+                showToast('⚠️ VIN-код повинен містити ровно 17 символів!', 'error');
+                return;
+            }
+
+            try {
+                const decodeRes = await fetch(`${API_BASE_URL}/vin/decode?vin=${newVin}`);
+                let updatePayload = { vin: newVin };
+                if (decodeRes.ok) {
+                    const decoded = await decodeRes.json();
+                    if (decoded.brand) updatePayload.brand = decoded.brand;
+                    if (decoded.model) updatePayload.model = decoded.model;
+                    if (decoded.release_year) updatePayload.release_date = decoded.release_year;
+                    if (decoded.engine) updatePayload.engine_code = decoded.engine;
+                    if (decoded.transmission) updatePayload.transmission_type = decoded.transmission;
+                }
+
+                const res = await fetch(`${API_BASE_URL}/cars/${carId}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json', 'X-Auth-Token': token },
+                    body: JSON.stringify(updatePayload)
+                });
+                const car = await res.json();
+                if (!res.ok) throw new Error(car.detail || 'Помилка оновлення VIN');
+
+                showToast(`🎉 VIN-код збережено! Відкрито доступ до Сервісного Бортжурналу та ТО для ${car.brand} ${car.model}!`);
+                closeVinRecommendationModal();
+                await refreshGarage(token);
+            } catch (err) {
+                showToast(`❌ ${err.message}`, 'error');
+            }
+        });
+    }
+
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const payload = {
@@ -350,6 +415,10 @@ function setupEventListeners() {
             initBrandAndModelSelects();
             clientVinCounter.textContent = '0/17';
             await refreshGarage(token);
+
+            if (vinValue.startsWith('NOVIN-')) {
+                openVinRecommendationModal(data.id, `${data.brand} ${data.model}`);
+            }
         } catch (err) {
             showToast(`❌ ${err.message}`, 'error');
         }
@@ -637,6 +706,18 @@ function getBrandEmblem(brandName) {
     return brandName.substring(0, 4).toUpperCase();
 }
 
+function openVinRecommendationModal(carId, carName) {
+    document.getElementById('addVinCarId').value = carId;
+    document.getElementById('vinModalCarName').textContent = `Для автомобіля: ${carName}`;
+    document.getElementById('addVinInput').value = '';
+    document.getElementById('addVinCounter').textContent = '0/17';
+    document.getElementById('vinRecommendationModal').style.display = 'flex';
+}
+
+function closeVinRecommendationModal() {
+    document.getElementById('vinRecommendationModal').style.display = 'none';
+}
+
 function renderGarage(cars) {
     garageCountBadge.textContent = `${cars.length}/10 авто`;
     if (cars.length > 0) {
@@ -650,12 +731,16 @@ function renderGarage(cars) {
         return;
     }
 
-    garageContainer.innerHTML = cars.map(car => `
+    garageContainer.innerHTML = cars.map(car => {
+        const isNoVin = !car.vin || car.vin.startsWith('NOVIN-');
+        const vinDisplay = isNoVin ? '<span style="color:#d97706; font-weight:600;">Не вказано (Рекомендовано додати)</span>' : escapeHtml(car.vin);
+
+        return `
         <div class="garage-card">
             <div class="garage-header-flex">
                 <div>
                     <div class="garage-card-title">${escapeHtml(car.brand)} ${escapeHtml(car.model)} ${car.release_date ? `<span style="font-size:13px; color:var(--primary); font-weight:600;">(${escapeHtml(car.release_date)} р.в.)</span>` : ''}</div>
-                    <div class="garage-card-vin">VIN: ${escapeHtml(car.vin)}</div>
+                    <div class="garage-card-vin">VIN: ${vinDisplay}</div>
                 </div>
                 <div class="brand-emblem-badge">
                     ${getBrandEmblem(car.brand)}
@@ -668,6 +753,13 @@ function renderGarage(cars) {
                 <div><span class="g-label">ТРАНСМІСІЯ</span><div class="g-value">${escapeHtml(car.transmission_type || '—')} ${escapeHtml(car.transmission_code || '')}</div></div>
             </div>
 
+            ${isNoVin ? `
+                <div style="margin-top:10px; background:#fffbe6; border:1px solid #ffe58f; padding:8px 12px; border-radius:10px; font-size:12px; display:flex; justify-content:space-between; align-items:center; gap:6px;">
+                    <span style="color:#d48806; font-weight:600;">💡 Вкажіть VIN для Бортжурналу та ТО</span>
+                    <button class="btn btn-primary" style="width:auto; padding:4px 10px; font-size:11px; white-space:nowrap;" onclick="openVinRecommendationModal(${car.id}, '${escapeHtml(car.brand)} ${escapeHtml(car.model)}')">✏️ Вказати VIN</button>
+                </div>
+            ` : ''}
+
             <div style="display:flex; gap:6px; margin-top:8px;">
                 <button class="btn btn-secondary" style="font-size:11px; padding:8px; flex:1;" onclick="window.open('${API_BASE_URL}/invoices/car/${car.id}/passport', '_blank')">
                     Сервісний Паспорт
@@ -677,7 +769,7 @@ function renderGarage(cars) {
                 </button>
             </div>
         </div>
-    `).join('');
+    `}).join('');
 }
 
 

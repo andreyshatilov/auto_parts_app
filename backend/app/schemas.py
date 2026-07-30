@@ -39,6 +39,7 @@ class CarCreate(CarBase):
 
 
 class CarUpdate(BaseModel):
+    vin: Optional[str] = None
     brand: Optional[str] = None
     model: Optional[str] = None
     modification: Optional[str] = None
@@ -49,6 +50,16 @@ class CarUpdate(BaseModel):
     transmission_code: Optional[str] = None
     notes: Optional[str] = None
     status: Optional[str] = None
+
+    @field_validator("vin")
+    @classmethod
+    def validate_and_clean_vin(cls, v: Optional[str]) -> Optional[str]:
+        if not v:
+            return None
+        clean_vin = v.strip().upper()
+        if len(clean_vin) != 17:
+            raise ValueError(f"VIN-код повинен містити ровно 17 символів (передано {len(clean_vin)})")
+        return clean_vin
 
 
 

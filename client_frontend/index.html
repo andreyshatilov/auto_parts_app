@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=3.5">
+    <link rel="stylesheet" href="styles.css?v=4.0">
 </head>
 <body>
     <div class="mobile-frame">
@@ -410,10 +410,54 @@
         </div>
     </div>
 
+    <!-- Модальне вікно Рекомендації додати VIN-код -->
+    <div id="vinRecommendationModal" class="modal-backdrop" style="display: none;">
+        <div class="card modal-content" style="max-width: 480px; width: 92%;">
+            <div class="card-header" style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
+                <div>
+                    <h2 style="font-size:17px; color:var(--text-main);">💡 Рекомендація: Вкажіть VIN-код</h2>
+                    <p id="vinModalCarName" style="font-size:12px; color:var(--text-muted);">Для вашого автомобіля</p>
+                </div>
+                <button onclick="closeVinRecommendationModal()" style="background:none; border:none; color:var(--text-muted); font-size:22px; cursor:pointer; font-weight:bold;">✕</button>
+            </div>
+
+            <div style="margin: 14px 0; font-size: 13px; color: var(--text-muted); line-height: 1.5;">
+                <p style="margin-bottom: 10px; color: var(--text-main); font-weight: 600;">
+                    Вказівка 17-значного VIN-коду відкриє доступ до цифрового автосервісу:
+                </p>
+                <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 12px; border-radius: 12px; display: flex; flex-direction: column; gap: 8px;">
+                    <div>📜 <strong>Сервісний бортжурнал:</strong> збереження повної історії замін та ремонту.</div>
+                    <div>🔧 <strong>Графік Планового ТО:</strong> автоматичний контроль інтервалів мастил, фільтрів та ГРМ.</div>
+                    <div>⚡ <strong>100% точний підбір:</strong> автоматичний вибір запчастин без ризику помилки.</div>
+                </div>
+            </div>
+
+            <form id="addVinForm" style="display:flex; flex-direction:column; gap:12px;">
+                <input type="hidden" id="addVinCarId">
+                <div class="form-group">
+                    <label for="addVinInput">Введіть 17 символів VIN-коду</label>
+                    <div class="vin-input-wrapper">
+                        <input type="text" id="addVinInput" placeholder="3G1BE6SM7JS652422" maxlength="17" required>
+                        <span class="vin-counter" id="addVinCounter">0/17</span>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:8px;">
+                    <button type="submit" class="btn btn-primary" style="flex:1;">
+                        <span>Зберегти VIN-код</span>
+                    </button>
+                    <button type="button" onclick="closeVinRecommendationModal()" class="btn btn-secondary" style="width: auto; padding: 10px 14px;">
+                        <span>Закрити</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
     <!-- Сповіщення Toast -->
     <div id="toastContainer" class="toast-container"></div>
 
-    <script src="app.js?v=3.5"></script>
+    <script src="app.js?v=4.0"></script>
 </body>
 </html>
 
