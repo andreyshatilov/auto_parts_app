@@ -809,7 +809,10 @@ async function generateTransferCode(carId, carName) {
 
 function applyPreset(text) {
     document.getElementById('requestText').value = text;
-    showToast('Комплект додано в форму запиту!');
+    switchNavTab('requests');
+    showToast('✨ Категорію/компонент додано в форму запиту!');
+    const reqForm = document.getElementById('requestForm');
+    if (reqForm) reqForm.scrollIntoView({ behavior: 'smooth' });
 }
 
 async function loadMyRequests(token) {
