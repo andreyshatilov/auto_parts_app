@@ -370,10 +370,10 @@ function showMainScreen(client) {
     authScreen.classList.remove('active');
     mainScreen.classList.add('active');
 
-    userNameDisplay.textContent = `${client.first_name} ${client.last_name}`;
-    userPhoneDisplay.textContent = client.phone;
-    userShippingDisplay.textContent = client.shipping_address || 'Не вказано';
-    userAvatar.textContent = client.first_name ? client.first_name[0].toUpperCase() : 'M';
+    if (userNameDisplay) userNameDisplay.textContent = `${client.first_name} ${client.last_name}`;
+    if (userPhoneDisplay) userPhoneDisplay.textContent = client.phone;
+    if (userAvatar) userAvatar.textContent = client.first_name ? client.first_name[0].toUpperCase() : 'M';
+    if (userShippingDisplay) userShippingDisplay.textContent = client.shipping_address || 'Не вказано';
 
     document.getElementById('profileFullName').textContent = `${client.first_name} ${client.last_name}`;
     document.getElementById('profilePhone').textContent = client.phone;
