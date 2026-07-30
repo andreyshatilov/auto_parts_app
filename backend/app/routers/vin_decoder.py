@@ -54,6 +54,7 @@ def decode_vin(vin: str = Query(..., min_length=3, max_length=17, description="V
         "brand": None,
         "model": None,
         "release_year": None,
+        "body_type": None,
         "engine": None,
         "fuel": None,
         "transmission": None,
@@ -77,6 +78,7 @@ def decode_vin(vin: str = Query(..., min_length=3, max_length=17, description="V
                     disp = results.get('DisplacementL')
                     fuel_raw = results.get('FuelTypePrimary', '')
                     trans_raw = results.get('TransmissionStyle', '')
+                    body_raw = results.get('BodyClass', '')
 
                     if make and make.strip():
                         decoded_result['brand'] = make.strip().title()
@@ -94,6 +96,25 @@ def decode_vin(vin: str = Query(..., min_length=3, max_length=17, description="V
                             decoded_result['engine'] = f"{l_val}L"
                         except:
                             decoded_result['engine'] = f"{disp}L"
+
+                    if body_raw:
+                        b_lower = body_raw.lower()
+                        if 'sedan' in b_lower:
+                            decoded_result['body_type'] = 'Седан'
+                        elif 'suv' in b_lower or 'utility' in b_lower:
+                            decoded_result['body_type'] = 'Кросовер / Позашляховик'
+                        elif 'hatchback' in b_lower:
+                            decoded_result['body_type'] = 'Хетчбек'
+                        elif 'wagon' in b_lower or 'estate' in b_lower:
+                            decoded_result['body_type'] = 'Універсал'
+                        elif 'coupe' in b_lower:
+                            decoded_result['body_type'] = 'Купе'
+                        elif 'convertible' in b_lower or 'cabrio' in b_lower:
+                            decoded_result['body_type'] = 'Кабріолет'
+                        elif 'van' in b_lower or 'minivan' in b_lower:
+                            decoded_result['body_type'] = 'Мінівен'
+                        elif 'pickup' in b_lower or 'truck' in b_lower:
+                            decoded_result['body_type'] = 'Пікап'
 
                     if fuel_raw:
                         f_lower = fuel_raw.lower()

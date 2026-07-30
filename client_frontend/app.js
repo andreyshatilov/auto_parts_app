@@ -203,6 +203,11 @@ function setupEventListeners() {
                             if (yearSelect) yearSelect.value = data.release_year;
                         }
 
+                        if (data.body_type) {
+                            const bodySelect = document.getElementById('clientBodySelect');
+                            if (bodySelect) bodySelect.value = data.body_type;
+                        }
+
                         if (data.engine) {
                             document.getElementById('clientEngineInput').value = data.engine;
                         }
@@ -393,10 +398,21 @@ function setupEventListeners() {
             engineVal = engineVal ? `${engineVal} (${fuelVal})` : fuelVal;
         }
 
+        const bodyVal = document.getElementById('clientBodySelect')?.value || '';
+        const genVal = document.getElementById('clientGenInput')?.value.trim() || '';
+        const restyleVal = document.getElementById('clientRestyleSelect')?.value || '';
+
+        const modParts = [];
+        if (bodyVal) modParts.push(bodyVal);
+        if (genVal) modParts.push(`Покоління: ${genVal}`);
+        if (restyleVal) modParts.push(restyleVal);
+        const modificationStr = modParts.length > 0 ? modParts.join(' | ') : null;
+
         const carData = {
             vin: vinValue,
             brand: finalBrand,
             model: finalModel,
+            modification: modificationStr,
             release_date: document.getElementById('clientYearSelect')?.value || null,
             engine_code: engineVal || null,
             transmission_type: document.getElementById('clientTransInput').value || null
@@ -748,6 +764,7 @@ function renderGarage(cars) {
             </div>
             
             <div class="garage-details">
+                <div><span class="g-label">КУЗОВ / ПОКОЛІННЯ</span><div class="g-value">${escapeHtml(car.modification || '—')}</div></div>
                 <div><span class="g-label">РІК ВИПУСКУ</span><div class="g-value">${escapeHtml(car.release_date || '—')}</div></div>
                 <div><span class="g-label">ДВИГУН</span><div class="g-value">${escapeHtml(car.engine_code || '—')}</div></div>
                 <div><span class="g-label">ТРАНСМІСІЯ</span><div class="g-value">${escapeHtml(car.transmission_type || '—')} ${escapeHtml(car.transmission_code || '')}</div></div>
