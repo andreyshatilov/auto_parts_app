@@ -68,6 +68,7 @@
         </div>
 
         <!-- 🔓 ЕКРАН 2: НА ТИВНИЙ ГОЛОВНИЙ ЕКРАН З НИЖНЬОЮ НАВІГАЦІЄЮ -->
+        <div id="mainScreen" class="screen">
             <header class="client-header">
                 <div class="brand-title-area">
                     <h2 class="brand-header-title">Міністерство Запчастин</h2>
@@ -172,8 +173,14 @@
 
                                 <div class="form-row" style="display:flex; gap:8px;">
                                     <div class="form-group" style="flex:1;">
-                                        <label for="clientEngineInput">Двигун</label>
-                                        <input type="text" id="clientEngineInput" placeholder="2.4 tfsi...">
+                                        <label for="clientYearSelect">Рік випуску</label>
+                                        <select id="clientYearSelect">
+                                            <option value="">Не вказано</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group" style="flex:1;">
+                                        <label for="clientEngineInput">Двигун / Об'єм</label>
+                                        <input type="text" id="clientEngineInput" placeholder="2.0 TFSI, 3.0 TDI...">
                                     </div>
                                     <div class="form-group" style="flex:1;">
                                         <label for="clientTransInput">Тип КПП</label>
@@ -181,6 +188,8 @@
                                             <option value="">Не обрано</option>
                                             <option value="АКПП">АКПП (Автомат)</option>
                                             <option value="МКПП">МКПП (Механіка)</option>
+                                            <option value="Робот">Робот (DSG)</option>
+                                            <option value="Варіатор">Варіатор (CVT)</option>
                                         </select>
                                     </div>
                                 </div>

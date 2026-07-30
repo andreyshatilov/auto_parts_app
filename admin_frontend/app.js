@@ -200,7 +200,7 @@ function renderCars(cars) {
         <div class="car-card">
             <div class="car-header-row">
                 <div>
-                    <div class="car-title">${escapeHtml(car.brand)} ${escapeHtml(car.model)}</div>
+                    <div class="car-title">${escapeHtml(car.brand)} ${escapeHtml(car.model)} ${car.release_date ? `(${escapeHtml(car.release_date)} р.в.)` : ''}</div>
                     <div class="car-modification">${escapeHtml(car.modification || 'Без модифікації')}</div>
                 </div>
             </div>
@@ -209,6 +209,7 @@ function renderCars(cars) {
                 <button class="copy-vin-btn" onclick="copyToClipboard('${car.vin}')">📋</button>
             </div>
             <div class="car-details-grid">
+                <div class="detail-item"><span class="detail-label">Рік випуску</span><span class="detail-value">${escapeHtml(car.release_date || '—')}</span></div>
                 <div class="detail-item"><span class="detail-label">Двигун</span><span class="detail-value">${escapeHtml(car.engine_code || '—')}</span></div>
                 <div class="detail-item"><span class="detail-label">КПП</span><span class="detail-value">${escapeHtml(car.transmission_type || '—')}</span></div>
             </div>
@@ -253,7 +254,7 @@ function renderClients(clients) {
             </div>
             <div style="background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px; font-size: 12px;">
                 <strong>🚘 Гараж (${c.cars.length} авто):</strong>
-                ${c.cars.length > 0 ? c.cars.map(car => `<div style="margin-top:2px; color:#60a5fa;">• ${escapeHtml(car.brand)} ${escapeHtml(car.model)} (VIN: ${escapeHtml(car.vin)})</div>`).join('') : '<div style="color:var(--text-muted);">Порожній</div>'}
+                ${c.cars.length > 0 ? c.cars.map(car => `<div style="margin-top:2px; color:#60a5fa;">• ${escapeHtml(car.brand)} ${escapeHtml(car.model)} ${car.release_date ? `(${car.release_date} р.в.)` : ''} (VIN: ${escapeHtml(car.vin)})</div>`).join('') : '<div style="color:var(--text-muted);">Порожній</div>'}
             </div>
         </div>
     `).join('');
@@ -291,7 +292,7 @@ function renderRequestsQueue(requests) {
             </div>
 
             <div style="background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.3); padding: 10px; border-radius: 8px; font-size: 13px;">
-                <strong>🚗 Автомобіль:</strong> ${req.car ? `${escapeHtml(req.car.brand)} ${escapeHtml(req.car.model)} (VIN: ${escapeHtml(req.car.vin)})` : 'Невідомо'}
+                <strong>🚗 Автомобіль:</strong> ${req.car ? `${escapeHtml(req.car.brand)} ${escapeHtml(req.car.model)} ${req.car.release_date ? `(${escapeHtml(req.car.release_date)} р.в.)` : ''} | VIN: ${escapeHtml(req.car.vin)} | Двигун: ${escapeHtml(req.car.engine_code || '—')}` : 'Невідомо'}
             </div>
 
             <div style="font-size: 14px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; font-weight: 500;">

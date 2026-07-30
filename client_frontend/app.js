@@ -45,38 +45,60 @@ let activeReturnOrderId = null;
 let activeChatRequestId = null;
 
 const CAR_DATABASE = {
-    "Alfa Romeo": ["Giulia", "Stelvio", "159", "Giulietta", "Tonale", "Mito", "Brera"],
-    "Audi": ["A3", "A4", "A5", "A6", "A7", "A8", "Q3", "Q5", "Q7", "Q8", "E-Tron", "TT", "R8", "RS6", "RS7", "80 / 100"],
-    "BMW": ["1 Series", "2 Series", "3 Series", "4 Series", "5 Series", "6 Series", "7 Series", "8 Series", "X1", "X2", "X3", "X4", "X5", "X6", "X7", "Z4", "i3", "i4", "iX", "M3", "M5"],
-    "Chevrolet": ["Cruze", "Aveo", "Captiva", "Lacetti", "Camaro", "Tahoe", "Bolt", "Equinox", "Trax", "Epica", "Orlando"],
-    "Citroen": ["C4", "C5", "C3", "Berlingo", "Jumper", "SpaceTourer", "C-Elysee", "C4 Picasso"],
-    "Dodge": ["Challenger", "Charger", "Durango", "Journey", "Ram 1500", "Caliber", "Dart"],
-    "Fiat": ["500", "Doblo", "Ducato", "Punto", "Tipo", "Panda", "Fiorino"],
-    "Ford": ["Focus", "Fusion (US)", "Mondeo", "Fiesta", "Kuga", "Escape", "Explorer", "Edge", "Mustang", "Transit", "Custom", "C-Max", "S-Max"],
-    "Genesis": ["G70", "G80", "GV70", "GV80"],
-    "Honda": ["Civic", "CR-V", "Accord", "HR-V", "Pilot", "Fit", "Insight", "Odyssey"],
-    "Hyundai": ["Tucson", "Santa Fe", "Elantra", "Sonata", "Accent", "i30", "Kona", "Palisade", "Getz", "IX35", "Ioniq"],
-    "Infiniti": ["FX35 / QX70", "Q50", "Q60", "QX60", "QX80", "EX35 / QX50", "G35 / G37"],
-    "Jeep": ["Grand Cherokee", "Cherokee", "Compass", "Renegade", "Wrangler", "Patriot"],
-    "Kia": ["Sportage", "Ceed", "Optima", "Sorento", "Rio", "K5", "Stinger", "Telluride", "Soul", "Cerato", "Niro"],
-    "Land Rover": ["Range Rover", "Range Rover Sport", "Range Rover Evoque", "Discovery", "Discovery Sport", "Defender", "Velar"],
-    "Lexus": ["RX", "NX", "GX", "LX", "ES", "IS", "GS", "UX", "LS", "CT"],
-    "Mazda": ["3", "6", "CX-3", "CX-5", "CX-7", "CX-9", "CX-30", "CX-60", "MX-5"],
-    "Mercedes-Benz": ["A-Class", "B-Class", "C-Class", "E-Class", "S-Class", "CLA", "CLS", "GLA", "GLB", "GLC", "GLE", "GLS", "G-Class", "Vito", "Sprinter", "W124 / W210"],
-    "Mitsubishi": ["Outlander", "Lancer", "Pajero", "Pajero Sport", "ASX", "L200", "Eclipse Cross", "Galant"],
-    "Nissan": ["Qashqai", "X-Trail", "Rogue", "Juke", "Leaf", "Almera", "Teana", "Patrol", "Navara", "Murano", "Micra", "Note"],
-    "Opel": ["Astra", "Insignia", "Vectra", "Zafira", "Mokka", "Vivaro", "Corsa", "Omega", "Meriva"],
-    "Peugeot": ["308", "508", "2008", "3008", "5008", "Partner", "Boxer", "Expert", "206 / 207"],
-    "Porsche": ["Cayenne", "Macan", "Panamera", "911", "Taycan", "Boxster", "Cayman"],
-    "Renault": ["Megane", "Duster", "Logan", "Sandero", "Kadjar", "Koleos", "Scenic", "Fluence", "Trafic", "Master", "Clio", "Kangoo"],
-    "SEAT": ["Leon", "Ibiza", "Ateca", "Tarraco", "Alhambra", "Altea"],
-    "Skoda": ["Octavia", "Superb", "Kodiaq", "Karoq", "Fabia", "Rapid", "Scala", "Kamiq", "Yeti"],
-    "Subaru": ["Forester", "Outback", "Legacy", "Impreza", "XV / Crosstrek", "Tribeca", "BRZ"],
-    "Suzuki": ["Grand Vitara", "Vitara", "SX4", "Jimny", "Swift"],
+    "Acura": ["MDX", "RDX", "TLX", "ILX", "TSX", "ZDX", "Integra", "RLX"],
+    "Alfa Romeo": ["Giulia", "Stelvio", "159", "Giulietta", "Tonale", "Mito", "Brera", "147", "156", "4C"],
+    "Audi": ["A1", "A3", "A4", "A5", "A6", "A7", "A8", "Q2", "Q3", "Q4 e-tron", "Q5", "Q7", "Q8", "e-tron", "TT", "R8", "RS3", "RS4", "RS5", "RS6", "RS7", "RS Q8", "80 / 100"],
+    "BMW": ["1 Series", "2 Series", "3 Series", "4 Series", "5 Series", "6 Series", "7 Series", "8 Series", "X1", "X2", "X3", "X4", "X5", "X6", "X7", "XM", "Z4", "i3", "i4", "i7", "iX", "M2", "M3", "M4", "M5", "M8"],
+    "BYD": ["Song Plus", "Tang", "Han", "Yuan Plus / Atto 3", "Dolphin", "Seal", "Qin Plus"],
+    "Cadillac": ["Escalade", "XT5", "XT4", "XT6", "CTS", "ATS", "SRX", "Lyriq"],
+    "Changan": ["CS35 Plus", "CS55 Plus", "CS75 Plus", "UNI-K", "UNI-V", "UNI-T"],
+    "Chery": ["Tiggo 2", "Tiggo 4", "Tiggo 7 Pro", "Tiggo 8 Pro", "Amulet", "QQ", "Arrizo 6"],
+    "Chevrolet": ["Cruze", "Aveo", "Captiva", "Lacetti", "Camaro", "Tahoe", "Suburban", "Corvette", "Bolt EV", "Equinox", "Trax", "Epica", "Orlando", "Spark", "Evanda", "Niva"],
+    "Chrysler": ["300C", "Pacificia", "Town & Country", "Voyager", "200", "Sebring", "PT Cruiser"],
+    "Citroen": ["C4", "C5", "C3", "C3 Aircross", "C5 Aircross", "Berlingo", "Jumper", "Jumpy", "SpaceTourer", "C-Elysee", "C4 Picasso", "C1", "C2", "Xsara"],
+    "Cupra": ["Formentor", "Born", "Ateca", "Leon"],
+    "Dacia": ["Duster", "Logan", "Sandero", "Jogger", "Spring", "Dokker", "Lodgy"],
+    "Daewoo": ["Lanos", "Sens", "Matiz", "NEXIA", "Nubira", "Gentra", "Tacuma", "Esperanto"],
+    "Dodge": ["Challenger", "Charger", "Durango", "Journey", "Ram 1500", "Caliber", "Dart", "Avenger", "Grand Caravan", "Nitro"],
+    "Fiat": ["500", "500X", "Doblo", "Ducato", "Punto", "Tipo", "Panda", "Fiorino", "Freemont", "Bravo", "Scudo"],
+    "Ford": ["Focus", "Fusion (US)", "Fusion (EU)", "Mondeo", "Fiesta", "Kuga", "Escape", "Explorer", "Edge", "EcoSport", "Mustang", "Mustang Mach-E", "Transit", "Custom", "C-Max", "S-Max", "Galaxy", "Ranger", "F-150", "Scorpio", "Sierra"],
+    "GAZ / ГАЗ": ["24 Волга", "3110 Волга", "Газель", "Газель Next", "Соболь"],
+    "Geely": ["Coolray", "Atlas Pro", "Monjaro", "Tugella", "Emgrand", "Geometry C", "CK", "MK"],
+    "Genesis": ["G70", "G80", "G90", "GV70", "GV80"],
+    "Great Wall / Haval": ["H6", "Jolion", "F7", "H9", "Dargo", "Hover H3/H5", "Wingle"],
+    "Honda": ["Civic", "CR-V", "Accord", "HR-V", "Pilot", "Fit / Jazz", "Insight", "Odyssey", "Element", "Ridgeline", "e:NS1"],
+    "Hyundai": ["Tucson", "Santa Fe", "Elantra", "Sonata", "Accent", "i10", "i20", "i30", "i40", "Kona", "Palisade", "Getz", "IX35", "Ioniq 5", "Ioniq 6", "Staria", "H-1 / Starex", "Matrix", "Coupe"],
+    "Infiniti": ["FX35 / QX70", "FX37", "Q50", "Q60", "QX60", "QX80", "EX35 / QX50", "G35 / G37", "M37 / Q70"],
+    "Jaguar": ["F-Pace", "E-Pace", "I-Pace", "XF", "XJ", "XE", "F-Type"],
+    "Jeep": ["Grand Cherokee", "Cherokee", "Compass", "Renegade", "Wrangler", "Patriot", "Commander", "Gladiator"],
+    "Kia": ["Sportage", "Ceed", "Optima", "Sorento", "Rio", "K5", "Stinger", "Telluride", "Soul", "Cerato", "Niro", "EV6", "Carnival", "Mohave", "Picanto", "Magentis"],
+    "Lada / ВАЗ": ["2101-2107", "2108 / 2109 / 21099", "2110 / 2111 / 2112", "Samara", "Kalina", "Priora", "Granta", "Vesta", "Niva / 4x4", "XRAY"],
+    "Land Rover": ["Range Rover", "Range Rover Sport", "Range Rover Evoque", "Discovery", "Discovery Sport", "Defender", "Velar", "Freelander"],
+    "Lexus": ["RX 300/350/450h", "NX 200/300/350h", "GX 460/550", "LX 470/570/600", "ES 250/300h/350", "IS 250/300/350", "GS 300/350", "UX 200/250h", "LS 460/500", "CT 200h"],
+    "Lincoln": ["MKZ", "MKX", "Nautilus", "Aviator", "Navigator", "Corsair", "Town Car"],
+    "Maserati": ["Ghibli", "Levante", "Quattroporte", "Grecale"],
+    "Mazda": ["3", "6", "CX-3", "CX-5", "CX-7", "CX-9", "CX-30", "CX-50", "CX-60", "MX-5", "2", "323 / 626", "RX-8"],
+    "Mercedes-Benz": ["A-Class", "B-Class", "C-Class", "E-Class", "S-Class", "CLA", "CLS", "GLA", "GLB", "GLC", "GLE", "GLS", "G-Class (Geländewagen)", "Vito", "V-Class", "Sprinter", "ML-Class", "GL-Class", "W124 / W210 / W211", "CLK"],
+    "MG": ["ZS", "HS", "MG 4", "MG 5", "MG 350"],
+    "Mini": ["Cooper", "Countryman", "Clubman", "Paceman"],
+    "Mitsubishi": ["Outlander", "Lancer", "Pajero", "Pajero Sport", "ASX", "L200", "Eclipse Cross", "Galant", "Colt", "Grandis"],
+    "Nissan": ["Qashqai", "X-Trail", "Rogue", "Juke", "Leaf", "Almera", "Teana", "Patrol", "Navara", "Murano", "Micra", "Note", "Pathfinder", "Tiida", "Sentra", "Maxima", "350Z / 370Z", "Ariya"],
+    "Opel": ["Astra F/G/H/J/K", "Insignia", "Vectra A/B/C", "Zafira", "Mokka", "Vivaro", "Corsa", "Omega", "Meriva", "Combo", "Crossland", "Grandland"],
+    "Peugeot": ["208", "308", "407", "508", "2008", "3008", "5008", "Partner", "Rifter", "Boxer", "Expert", "206", "207", "307", "406"],
+    "Porsche": ["Cayenne", "Macan", "Panamera", "911 Carrera", "Taycan", "Boxster", "Cayman"],
+    "Renault": ["Megane", "Duster", "Logan", "Sandero", "Kadjar", "Koleos", "Scenic", "Fluence", "Trafic", "Master", "Clio", "Kangoo", "Symbol", "Arkana", "Zoe"],
+    "SAAB": ["9-3", "9-5", "900"],
+    "SEAT": ["Leon", "Ibiza", "Ateca", "Tarraco", "Alhambra", "Altea", "Toledo", "Arona"],
+    "Skoda": ["Octavia Tour/A5/A7/A8", "Superb", "Kodiaq", "Karoq", "Fabia", "Rapid", "Scala", "Kamiq", "Yeti", "Felicia", "Enyaq"],
+    "Smart": ["Fortwo", "Forfour"],
+    "SsangYong / KGM": ["Korando", "Rexton", "Kyron", "Actyon", "Tivoli", "Rodius"],
+    "Subaru": ["Forester", "Outback", "Legacy", "Impreza", "XV / Crosstrek", "Tribeca", "BRZ", "Solterra"],
+    "Suzuki": ["Grand Vitara", "Vitara", "SX4", "Jimny", "Swift", "Liana", "Splash"],
     "Tesla": ["Model 3", "Model Y", "Model S", "Model X", "Cybertruck"],
-    "Toyota": ["Camry", "Corolla", "RAV4", "Land Cruiser 200/300", "Land Cruiser Prado", "Highlander", "C-HR", "Yaris", "Avensis", "Hilux", "Prius", "Venza", "Sequoia", "Tundra"],
-    "Volkswagen": ["Golf", "Passat", "Tiguan", "Touareg", "Jetta", "Polo", "Arteon", "Transporter", "Multivan", "Caddy", "ID.4", "CC", "Amarok", "Bora"],
-    "Volvo": ["XC60", "XC90", "XC40", "S60", "S90", "V60", "V90", "V40", "S80", "V50"]
+    "Toyota": ["Camry", "Corolla", "RAV4", "Land Cruiser 200/300", "Land Cruiser Prado 120/150/250", "Highlander", "C-HR", "Yaris", "Avensis", "Hilux", "Prius", "Venza", "Sequoia", "Tundra", "Tacoma", "Sienna", "Auris", "Matrix", "Solara"],
+    "Volkswagen": ["Golf III/IV/V/VI/VII/VIII", "Passat B5/B6/B7/B8/NMS", "Tiguan", "Touareg", "Jetta", "Polo", "Arteon", "Transporter T4/T5/T6", "Multivan", "Caddy", "ID.4", "CC", "Amarok", "Bora", "Touran", "Sharan", "Taos"],
+    "Volvo": ["XC60", "XC90", "XC40", "S60", "S90", "V60", "V90", "V40", "S80", "V50", "C30", "XC70"],
+    "ZAZ / ЗАЗ": ["Lanos / Chance", "Sens", "Forza", "Vida", "Tavria", "Slavuta"]
 };
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -238,6 +260,7 @@ function setupEventListeners() {
             vin: clientVinInput.value.trim(),
             brand: finalBrand,
             model: finalModel,
+            release_date: document.getElementById('clientYearSelect')?.value || null,
             engine_code: document.getElementById('clientEngineInput').value.trim() || null,
             transmission_type: document.getElementById('clientTransInput').value || null
         };
@@ -405,7 +428,21 @@ function openEditProfileModal() {
     document.getElementById('editProfileModal').style.display = 'flex';
 }
 
+function initYearSelect() {
+    const yearSelect = document.getElementById('clientYearSelect');
+    if (!yearSelect) return;
+    yearSelect.innerHTML = '<option value="">Не вказано</option>';
+    const currentYear = new Date().getFullYear() + 1;
+    for (let y = currentYear; y >= 1970; y--) {
+        const opt = document.createElement('option');
+        opt.value = `${y}`;
+        opt.textContent = `${y} рік`;
+        yearSelect.appendChild(opt);
+    }
+}
+
 function initBrandAndModelSelects() {
+    initYearSelect();
     const brandSelect = document.getElementById('clientBrandSelect');
     const modelSelect = document.getElementById('clientModelSelect');
     const customRow = document.getElementById('customBrandModelRow');
@@ -545,7 +582,7 @@ function renderGarage(cars) {
         <div class="garage-card">
             <div class="garage-header-flex">
                 <div>
-                    <div class="garage-card-title">${escapeHtml(car.brand)} ${escapeHtml(car.model)}</div>
+                    <div class="garage-card-title">${escapeHtml(car.brand)} ${escapeHtml(car.model)} ${car.release_date ? `<span style="font-size:13px; color:var(--primary); font-weight:600;">(${escapeHtml(car.release_date)} р.в.)</span>` : ''}</div>
                     <div class="garage-card-vin">VIN: ${escapeHtml(car.vin)}</div>
                 </div>
                 <div class="brand-emblem-badge">
@@ -554,6 +591,7 @@ function renderGarage(cars) {
             </div>
             
             <div class="garage-details">
+                <div><span class="g-label">РІК ВИПУСКУ</span><div class="g-value">${escapeHtml(car.release_date || '—')}</div></div>
                 <div><span class="g-label">ДВИГУН</span><div class="g-value">${escapeHtml(car.engine_code || '—')}</div></div>
                 <div><span class="g-label">ТРАНСМІСІЯ</span><div class="g-value">${escapeHtml(car.transmission_type || '—')} ${escapeHtml(car.transmission_code || '')}</div></div>
             </div>
