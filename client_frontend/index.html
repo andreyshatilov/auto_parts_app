@@ -138,9 +138,9 @@
                             <h4>Додати авто в гараж</h4>
                             <form id="addGarageCarForm" autocomplete="off" style="margin-top: 10px; display:flex; flex-direction:column; gap:10px;">
                                 <div class="form-group">
-                                    <label for="clientVinInput">VIN-код (17 символів) <span class="req">*</span></label>
+                                    <label for="clientVinInput">VIN-код (17 символів, автозаповнення ⚡)</label>
                                     <div class="vin-input-wrapper">
-                                        <input type="text" id="clientVinInput" placeholder="3G1BE6SM7JS652422" maxlength="17" required>
+                                        <input type="text" id="clientVinInput" placeholder="3G1BE6SM7JS652422 (введіть для автопідбору)">
                                         <span class="vin-counter" id="clientVinCounter">0/17</span>
                                     </div>
                                 </div>
@@ -178,6 +178,20 @@
                                             <option value="">Не вказано</option>
                                         </select>
                                     </div>
+                                    <div class="form-group" style="flex:1;">
+                                        <label for="clientFuelSelect">Тип палива</label>
+                                        <select id="clientFuelSelect">
+                                            <option value="">Не вказано</option>
+                                            <option value="Бензин">Бензин</option>
+                                            <option value="Дизель">Дизель</option>
+                                            <option value="Газ / Бензин (ГБО)">Газ / Бензин (ГБО)</option>
+                                            <option value="Гібрид">Гібрид (Hybrid)</option>
+                                            <option value="Електро">Електро (EV)</option>
+                                        </select>
+                                    </div>
+                                </div>
+
+                                <div class="form-row" style="display:flex; gap:8px;">
                                     <div class="form-group" style="flex:1;">
                                         <label for="clientEngineInput">Двигун / Об'єм</label>
                                         <input type="text" id="clientEngineInput" placeholder="2.0 TFSI, 3.0 TDI...">

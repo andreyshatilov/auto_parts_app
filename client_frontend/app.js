@@ -162,10 +162,68 @@ function switchAuthTab(tabName) {
 }
 
 function setupEventListeners() {
-    clientVinInput.addEventListener('input', (e) => {
+    let lastDecodedVin = '';
+    clientVinInput.addEventListener('input', async (e) => {
         let val = e.target.value.replace(/\s+/g, '').toUpperCase();
         e.target.value = val;
         clientVinCounter.textContent = `${val.length}/17`;
+
+        if (val.length === 17 && val !== lastDecodedVin) {
+            lastDecodedVin = val;
+            try {
+                const res = await fetch(`${API_BASE_URL}/vin/decode?vin=${val}`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data.is_decoded && data.brand) {
+                        const brandSelect = document.getElementById('clientBrandSelect');
+                        const modelSelect = document.getElementById('clientModelSelect');
+
+                        let brandFound = Array.from(brandSelect.options).find(opt => opt.value.toUpperCase() === data.brand.toUpperCase());
+                        if (brandFound) {
+                            brandSelect.value = brandFound.value;
+                        } else {
+                            brandSelect.value = '__custom__';
+                            document.getElementById('clientCustomBrandInput').value = data.brand;
+                        }
+                        brandSelect.onchange();
+
+                        if (data.model) {
+                            let modelFound = Array.from(modelSelect.options).find(opt => opt.value.toUpperCase() === data.model.toUpperCase());
+                            if (modelFound) {
+                                modelSelect.value = modelFound.value;
+                            } else {
+                                modelSelect.value = '__custom__';
+                                document.getElementById('clientCustomModelInput').value = data.model;
+                            }
+                            modelSelect.onchange();
+                        }
+
+                        if (data.release_year) {
+                            const yearSelect = document.getElementById('clientYearSelect');
+                            if (yearSelect) yearSelect.value = data.release_year;
+                        }
+
+                        if (data.engine) {
+                            document.getElementById('clientEngineInput').value = data.engine;
+                        }
+
+                        if (data.fuel) {
+                            const fuelSelect = document.getElementById('clientFuelSelect');
+                            if (fuelSelect) fuelSelect.value = data.fuel;
+                        }
+
+                        if (data.transmission) {
+                            const transSelect = document.getElementById('clientTransInput');
+                            if (transSelect) transSelect.value = data.transmission;
+                        }
+
+                        showToast(`⚡ ${data.brand} ${data.model || ''} ${data.release_year ? '(' + data.release_year + ')' : ''} розпізнано за VIN!`);
+                    }
+                }
+            } catch (err) {
+                console.error(err);
+            }
+        }
     });
 
     registerForm.addEventListener('submit', async (e) => {
@@ -256,12 +314,26 @@ function setupEventListeners() {
             return;
         }
 
+        let vinValue = clientVinInput.value.trim();
+        if (!vinValue) {
+            vinValue = 'NOVIN-' + Math.random().toString(36).substring(2, 11).toUpperCase();
+        } else if (vinValue.length !== 17) {
+            showToast('⚠️ VIN-код повинен містити ровно 17 символів (або залиште порожнім)!', 'error');
+            return;
+        }
+
+        const fuelVal = document.getElementById('clientFuelSelect')?.value || '';
+        let engineVal = document.getElementById('clientEngineInput').value.trim();
+        if (fuelVal) {
+            engineVal = engineVal ? `${engineVal} (${fuelVal})` : fuelVal;
+        }
+
         const carData = {
-            vin: clientVinInput.value.trim(),
+            vin: vinValue,
             brand: finalBrand,
             model: finalModel,
             release_date: document.getElementById('clientYearSelect')?.value || null,
-            engine_code: document.getElementById('clientEngineInput').value.trim() || null,
+            engine_code: engineVal || null,
             transmission_type: document.getElementById('clientTransInput').value || null
         };
         try {
