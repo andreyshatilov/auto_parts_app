@@ -15,6 +15,7 @@ if BACKEND_DIR not in sys.path:
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
+from fastapi.responses import RedirectResponse
 
 from app.database import engine, Base
 from app.routers import cars, auth, clients, requests, proposals, transfers, orders, returns, chat, payments, crosses, analytics, novaposhta, exports, vin_decoder, invoices
@@ -79,11 +80,4 @@ if os.path.exists(CLIENT_DIR):
 
 @app.get("/", tags=["Системні"])
 def root():
-    return {
-        "status": "online",
-        "service": "Міністерство Запчастин API (Enterprise Production 2.0)",
-
-        "docs_url": "/docs",
-        "admin_ui": "/admin",
-        "client_ui": "/client"
-    }
+    return RedirectResponse(url="/client/")
