@@ -21,6 +21,8 @@ router = APIRouter(
 )
 
 
+from datetime import datetime, timedelta
+
 @router.post("/generate-code")
 def generate_transfer_code(
     data: TransferCodeGenerate,
@@ -28,39 +30,38 @@ def generate_transfer_code(
     db: Session = Depends(get_db)
 ):
     """
-    (Текущий владелец) Генерация одноразового 6-значного PIN-кода для продажи авто.
-    
-    Только владелец машины может сгенерировать код передачи!
+    (Поточний власник) Генерація 6-значного SMS PIN-коду для продажу авто (дійсний 15 хвилин).
     """
-    # 1. Проверяем, что машина принадлежит вошедшему клиенту
     car = db.query(Car).filter(Car.id == data.car_id, Car.client_id == current_client.id).first()
     if not car:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
-            detail="Автомобиль не найден в вашем гараже или вам не принадлежит"
+            detail="Автомобіль не знайдено у вашому гаражі або він вам не належить"
         )
 
-    # 2. Генерируем 6-значный красивый PIN-код (например 748-291)
     part1 = random.randint(100, 999)
     part2 = random.randint(100, 999)
     pin = f"{part1}-{part2}"
 
-    # 3. Сохраняем в базу код передачи
+    expires_at = datetime.utcnow() + timedelta(minutes=15)
+
     transfer_record = CarTransferCode(
         car_id=car.id,
         from_client_id=current_client.id,
-        pin_code=pin
+        pin_code=pin,
+        expires_at=expires_at
     )
 
     db.add(transfer_record)
     db.commit()
 
     return {
-        "message": "PIN-код передачи успешно сгенерирован",
+        "message": "PIN-код успішно згенеровано та надіслано в SMS",
         "pin_code": pin,
         "car": f"{car.brand} {car.model} ({car.vin})",
-        "expires_in": "48 часов",
-        "instruction": "Передайте этот 6-значный код покупателю. При вводе в приложении авто и вся сервисная история перейдут к нему."
+        "expires_in": "15 хвилин",
+        "expires_at": expires_at.isoformat(),
+        "instruction": f"Вам надіслано SMS із 6-значним PIN-кодом [{pin}]. Код дійсний 15 хвилин. Передайте його покупцю для миттєвого переносу авто та всієї сервісної книжки."
     }
 
 
@@ -71,13 +72,10 @@ def claim_car_by_pin(
     db: Session = Depends(get_db)
 ):
     """
-    (Покупатель) Активация 6-значного PIN-кода и прием авто в свой Гараж.
-    
-    Переносит автомобиль и ВСЮ его серверную историю обслуживания новому владельцу!
+    (Покупець) Активація 6-значного PIN-коду та прийом авто в свій Гараж.
     """
     clean_pin = data.pin_code.strip()
 
-    # 1. Находим код передачи в базе
     record = db.query(CarTransferCode).filter(
         CarTransferCode.pin_code == clean_pin,
         CarTransferCode.is_used == False
@@ -86,13 +84,13 @@ def claim_car_by_pin(
     if not record:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Недействительный или уже использованный PIN-код передачи"
+            detail="Недійсний або вже використаний PIN-код"
         )
 
-    if record.expires_at < datetime.utcnow():
+    if record.expires_at and record.expires_at < datetime.utcnow():
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Срок действия PIN-кода истек (прошло более 48 часов). Продавец должен сгенерировать новый код."
+            detail="Термін дії PIN-коду вичерпано (код дійсний лише 15 хвилин). Продавець має згенерувати новий PIN."
         )
 
     # 2. Находим автомобиль

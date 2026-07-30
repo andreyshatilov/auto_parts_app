@@ -11,7 +11,7 @@ const API_BASE_URL = window.location.origin.includes(':8000') || window.location
     ? 'http://localhost:8000/api/v1'
     : '/api/v1';
 
-const HEALTH_CHECK_URL = API_BASE_URL.replace('/api/v1', '/');
+const HEALTH_CHECK_URL = `${API_BASE_URL}/health`;
 
 // DOM Елементи
 const addCarForm = document.getElementById('addCarForm');
@@ -167,12 +167,15 @@ async function checkServerHealth() {
     try {
         const res = await fetch(HEALTH_CHECK_URL);
         if (res.ok) {
-            serverStatusDot.className = 'status-indicator online';
-            serverStatusText.textContent = 'Бекенд API підключено';
+            const data = await res.json();
+            if (data.status === 'online') {
+                serverStatusDot.className = 'status-indicator online';
+                serverStatusText.textContent = '🟢 Сервер Онлайн (Render + PostgreSQL)';
+            } else throw new Error();
         } else throw new Error();
     } catch {
         serverStatusDot.className = 'status-indicator offline';
-        serverStatusText.textContent = 'Сервер недоступний';
+        serverStatusText.textContent = '🔴 Сервер недоступний';
     }
 }
 

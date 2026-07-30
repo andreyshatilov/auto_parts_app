@@ -801,7 +801,7 @@ async function generateTransferCode(carId, carName) {
         const data = await res.json();
         if (!res.ok) throw new Error(data.detail || 'Помилка');
 
-        alert(`ОДНОРАЗОВИЙ PIN-КОД ПРОДАЖУ АВТО:\n\n${data.pin_code}\n\nПередайте цей 6-значний код покупцю. При введенні у його застосунку авто "${carName}" та вся його історія перейдуть до нього.`);
+        alert(`📲 ОДНОРАЗОВИЙ SMS PIN-КОД ПЕРЕДАЧІ АВТО:\n\nPIN-КОД: ${data.pin_code}\n\n⏱️ Код дійсний 15 ХВИЛИН!\n\nПередайте цей 6-значний код покупцю. При введенні у його застосунку авто "${carName}" та вся його історія перейдуть до нього.`);
     } catch (err) {
         showToast(err.message, 'error');
     }

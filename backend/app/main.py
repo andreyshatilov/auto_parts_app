@@ -78,6 +78,11 @@ if os.path.exists(CLIENT_DIR):
     app.mount("/client", StaticFiles(directory=CLIENT_DIR, html=True), name="client")
 
 
+@app.get("/api/v1/health", tags=["Системні"])
+def health_check():
+    return {"status": "online", "service": "Міністерство Запчастин API", "database": "connected"}
+
+
 @app.get("/", tags=["Системні"])
 def root():
     return RedirectResponse(url="/client/")
