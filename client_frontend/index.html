@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=27.0">
+    <link rel="stylesheet" href="styles.css?v=28.0">
 </head>
 <body>
     <div class="mobile-frame">
@@ -786,25 +786,24 @@
                 </div>
             </div>
 
-            <!-- 3D / 360° ГАРАЖНИЙ ПЕРЕГЛЯДАЧ ТА ФОТО АВТО (СВІТЛИЙ ШОУРУМ) -->
-            <div style="position:relative; background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 70%, #cbd5e1 100%); border-radius:14px; overflow:hidden; min-height:220px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#0f172a; padding:16px; margin-bottom:16px; border:1px solid rgba(203,213,225,0.8); box-shadow: inset 0 2px 8px rgba(255,255,255,0.9);">
-                <div id="carHeroPhotoContainer" style="width:100%; display:flex; flex-direction:column; align-items:center;">
-                    <img id="carHeroPhoto" src="" alt="Auto Photo" style="max-height:180px; width:100%; object-fit:cover; border-radius:8px; display:none;">
-                    
-                    <div id="car3dCanvasWrapper" style="width:100%; display:flex; flex-direction:column; align-items:center;">
-                        <canvas id="car3dCanvas" width="380" height="160" style="max-width:100%; border-radius:8px; cursor:grab;"></canvas>
-                        <div style="font-size:11px; color:#475569; font-weight:600; margin-top:4px;">3D Шоурум 360° (потягніть для обертання)</div>
+            <!-- CAR PHOTO / LOGO AREA -->
+            <div style="position:relative; background: #f8fafc; border-radius:14px; overflow:hidden; min-height:180px; display:flex; flex-direction:column; align-items:center; justify-content:center; padding:16px; margin-bottom:16px; border:1px solid rgba(203,213,225,0.8);">
+                <div id="carHeroPhotoContainer" style="width:100%; display:flex; flex-direction:column; align-items:center; gap: 12px;">
+                    <img id="carHeroPhoto" src="" alt="Auto Photo" style="max-height:220px; width:100%; object-fit:cover; border-radius:8px; display:none;">
+                    <div id="carLogoPlaceholder" style="display:flex; justify-content:center; align-items:center; opacity:0.3; transform:scale(2.5); margin: 20px 0;">
+                        <!-- Logo will be injected here -->
                     </div>
                 </div>
 
-                <!-- Завантаження власного фото авто -->
-                <div style="margin-top:12px; display:flex; gap:8px; width:100%;">
-                    <input type="text" id="customPhotoUrlInput" placeholder="Вставте посилання на фотку свого авто (URL)..." style="flex:1; font-size:11px; padding:8px 12px; border-radius:8px; border:1px solid #cbd5e1; background:#ffffff; color:#0f172a;">
-                    <button class="btn btn-secondary" style="font-size:11px; padding:8px 12px; width:auto; white-space:nowrap;" onclick="saveCustomCarPhoto()">Зберегти фото</button>
+                <div style="margin-top:16px; display:flex; justify-content:center; width:100%;">
+                    <button class="btn btn-secondary" style="font-size:12px; padding:8px 16px; display:flex; align-items:center; gap:6px;" onclick="document.getElementById('customCarPhotoUpload').click()">
+                        📷 Додати/Змінити фото
+                    </button>
+                    <input type="file" id="customCarPhotoUpload" accept="image/*" style="display:none;" onchange="uploadCustomCarPhoto(this.files[0])">
                 </div>
             </div>
 
-            <!-- ПОВНА ТЕХНІЧНА КАРТКА АВТОМОБІЛЯ -->
+            <!-- ДЕТАЛІ -->
             <div style="font-size:13px; display:grid; grid-template-columns: 1fr 1fr; gap:10px; background:#f8fafc; padding:14px; border-radius:12px; border:1px solid var(--border-color); margin-bottom:16px;">
                 <div><span style="color:var(--text-muted); font-size:11px; display:block;">ПОКОЛІННЯ / КУЗОВ</span><strong id="detailCarGeneration">G20 / LCI</strong></div>
                 <div><span style="color:var(--text-muted); font-size:11px; display:block;">РІК ВИПУСКУ</span><strong id="detailCarYear">2020 р.в.</strong></div>
@@ -1056,7 +1055,7 @@
     <div id="toastContainer" class="toast-container"></div>
 
     <script src="js/car_models.js"></script>
-    <script src="app.js?v=27.0"></script>
+    <script src="app.js?v=28.0"></script>
 </body>
 </html>
 
