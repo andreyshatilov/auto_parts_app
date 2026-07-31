@@ -13,7 +13,7 @@
 <body>
     <div class="mobile-frame">
 
-        <!-- 🔒 ЕКРАН 1: АВТОРИЗАЦІЯ ТА РЕЄСТРАЦІЯ -->
+        <!--  ЕКРАН 1: АВТОРИЗАЦІЯ ТА РЕЄСТРАЦІЯ -->
         <div id="authScreen" class="screen active">
             <div class="auth-header">
                 <h1>Міністерство Запчастин</h1>
@@ -67,7 +67,7 @@
             </div>
         </div>
 
-        <!-- 🔓 ЕКРАН 2: НА ТИВНИЙ ГОЛОВНИЙ ЕКРАН З НИЖНЬОЮ НАВІГАЦІЄЮ -->
+        <!--  ЕКРАН 2: НА ТИВНИЙ ГОЛОВНИЙ ЕКРАН З НИЖНЬОЮ НАВІГАЦІЄЮ -->
         <div id="mainScreen" class="screen">
             <header class="client-header">
                 <div class="brand-title-area">
@@ -106,7 +106,7 @@
                         </div>
                     </section>
 
-                    <!-- 🧰 ВІЗУАЛЬНИЙ КАТАЛОГ ВУЗЛІВ ТА ШВИДКЕ ТО -->
+                    <!--  ВІЗУАЛЬНИЙ КАТАЛОГ ВУЗЛІВ ТА ШВИДКЕ ТО -->
                     <section class="section" style="margin-top: 16px;">
                         <div class="section-header">
                             <h3>Вузли та Компоненти Авто</h3>
@@ -282,7 +282,7 @@
                             <h4>Додати авто в гараж</h4>
                             <form id="addGarageCarForm" autocomplete="off" style="margin-top: 10px; display:flex; flex-direction:column; gap:10px;">
                                 <div class="form-group">
-                                    <label for="clientVinInput">VIN-код (17 символів, автозаповнення ⚡)</label>
+                                    <label for="clientVinInput">VIN-код (17 символів, автозаповнення )</label>
                                     <div class="vin-input-wrapper">
                                         <input type="text" id="clientVinInput" placeholder="3G1BE6SM7JS652422 (введіть для автопідбору)">
                                         <span class="vin-counter" id="clientVinCounter">0/17</span>
@@ -430,27 +430,27 @@
                         <div class="card" style="padding:14px;">
                             <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:8px;">
                                 <div style="background:#f8fafc; border:1px solid var(--border-color); padding:10px; border-radius:10px; cursor:pointer;" onclick="applyPreset('Категорія [ТО та Мастила]: Масляний, Салонний, Повітряний фільтр, Олива 5W-30 / 5W-40')">
-                                    <div style="font-weight:700; font-size:13px; color:var(--text-main);">🛢️ ТО та Мастила</div>
+                                    <div style="font-weight:700; font-size:13px; color:var(--text-main);">ТО та Мастила</div>
                                     <div style="font-size:11px; color:var(--text-muted);">Фільтри, олії, рідини</div>
                                 </div>
                                 <div style="background:#f8fafc; border:1px solid var(--border-color); padding:10px; border-radius:10px; cursor:pointer;" onclick="applyPreset('Категорія [Гальмівна система]: Передні та задні диски, колодки, супорти')">
-                                    <div style="font-weight:700; font-size:13px; color:var(--text-main);">🛑 Гальмівна система</div>
+                                    <div style="font-weight:700; font-size:13px; color:var(--text-main);">Гальмівна система</div>
                                     <div style="font-size:11px; color:var(--text-muted);">Диски, колодки, супорти</div>
                                 </div>
                                 <div style="background:#f8fafc; border:1px solid var(--border-color); padding:10px; border-radius:10px; cursor:pointer;" onclick="applyPreset('Категорія [Ходова та Підвіска]: Амортизатори, важелі, сайлентблоки, стійки')">
-                                    <div style="font-weight:700; font-size:13px; color:var(--text-main);">⚙️ Ходова та Підвіска</div>
+                                    <div style="font-weight:700; font-size:13px; color:var(--text-main);">Ходова та Підвіска</div>
                                     <div style="font-size:11px; color:var(--text-muted);">Амортизатори, важелі</div>
                                 </div>
                                 <div style="background:#f8fafc; border:1px solid var(--border-color); padding:10px; border-radius:10px; cursor:pointer;" onclick="applyPreset('Категорія [Двигун та ГРМ]: Ланцюг / Ремінь ГРМ, помпа, прокладки')">
-                                    <div style="font-weight:700; font-size:13px; color:var(--text-main);">🚗 Двигун та ГРМ</div>
+                                    <div style="font-weight:700; font-size:13px; color:var(--text-main);">Двигун та ГРМ</div>
                                     <div style="font-size:11px; color:var(--text-muted);">Комплекти ГРМ, помпи</div>
                                 </div>
                                 <div style="background:#f8fafc; border:1px solid var(--border-color); padding:10px; border-radius:10px; cursor:pointer;" onclick="applyPreset('Категорія [Електрика та Запалювання]: Свічки запалювання, акумулятор, катушки')">
-                                    <div style="font-weight:700; font-size:13px; color:var(--text-main);">⚡ Електрика</div>
+                                    <div style="font-weight:700; font-size:13px; color:var(--text-main);">Електрика</div>
                                     <div style="font-size:11px; color:var(--text-muted);">Свічки, АКБ, катушки</div>
                                 </div>
                                 <div style="background:#f8fafc; border:1px solid var(--border-color); padding:10px; border-radius:10px; cursor:pointer;" onclick="applyPreset('Категорія [Охолодження та Клімат]: Радіатор, термостат, антифриз')">
-                                    <div style="font-weight:700; font-size:13px; color:var(--text-main);">❄️ Охолодження</div>
+                                    <div style="font-weight:700; font-size:13px; color:var(--text-main);">Охолодження</div>
                                     <div style="font-size:11px; color:var(--text-muted);">Радіатори, термостати</div>
                                 </div>
                             </div>
@@ -504,7 +504,7 @@
 
             </div>
 
-            <!-- 📱 ПЛАВАЮЧА НИЖНЯ НАВІГАЦІЙНА ПАНЕЛЬ (BOTTOM NAV BAR) -->
+            <!--  ПЛАВАЮЧА НИЖНЯ НАВІГАЦІЙНА ПАНЕЛЬ (BOTTOM NAV BAR) -->
             <nav class="bottom-nav" id="bottomNav">
                 <button class="nav-item active" onclick="switchNavTab('garage')">
                     <span class="nav-item-icon">
@@ -543,7 +543,7 @@
                     <h2>Повернення Замовлення #<span id="returnOrderId">0</span></h2>
                     <p id="returnPolicyHint">Заявка на повернення</p>
                 </div>
-                <button onclick="closeReturnModal()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
+                <button onclick="closeReturnModal()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;"></button>
             </div>
 
             <form id="returnForm" style="margin-top: 10px;">
@@ -566,7 +566,7 @@
                 <div>
                     <h2>Чат з Експертом (Запит #<span id="chatRequestId">0</span>)</h2>
                 </div>
-                <button onclick="closeChatModal()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
+                <button onclick="closeChatModal()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;"></button>
             </div>
 
             <div id="chatMessagesContainer" style="flex: 1; overflow-y: auto; padding: 12px 0; display: flex; flex-direction: column; gap: 8px;"></div>
@@ -586,7 +586,7 @@
                     <h2 style="font-size: 18px; font-weight: 800; color: #0f172a; margin: 0;">Редагувати Профіль</h2>
                     <p style="font-size: 12px; color: #64748b; margin: 2px 0 0 0;">Зміна імені, Email та адреси Нової Пошти</p>
                 </div>
-                <button type="button" onclick="closeEditProfileModal()" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #0f172a; width: 32px; height: 32px; border-radius: 50%; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">✕</button>
+                <button type="button" onclick="closeEditProfileModal()" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #0f172a; width: 32px; height: 32px; border-radius: 50%; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"></button>
             </div>
 
             <form id="editProfileForm" style="margin-top: 10px; display:flex; flex-direction:column; gap:12px;">
@@ -622,10 +622,10 @@
         <div class="card modal-content" style="max-width: 480px; width: 92%;">
             <div class="card-header" style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
                 <div>
-                    <h2 style="font-size:17px; color:var(--text-main);">💡 Рекомендація: Вкажіть VIN-код</h2>
+                    <h2 style="font-size:17px; color:var(--text-main);"> Рекомендація: Вкажіть VIN-код</h2>
                     <p id="vinModalCarName" style="font-size:12px; color:var(--text-muted);">Для вашого автомобіля</p>
                 </div>
-                <button onclick="closeVinRecommendationModal()" style="background:none; border:none; color:var(--text-muted); font-size:22px; cursor:pointer; font-weight:bold;">✕</button>
+                <button onclick="closeVinRecommendationModal()" style="background:none; border:none; color:var(--text-muted); font-size:22px; cursor:pointer; font-weight:bold;"></button>
             </div>
 
             <div style="margin: 14px 0; font-size: 13px; color: var(--text-muted); line-height: 1.5;">
@@ -633,9 +633,9 @@
                     Вказівка 17-значного VIN-коду відкриє доступ до цифрового автосервісу:
                 </p>
                 <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 12px; border-radius: 12px; display: flex; flex-direction: column; gap: 8px;">
-                    <div>📜 <strong>Сервісний бортжурнал:</strong> збереження повної історії замін та ремонту.</div>
-                    <div>🔧 <strong>Графік Планового ТО:</strong> автоматичний контроль інтервалів мастил, фільтрів та ГРМ.</div>
-                    <div>⚡ <strong>100% точний підбір:</strong> автоматичний вибір запчастин без ризику помилки.</div>
+                    <div> <strong>Сервісний бортжурнал:</strong> збереження повної історії замін та ремонту.</div>
+                    <div> <strong>Графік Планового ТО:</strong> автоматичний контроль інтервалів мастил, фільтрів та ГРМ.</div>
+                    <div> <strong>100% точний підбір:</strong> автоматичний вибір запчастин без ризику помилки.</div>
                 </div>
             </div>
 
@@ -664,7 +664,7 @@
     <!-- Сповіщення Toast -->
     <div id="toastContainer" class="toast-container"></div>
 
-    <script src="app.js?v=6.0"></script>
+    <script src="app.js?v=7.0"></script>
 </body>
 </html>
 

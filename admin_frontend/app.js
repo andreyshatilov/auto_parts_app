@@ -107,7 +107,7 @@ function setupEventListeners() {
                         const brandField = document.getElementById('brandInput');
                         if (!brandField.value) {
                             brandField.value = data.brand;
-                            showToast(`⚡ Декодер VIN: Визначено марку ${data.brand} (${data.country})`);
+                            showToast(` Декодер VIN: Визначено марку ${data.brand} (${data.country})`);
                         }
                     }
                 }
@@ -150,7 +150,7 @@ function setupEventListeners() {
             document.getElementById('adminChatInput').value = '';
             await loadAdminChatMessages(activeAdminChatRequestId);
         } catch (err) {
-            showToast(`❌ ${err.message}`, 'error');
+            showToast(` ${err.message}`, 'error');
         }
     });
 
@@ -174,12 +174,12 @@ async function checkServerHealth() {
             const data = await res.json();
             if (data.status === 'online') {
                 serverStatusDot.className = 'status-indicator online';
-                serverStatusText.textContent = '🟢 Сервер Онлайн (Render + PostgreSQL)';
+                serverStatusText.textContent = ' Сервер Онлайн (Render + PostgreSQL)';
             } else throw new Error();
         } else throw new Error();
     } catch {
         serverStatusDot.className = 'status-indicator offline';
-        serverStatusText.textContent = '🔴 Сервер недоступний';
+        serverStatusText.textContent = ' Сервер недоступний';
     }
 }
 
@@ -192,14 +192,14 @@ async function loadCars(searchQuery = '') {
         const cars = await res.json();
         renderCars(cars);
     } catch (err) {
-        carsContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--danger); padding: 20px;">⚠️ Помилка завантаження авто</div>`;
+        carsContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--danger); padding: 20px;"> Помилка завантаження авто</div>`;
     }
 }
 
 function renderCars(cars) {
     carsCountEl.textContent = cars.length;
     if (cars.length === 0) {
-        carsContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); padding: 20px;">🚗 База авто порожня.</div>`;
+        carsContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); padding: 20px;"> База авто порожня.</div>`;
         return;
     }
 
@@ -213,7 +213,7 @@ function renderCars(cars) {
             </div>
             <div class="vin-badge">
                 <span>VIN: ${escapeHtml(car.vin)}</span>
-                <button class="copy-vin-btn" onclick="copyToClipboard('${car.vin}')">📋</button>
+                <button class="copy-vin-btn" onclick="copyToClipboard('${car.vin}')"></button>
             </div>
             <div class="car-details-grid">
                 <div class="detail-item"><span class="detail-label">Рік випуску</span><span class="detail-value">${escapeHtml(car.release_date || '—')}</span></div>
@@ -237,7 +237,7 @@ async function loadClients(searchQuery = '') {
         const clients = await res.json();
         renderClients(clients);
     } catch (err) {
-        clientsContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--danger); padding: 20px;">⚠️ Помилка клієнтів</div>`;
+        clientsContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--danger); padding: 20px;"> Помилка клієнтів</div>`;
     }
 }
 
@@ -252,7 +252,7 @@ function renderClients(clients) {
         clients.forEach(c => {
             const opt = document.createElement('option');
             opt.value = c.id;
-            opt.textContent = `👤 ${c.first_name} ${c.last_name} (${c.phone})`;
+            opt.textContent = ` ${c.first_name} ${c.last_name} (${c.phone})`;
             adminClientSelect.appendChild(opt);
         });
         if (currentVal) adminClientSelect.value = currentVal;
@@ -267,11 +267,11 @@ function renderClients(clients) {
         <div class="client-card">
             <div class="car-header-row">
                 <div>
-                    <div class="car-title">👤 ${escapeHtml(c.first_name)} ${escapeHtml(c.last_name)} (ID #${c.id})</div>
-                    <div class="car-modification">📞 ${escapeHtml(c.phone)}</div>
+                    <div class="car-title"> ${escapeHtml(c.first_name)} ${escapeHtml(c.last_name)} (ID #${c.id})</div>
+                    <div class="car-modification"> ${escapeHtml(c.phone)}</div>
                 </div>
                 <button class="btn btn-secondary" style="font-size:11px; padding:4px 8px;" onclick="prefillAddCarForClient(${c.id}, '${escapeHtml(c.first_name)} ${escapeHtml(c.last_name)}')">
-                    ➕ Додати авто в гараж
+                    + Додати авто в гараж
                 </button>
             </div>
             <div class="car-details-grid">
@@ -294,13 +294,13 @@ async function loadRequestsQueue() {
         pendingBadge.textContent = pending.length;
         renderRequestsQueue(requests);
     } catch (err) {
-        requestsQueueContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--danger); padding: 20px;">⚠️ Помилка запитів</div>`;
+        requestsQueueContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--danger); padding: 20px;"> Помилка запитів</div>`;
     }
 }
 
 function renderRequestsQueue(requests) {
     if (requests.length === 0) {
-        requestsQueueContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); padding: 20px;">📥 Запитів немає.</div>`;
+        requestsQueueContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); padding: 20px;"> Запитів немає.</div>`;
         return;
     }
 
@@ -312,27 +312,27 @@ function renderRequestsQueue(requests) {
                     <div class="car-modification">Від ${formatDate(req.created_at)}</div>
                 </div>
                 <span class="badge ${req.status === 'completed' ? 'badge-engine' : 'badge-trans'}">
-                    ${req.status === 'completed' ? '✓ Оброблено' : '⏳ Очікує кошторису'}
+                    ${req.status === 'completed' ? ' Оброблено' : ' Очікує кошторису'}
                 </span>
             </div>
 
             <div style="background: rgba(59,130,246,0.1); border: 1px solid rgba(59,130,246,0.3); padding: 10px; border-radius: 8px; font-size: 13px;">
-                <strong>🚗 Автомобіль:</strong> ${req.car ? `${escapeHtml(req.car.brand)} ${escapeHtml(req.car.model)} ${req.car.release_date ? `(${escapeHtml(req.car.release_date)} р.в.)` : ''} | VIN: ${escapeHtml(req.car.vin)} | Двигун: ${escapeHtml(req.car.engine_code || '—')}` : 'Невідомо'}
+                <strong> Автомобіль:</strong> ${req.car ? `${escapeHtml(req.car.brand)} ${escapeHtml(req.car.model)} ${req.car.release_date ? `(${escapeHtml(req.car.release_date)} р.в.)` : ''} | VIN: ${escapeHtml(req.car.vin)} | Двигун: ${escapeHtml(req.car.engine_code || '—')}` : 'Невідомо'}
             </div>
 
             <div style="font-size: 14px; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 8px; font-weight: 500;">
-                💬 "${escapeHtml(req.client_message)}"
+                 "${escapeHtml(req.client_message)}"
             </div>
 
             <div class="car-footer">
                 <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px;" onclick="openAdminChatModal(${req.id})">
-                    💬 Чат з клієнтом
+                     Чат з клієнтом
                 </button>
                 ${req.status !== 'completed' ? `
                     <button class="btn btn-primary" style="padding: 6px 12px; width: auto; font-size: 12px;" onclick="openProposalModal(${req.id}, '${escapeHtml(req.car ? req.car.brand + ' ' + req.car.model : '')}')">
-                        📝 Скласти кошторис
+                         Скласти кошторис
                     </button>
-                ` : '<span style="color:#34d399; font-weight:600;">✓ Кошторис надіслано</span>'}
+                ` : '<span style="color:#34d399; font-weight:600;"> Кошторис надіслано</span>'}
             </div>
         </div>
     `).join('');
@@ -346,13 +346,13 @@ async function loadOrdersQueue() {
         ordersBadge.textContent = orders.length;
         renderOrdersQueue(orders);
     } catch (err) {
-        ordersContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--danger); padding: 20px;">⚠️ Помилка замовлень</div>`;
+        ordersContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--danger); padding: 20px;"> Помилка замовлень</div>`;
     }
 }
 
 function renderOrdersQueue(orders) {
     if (orders.length === 0) {
-        ordersContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); padding: 20px;">📦 Замовлень у роботі поки немає.</div>`;
+        ordersContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); padding: 20px;"> Замовлень у роботі поки немає.</div>`;
         return;
     }
 
@@ -374,7 +374,7 @@ function renderOrdersQueue(orders) {
 
             <div style="font-size: 12px; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px;">
                 <strong>Доставка НП:</strong> ${escapeHtml(order.shipping_address || 'Не вказано')}
-                ${order.ttn_number ? `<div style="color:#60a5fa; margin-top:2px;">📦 ТТН: ${escapeHtml(order.ttn_number)}</div>` : ''}
+                ${order.ttn_number ? `<div style="color:#60a5fa; margin-top:2px;"> ТТН: ${escapeHtml(order.ttn_number)}</div>` : ''}
             </div>
 
             <div style="font-size:12px;">
@@ -384,10 +384,10 @@ function renderOrdersQueue(orders) {
 
             <div class="car-footer">
                 <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px;" onclick="printOrderPackingSlip(${order.id}, '${escapeHtml(order.shipping_address || '')}', '${escapeHtml(order.total_price)}')">
-                    🖨️ Друк чек-листа
+                     Друк чек-листа
                 </button>
                 <button class="btn btn-primary" style="padding: 6px 12px; width: auto; font-size: 12px;" onclick="openOrderStatusModal(${order.id}, '${order.status}', '${escapeHtml(order.assembly_photo_url || '')}', '${escapeHtml(order.ttn_number || '')}', '${order.purchase_cost || ''}')">
-                    ⚙️ Статус / ТТН
+                     Статус / ТТН
                 </button>
             </div>
         </div>
@@ -402,13 +402,13 @@ async function loadReturnsQueue() {
         returnsBadge.textContent = returnsList.filter(r => r.status === 'requested').length;
         renderReturnsQueue(returnsList);
     } catch (err) {
-        returnsContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--danger); padding: 20px;">⚠️ Помилка повернень</div>`;
+        returnsContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--danger); padding: 20px;"> Помилка повернень</div>`;
     }
 }
 
 function renderReturnsQueue(returnsList) {
     if (returnsList.length === 0) {
-        returnsContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); padding: 20px;">🔄 Заявок на повернення немає.</div>`;
+        returnsContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); padding: 20px;"> Заявок на повернення немає.</div>`;
         return;
     }
 
@@ -420,7 +420,7 @@ function renderReturnsQueue(returnsList) {
                     <div class="car-modification">Замовлення #${ret.order_id} • ${formatDate(ret.created_at)}</div>
                 </div>
                 <span class="badge ${ret.status === 'approved' ? 'badge-engine' : 'badge-trans'}">
-                    ${ret.status === 'requested' ? '⏳ На розгляді' : (ret.status === 'approved' ? '✓ Схвалено' : '✕ Відхилено')}
+                    ${ret.status === 'requested' ? ' На розгляді' : (ret.status === 'approved' ? ' Схвалено' : ' Відхилено')}
                 </span>
             </div>
 
@@ -431,8 +431,8 @@ function renderReturnsQueue(returnsList) {
 
             ${ret.status === 'requested' ? `
                 <div class="car-footer" style="gap:8px;">
-                    <button class="btn btn-primary" style="padding:6px; font-size:12px; flex:1;" onclick="updateReturnStatus(${ret.id}, 'approved')">✓ Схвалити повернення</button>
-                    <button class="btn btn-delete" style="padding:6px; font-size:12px; flex:1;" onclick="updateReturnStatus(${ret.id}, 'rejected')">✕ Відхилити</button>
+                    <button class="btn btn-primary" style="padding:6px; font-size:12px; flex:1;" onclick="updateReturnStatus(${ret.id}, 'approved')"> Схвалити повернення</button>
+                    <button class="btn btn-delete" style="padding:6px; font-size:12px; flex:1;" onclick="updateReturnStatus(${ret.id}, 'rejected')"> Відхилити</button>
                 </div>
             ` : ''}
         </div>
@@ -443,10 +443,10 @@ async function updateReturnStatus(returnId, statusVal) {
     try {
         const res = await fetch(`${API_BASE_URL}/returns/${returnId}/status?status_val=${statusVal}`, { method: 'PUT' });
         if (!res.ok) throw new Error();
-        showToast('✅ Статус повернення оновлено!');
+        showToast(' Статус повернення оновлено!');
         await loadReturnsQueue();
     } catch (err) {
-        showToast(`❌ ${err.message}`, 'error');
+        showToast(` ${err.message}`, 'error');
     }
 }
 
@@ -470,7 +470,7 @@ async function loadAnalyticsSummary() {
         } else {
             topContainer.innerHTML = data.top_clients.map((c, i) => `
                 <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid rgba(255,255,255,0.05); font-size:13px;">
-                    <span>🥇 ${i+1}. <strong>${escapeHtml(c.name)}</strong> (${escapeHtml(c.phone)}) — ${c.orders_count} замовлень</span>
+                    <span> ${i+1}. <strong>${escapeHtml(c.name)}</strong> (${escapeHtml(c.phone)}) — ${c.orders_count} замовлень</span>
                     <span style="color:#34d399; font-weight:700;">${c.total_spent} грн</span>
                 </div>
             `).join('');
@@ -494,7 +494,7 @@ function printOrderPackingSlip(orderId, address, total) {
             </style>
         </head>
         <body>
-            <h1>🏛️ Міністерство Запчастин — Чек-лист Комплектації Замовлення #${orderId}</h1>
+            <h1>️ Міністерство Запчастин — Чек-лист Комплектації Замовлення #${orderId}</h1>
 
             <div class="border">Дата формування: ${new Date().toLocaleDateString('uk-UA')}</div>
 
@@ -540,7 +540,7 @@ async function lookupCrossesForOE(blockId, oemInput) {
                 </div>
             `).join('');
 
-            showToast(`⚡ База знань: підтягнуто ${matches.length} аналогів за 5 мс!`);
+            showToast(` База знань: підтягнуто ${matches.length} аналогів за 5 мс!`);
         }
     } catch (err) {
         console.error(err);
@@ -573,7 +573,7 @@ function addProposalItemBlock() {
 
     block.innerHTML = `
         <div style="display:flex; justify-content:space-between; margin-bottom:8px;">
-            <strong>📦 Деталь #${itemBlockCounter}</strong>
+            <strong> Деталь #${itemBlockCounter}</strong>
             <button type="button" onclick="document.getElementById('${blockId}').remove()" style="background:none; border:none; color:#f87171; cursor:pointer;">Видалити</button>
         </div>
         <div class="form-row">
@@ -589,7 +589,7 @@ function addProposalItemBlock() {
         <div style="margin-top: 8px;">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
                 <label style="font-size:11px; color:var(--text-muted);">ВАРИАНТИ АНАЛОГІВ (БРЕНД / АРТИКУЛ / ЦІНА ГРН):</label>
-                <button type="button" style="background:none; border:none; color:#60a5fa; font-size:11px; cursor:pointer;" onclick="addAltRowToBlock('${blockId}')">➕ Ще аналог</button>
+                <button type="button" style="background:none; border:none; color:#60a5fa; font-size:11px; cursor:pointer;" onclick="addAltRowToBlock('${blockId}')">+ Ще аналог</button>
             </div>
             <div class="alts-container" style="display:flex; flex-direction:column; gap:6px;">
                 <div class="alt-row" style="display:grid; grid-template-columns: 1fr 1fr 100px; gap:8px;">
@@ -647,7 +647,7 @@ async function handleProposalSubmit() {
     });
 
     if (items.length === 0) {
-        showToast('⚠️ Заповніть хоча б одну деталь з аналогом!', 'error');
+        showToast(' Заповніть хоча б одну деталь з аналогом!', 'error');
         return;
     }
 
@@ -667,11 +667,11 @@ async function handleProposalSubmit() {
         const data = await res.json();
         if (!res.ok) throw new Error(data.detail || 'Помилка');
 
-        showToast('✅ Кошторис надіслано клієнту!');
+        showToast(' Кошторис надіслано клієнту!');
         closeProposalModal();
         await loadRequestsQueue();
     } catch (err) {
-        showToast(`❌ ${err.message}`, 'error');
+        showToast(` ${err.message}`, 'error');
     }
 }
 
@@ -705,12 +705,12 @@ async function handleAddCar() {
         const result = await res.json();
         if (!res.ok) throw new Error(result.detail || 'Помилка');
 
-        showToast(`✅ Автомобіль ${result.brand} ${result.model} збережено!`);
+        showToast(` Автомобіль ${result.brand} ${result.model} збережено!`);
         addCarForm.reset();
         vinCounter.textContent = '0/17';
         await loadCars();
     } catch (err) {
-        showToast(`❌ ${err.message}`, 'error');
+        showToast(` ${err.message}`, 'error');
     } finally {
         submitBtn.disabled = false;
     }
@@ -776,11 +776,11 @@ async function handleOrderStatusSubmit() {
         const data = await res.json();
         if (!res.ok) throw new Error(data.detail || 'Помилка');
 
-        showToast(`✅ Замовлення #${currentActiveOrderId} оновлено!`);
+        showToast(` Замовлення #${currentActiveOrderId} оновлено!`);
         closeOrderStatusModal();
         await loadOrdersQueue();
     } catch (err) {
-        showToast(`❌ ${err.message}`, 'error');
+        showToast(` ${err.message}`, 'error');
     }
 }
 
@@ -789,24 +789,24 @@ async function deleteCar(carId, vin) {
     try {
         const res = await fetch(`${API_BASE_URL}/cars/${carId}`, { method: 'DELETE' });
         if (!res.ok) throw new Error('Помилка');
-        showToast(`🗑️ Авто з VIN ${vin} видалено`);
+        showToast(` Авто з VIN ${vin} видалено`);
         await loadCars();
     } catch (err) {
-        showToast(`❌ ${err.message}`, 'error');
+        showToast(` ${err.message}`, 'error');
     }
 }
 
 function copyToClipboard(text) {
-    navigator.clipboard.writeText(text).then(() => showToast(`📋 VIN скопійовано: ${text}`));
+    navigator.clipboard.writeText(text).then(() => showToast(` VIN скопійовано: ${text}`));
 }
 
 function getStatusTitle(st) {
     const map = {
-        'sent_to_preparation': '⏳ В підготовці',
-        'assembling': '⚙️ Збирається у постачальників',
-        'ready_for_shipping': '📸 Зібрано, готується до відправки',
-        'shipped': '🚚 Відправлено Новою Поштою',
-        'delivered': '✅ Отримано клієнтом'
+        'sent_to_preparation': ' В підготовці',
+        'assembling': ' Збирається у постачальників',
+        'ready_for_shipping': ' Зібрано, готується до відправки',
+        'shipped': ' Відправлено Новою Поштою',
+        'delivered': ' Отримано клієнтом'
     };
     return map[st] || st;
 }
@@ -858,20 +858,20 @@ async function loadGarages(searchQuery = '') {
                                     <div class="car-modification">${escapeHtml(car.modification || 'Без специфікації кузова')}</div>
                                 </div>
                                 <button class="btn btn-secondary" style="font-size:11px; padding:4px 8px;" onclick="prefillAddCarForClient(${client.id}, '${escapeHtml(client.first_name)} ${escapeHtml(client.last_name)}')">
-                                    ➕ Додати авто клієнту
+                                    + Додати авто клієнту
                                 </button>
                             </div>
                             
                             <div class="vin-badge" style="background: rgba(59,130,246,0.15); border-color: rgba(59,130,246,0.3);">
                                 <span>VIN: <strong>${escapeHtml(car.vin)}</strong></span>
-                                <button class="copy-vin-btn" onclick="copyToClipboard('${car.vin}')">📋</button>
+                                <button class="copy-vin-btn" onclick="copyToClipboard('${car.vin}')"></button>
                             </div>
 
                             <div style="background: rgba(15,23,42,0.6); padding: 8px 10px; border-radius: 8px; font-size: 12px; margin-top: 6px; border: 1px solid rgba(255,255,255,0.05);">
-                                <div style="color: #60a5fa; font-weight: 700;">👤 Власник: ${escapeHtml(client.first_name)} ${escapeHtml(client.last_name)} (ID #${client.id})</div>
-                                <div>📞 Телефон: <strong>${escapeHtml(client.phone)}</strong></div>
-                                ${client.email ? `<div>✉️ Email: ${escapeHtml(client.email)}</div>` : ''}
-                                <div>📦 Доставка НП: ${escapeHtml(client.shipping_address || 'Не вказано')}</div>
+                                <div style="color: #60a5fa; font-weight: 700;"> Власник: ${escapeHtml(client.first_name)} ${escapeHtml(client.last_name)} (ID #${client.id})</div>
+                                <div> Телефон: <strong>${escapeHtml(client.phone)}</strong></div>
+                                ${client.email ? `<div> Email: ${escapeHtml(client.email)}</div>` : ''}
+                                <div> Доставка НП: ${escapeHtml(client.shipping_address || 'Не вказано')}</div>
                             </div>
 
                             <div class="car-details-grid" style="margin-top: 8px;">
@@ -909,7 +909,7 @@ async function loadGarages(searchQuery = '') {
         }
     } catch (err) {
         console.error(err);
-        garagesContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--danger); padding: 20px;">⚠️ Помилка завантаження гаражів</div>`;
+        garagesContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--danger); padding: 20px;"> Помилка завантаження гаражів</div>`;
     }
 }
 
@@ -917,7 +917,7 @@ function prefillAddCarForClient(clientId, clientName) {
     switchAdminTab('cars');
     const select = document.getElementById('adminClientSelect');
     if (select) select.value = clientId;
-    showToast(`📝 Обрано клієнта ${clientName}. Введіть VIN-код для додавання авто в його гараж!`);
+    showToast(` Обрано клієнта ${clientName}. Введіть VIN-код для додавання авто в його гараж!`);
     const vinInp = document.getElementById('vinInput');
     if (vinInp) vinInp.focus();
 }

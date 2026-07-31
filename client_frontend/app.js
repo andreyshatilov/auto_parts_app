@@ -248,7 +248,7 @@ function setupEventListeners() {
                             if (transSelect) transSelect.value = data.transmission;
                         }
 
-                        showToast(`⚡ ${data.brand} ${data.model || ''} ${data.release_year ? '(' + data.release_year + ')' : ''} розпізнано за VIN!`);
+                        showToast(` ${data.brand} ${data.model || ''} ${data.release_year ? '(' + data.release_year + ')' : ''} розпізнано за VIN!`);
                     }
                 }
             } catch (err) {
@@ -272,7 +272,7 @@ function setupEventListeners() {
                     if (res.ok) {
                         const data = await res.json();
                         if (data.is_decoded && data.brand) {
-                            showToast(`⚡ ${data.brand} ${data.model || ''} (${data.release_year || ''}) розпізнано за VIN!`);
+                            showToast(` ${data.brand} ${data.model || ''} (${data.release_year || ''}) розпізнано за VIN!`);
                         }
                     }
                 } catch (err) {}
@@ -289,7 +289,7 @@ function setupEventListeners() {
             const token = localStorage.getItem(TOKEN_STORAGE_KEY);
 
             if (newVin.length !== 17) {
-                showToast('⚠️ VIN-код повинен містити ровно 17 символів!', 'error');
+                showToast(' VIN-код повинен містити ровно 17 символів!', 'error');
                 return;
             }
 
@@ -313,11 +313,11 @@ function setupEventListeners() {
                 const car = await res.json();
                 if (!res.ok) throw new Error(car.detail || 'Помилка оновлення VIN');
 
-                showToast(`🎉 VIN-код збережено! Відкрито доступ до Сервісного Бортжурналу та ТО для ${car.brand} ${car.model}!`);
+                showToast(` VIN-код збережено! Відкрито доступ до Сервісного Бортжурналу та ТО для ${car.brand} ${car.model}!`);
                 closeVinRecommendationModal();
                 await refreshGarage(token);
             } catch (err) {
-                showToast(`❌ ${err.message}`, 'error');
+                showToast(` ${err.message}`, 'error');
             }
         });
     }
@@ -341,10 +341,10 @@ function setupEventListeners() {
 
             localStorage.setItem(TOKEN_STORAGE_KEY, data.auth_token);
             currentClient = data.client;
-            showToast(`✅ Ласкаво просимо, ${currentClient.first_name}!`);
+            showToast(` Ласкаво просимо, ${currentClient.first_name}!`);
             showMainScreen(currentClient);
         } catch (err) {
-            showToast(`❌ ${err.message}`, 'error');
+            showToast(` ${err.message}`, 'error');
         }
     });
 
@@ -362,10 +362,10 @@ function setupEventListeners() {
 
             localStorage.setItem(TOKEN_STORAGE_KEY, data.auth_token);
             currentClient = data.client;
-            showToast(`👋 З поверненням, ${currentClient.first_name}!`);
+            showToast(` З поверненням, ${currentClient.first_name}!`);
             showMainScreen(currentClient);
         } catch (err) {
-            showToast(`❌ ${err.message}`, 'error');
+            showToast(` ${err.message}`, 'error');
         }
     });
 
@@ -382,11 +382,11 @@ function setupEventListeners() {
             const car = await res.json();
             if (!res.ok) throw new Error(car.detail || 'Помилка прийому авто');
 
-            showToast(`🎉 Вітаємо! Автомобіль ${car.brand} ${car.model} та вся його історія прийняті у ваш гараж!`);
+            showToast(` Вітаємо! Автомобіль ${car.brand} ${car.model} та вся його історія прийняті у ваш гараж!`);
             document.getElementById('pinInput').value = '';
             await refreshGarage(token);
         } catch (err) {
-            showToast(`❌ ${err.message}`, 'error');
+            showToast(` ${err.message}`, 'error');
         }
     });
 
@@ -406,7 +406,7 @@ function setupEventListeners() {
             : selectedModel;
 
         if (!finalBrand || !finalModel) {
-            showToast('⚠️ Будь ласка, оберіть або вкажіть марку та модель авто!', 'error');
+            showToast(' Будь ласка, оберіть або вкажіть марку та модель авто!', 'error');
             return;
         }
 
@@ -414,7 +414,7 @@ function setupEventListeners() {
         if (!vinValue) {
             vinValue = 'NOVIN-' + Math.random().toString(36).substring(2, 11).toUpperCase();
         } else if (vinValue.length !== 17) {
-            showToast('⚠️ VIN-код повинен містити ровно 17 символів (або залиште порожнім)!', 'error');
+            showToast(' VIN-код повинен містити ровно 17 символів (або залиште порожнім)!', 'error');
             return;
         }
 
@@ -452,7 +452,7 @@ function setupEventListeners() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.detail || 'Помилка');
 
-            showToast(`🚘 ${data.brand} ${data.model} додано у ваш Гараж!`);
+            showToast(` ${data.brand} ${data.model} додано у ваш Гараж!`);
             addGarageCarForm.reset();
             initBrandAndModelSelects();
             clientVinCounter.textContent = '0/17';
@@ -462,7 +462,7 @@ function setupEventListeners() {
                 openVinRecommendationModal(data.id, `${data.brand} ${data.model}`);
             }
         } catch (err) {
-            showToast(`❌ ${err.message}`, 'error');
+            showToast(` ${err.message}`, 'error');
         }
     });
 
@@ -473,7 +473,7 @@ function setupEventListeners() {
         const text = document.getElementById('requestText').value.trim();
 
         if (!carId) {
-            showToast('⚠️ Оберіть авто з гаража!', 'error');
+            showToast(' Оберіть авто з гаража!', 'error');
             return;
         }
 
@@ -487,11 +487,11 @@ function setupEventListeners() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.detail || 'Помилка надсилання');
 
-            showToast('📨 Запит на підбір надіслано експерту!');
+            showToast(' Запит на підбір надіслано експерту!');
             document.getElementById('requestText').value = '';
             await loadMyRequests(token);
         } catch (err) {
-            showToast(`❌ ${err.message}`, 'error');
+            showToast(` ${err.message}`, 'error');
         }
     });
 
@@ -510,11 +510,11 @@ function setupEventListeners() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.detail || 'Помилка');
 
-            showToast('🔄 Заявка на повернення товару надіслана!');
+            showToast(' Заявка на повернення товару надіслана!');
             closeReturnModal();
             await loadMyOrders(token);
         } catch (err) {
-            showToast(`❌ ${err.message}`, 'error');
+            showToast(` ${err.message}`, 'error');
         }
     });
 
@@ -652,7 +652,7 @@ function initBrandAndModelSelects() {
 
     const otherBrandOpt = document.createElement('option');
     otherBrandOpt.value = '__custom__';
-    otherBrandOpt.textContent = '➕ Інша марка (вказати вручну)';
+    otherBrandOpt.textContent = '+ Інша марка (вказати вручну)';
     brandSelect.appendChild(otherBrandOpt);
 
     function updateCustomFieldsVisibility() {
@@ -698,7 +698,7 @@ function initBrandAndModelSelects() {
         if (selectedBrand === '__custom__') {
             const optCustom = document.createElement('option');
             optCustom.value = '__custom__';
-            optCustom.textContent = '➕ Інша модель (вказати вручну)';
+            optCustom.textContent = '+ Інша модель (вказати вручну)';
             modelSelect.appendChild(optCustom);
             modelSelect.value = '__custom__';
         } else {
@@ -717,7 +717,7 @@ function initBrandAndModelSelects() {
 
             const optCustom = document.createElement('option');
             optCustom.value = '__custom__';
-            optCustom.textContent = '➕ Інша модель (вказати вручну)';
+            optCustom.textContent = '+ Інша модель (вказати вручну)';
             modelSelect.appendChild(optCustom);
         }
 
@@ -771,7 +771,7 @@ function renderGarage(cars) {
     }
 
     if (cars.length === 0) {
-        garageContainer.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 24px;">🚗 Ваш гараж порожній. Додайте перше авто нижче (до 10 машин).</div>`;
+        garageContainer.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 24px;"> Ваш гараж порожній. Додайте перше авто нижче (до 10 машин).</div>`;
         return;
     }
 
@@ -800,8 +800,8 @@ function renderGarage(cars) {
 
             ${isNoVin ? `
                 <div style="margin-top:10px; background:#fffbe6; border:1px solid #ffe58f; padding:8px 12px; border-radius:10px; font-size:12px; display:flex; justify-content:space-between; align-items:center; gap:6px;">
-                    <span style="color:#d48806; font-weight:600;">💡 Вкажіть VIN для Бортжурналу та ТО</span>
-                    <button class="btn btn-primary" style="width:auto; padding:4px 10px; font-size:11px; white-space:nowrap;" onclick="openVinRecommendationModal(${car.id}, '${escapeHtml(car.brand)} ${escapeHtml(car.model)}')">✏️ Вказати VIN</button>
+                    <span style="color:#d48806; font-weight:600;"> Вкажіть VIN для Бортжурналу та ТО</span>
+                    <button class="btn btn-primary" style="width:auto; padding:4px 10px; font-size:11px; white-space:nowrap;" onclick="openVinRecommendationModal(${car.id}, '${escapeHtml(car.brand)} ${escapeHtml(car.model)}')"> Вказати VIN</button>
                 </div>
             ` : ''}
 
@@ -829,7 +829,7 @@ async function generateTransferCode(carId, carName) {
         const data = await res.json();
         if (!res.ok) throw new Error(data.detail || 'Помилка');
 
-        alert(`📲 ОДНОРАЗОВИЙ SMS PIN-КОД ПЕРЕДАЧІ АВТО:\n\nPIN-КОД: ${data.pin_code}\n\n⏱️ Код дійсний 15 ХВИЛИН!\n\nПередайте цей 6-значний код покупцю. При введенні у його застосунку авто "${carName}" та вся його історія перейдуть до нього.`);
+        alert(` ОДНОРАЗОВИЙ SMS PIN-КОД ПЕРЕДАЧІ АВТО:\n\nPIN-КОД: ${data.pin_code}\n\n Код дійсний 15 ХВИЛИН!\n\nПередайте цей 6-значний код покупцю. При введенні у його застосунку авто "${carName}" та вся його історія перейдуть до нього.`);
     } catch (err) {
         showToast(err.message, 'error');
     }
@@ -838,7 +838,7 @@ async function generateTransferCode(carId, carName) {
 function applyPreset(text) {
     document.getElementById('requestText').value = text;
     switchNavTab('requests');
-    showToast('✨ Категорію/компонент додано в форму запиту!');
+    showToast(' Категорію/компонент додано в форму запиту!');
     const reqForm = document.getElementById('requestForm');
     if (reqForm) reqForm.scrollIntoView({ behavior: 'smooth' });
 }
@@ -866,31 +866,31 @@ function renderRequests(requests) {
         <div class="card" style="margin-bottom:12px;">
             <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted); margin-bottom:6px;">
                 <span>Запит #${req.id} від ${formatDate(req.created_at)}</span>
-                <span class="badge ${req.status === 'completed' ? 'badge-engine' : 'badge-trans'}">${req.status === 'completed' ? '✓ Відповідь отримано' : '⏳ В обробці'}</span>
+                <span class="badge ${req.status === 'completed' ? 'badge-engine' : 'badge-trans'}">${req.status === 'completed' ? ' Відповідь отримано' : ' В обробці'}</span>
             </div>
             <div style="font-size:14px; font-weight:600; margin-bottom:8px;">"${escapeHtml(req.client_message)}"</div>
 
             <button class="btn btn-secondary" style="font-size:11px; padding:4px 8px; margin-bottom:8px;" onclick="openChatModal(${req.id})">
-                💬 Чат з експертом по цьому запиту
+                 Чат з експертом по цьому запиту
             </button>
 
             ${req.proposal ? `
                 <div style="background:rgba(15,23,42,0.6); padding:12px; border-radius:10px; border:1px solid rgba(59,130,246,0.3); margin-top:8px;">
-                    <div style="color:#60a5fa; font-weight:700; font-size:13px; margin-bottom:6px;">📋 Кошторис від Експерта:</div>
-                    ${req.proposal.manager_comment ? `<div style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">💬 ${escapeHtml(req.proposal.manager_comment)}</div>` : ''}
+                    <div style="color:#60a5fa; font-weight:700; font-size:13px; margin-bottom:6px;"> Кошторис від Експерта:</div>
+                    ${req.proposal.manager_comment ? `<div style="font-size:12px; color:var(--text-muted); margin-bottom:8px;"> ${escapeHtml(req.proposal.manager_comment)}</div>` : ''}
                     
                     <form onsubmit="submitOrderFromProposal(event, ${req.proposal.id}, ${req.car_id})">
                         ${req.proposal.items.map((item, idx) => `
                             <div style="margin-bottom:10px; padding-bottom:8px; border-bottom:1px solid rgba(255,255,255,0.05);">
                                 <div style="display:flex; justify-content:space-between; align-items:center;">
-                                    <div style="font-size:13px; font-weight:600;">📦 ${idx+1}. ${escapeHtml(item.category_name)}</div>
+                                    <div style="font-size:13px; font-weight:600;"> ${idx+1}. ${escapeHtml(item.category_name)}</div>
                                     ${item.oem_number ? `
                                         <span style="background:rgba(16,185,129,0.2); color:#34d399; border:1px solid rgba(16,185,129,0.4); padding:2px 8px; border-radius:12px; font-size:10px; font-weight:700;">
-                                            ✅ 100% Перевірено за OE #${escapeHtml(item.oem_number)}
+                                             100% Перевірено за OE #${escapeHtml(item.oem_number)}
                                         </span>
                                     ` : `
                                         <span style="background:rgba(245,158,11,0.2); color:#fbbf24; border:1px solid rgba(245,158,11,0.4); padding:2px 8px; border-radius:12px; font-size:10px; font-weight:700;">
-                                            ℹ️ Підбір за специфікацією моделі
+                                             Підбір за специфікацією моделі
                                         </span>
                                     `}
                                 </div>
@@ -900,7 +900,7 @@ function renderRequests(requests) {
                                         <label style="display:flex; justify-content:space-between; align-items:center; background:rgba(255,255,255,0.05); padding:8px 10px; border-radius:6px; font-size:12px; cursor:pointer;">
                                             <div style="display:flex; align-items:center; gap:8px;">
                                                 <input type="radio" name="item_${item.id}" value="${alt.brand}|${alt.part_number}|${alt.price}|${item.category_name}|${item.oem_number || ''}" ${aIdx === 0 ? 'checked' : ''}>
-                                                <span>🔹 <strong>${escapeHtml(alt.brand)}</strong> (${escapeHtml(alt.part_number)})</span>
+                                                <span> <strong>${escapeHtml(alt.brand)}</strong> (${escapeHtml(alt.part_number)})</span>
                                             </div>
                                             <span style="color:#34d399; font-weight:700;">${alt.price} грн</span>
                                         </label>
@@ -1085,10 +1085,10 @@ function renderServiceTimeline(orders) {
         <div class="timeline-item">
             <div class="timeline-dot"></div>
             <div style="display:flex; justify-content:space-between; font-size:11px; color:#60a5fa; margin-bottom:4px;">
-                <span>🗓️ ${formatDate(o.created_at)}</span>
+                <span> ${formatDate(o.created_at)}</span>
                 <span>Замовлення #${o.id}</span>
             </div>
-            <div style="font-size:13px; font-weight:700;">🔧 Замінені запчастини:</div>
+            <div style="font-size:13px; font-weight:700;"> Замінені запчастини:</div>
             <div style="font-size:12px; margin-top:2px; color:var(--text-main);">
                 ${o.items.map(i => `<div>• ${escapeHtml(i.category_name)} (${escapeHtml(i.brand)} ${escapeHtml(i.part_number)})</div>`).join('')}
             </div>
@@ -1143,29 +1143,29 @@ async function repeatOrder(orderId) {
         const data = await res.json();
         if (!res.ok) throw new Error(data.detail || 'Помилка');
 
-        showToast('🔁 Запит на повтор замовлення надіслано експерту!');
+        showToast(' Запит на повтор замовлення надіслано експерту!');
         await loadMyRequests(token);
     } catch (err) {
-        showToast(`❌ ${err.message}`, 'error');
+        showToast(` ${err.message}`, 'error');
     }
 }
 
 function getStatusTitle(st) {
     const map = {
-        'sent_to_preparation': '⏳ В підготовці',
-        'assembling': '⚙️ Збирається у постачальників',
-        'ready_for_shipping': '📸 Зібрано, готується до відправки',
-        'shipped': '🚚 Відправлено Новою Поштою',
-        'delivered': '✅ Отримано клієнтом'
+        'sent_to_preparation': ' В підготовці',
+        'assembling': ' Збирається у постачальників',
+        'ready_for_shipping': ' Зібрано, готується до відправки',
+        'shipped': ' Відправлено Новою Поштою',
+        'delivered': ' Отримано клієнтом'
     };
     return map[st] || st;
 }
 
 function getPaymentTitle(pm) {
     const map = {
-        'cash_on_delivery': '🚚 Накладений платіж Нової Пошти',
-        'fop_prepayment': '💳 Передплата на рахунок ФОП',
-        'partial_prepayment': '⚖️ Часткова передплата'
+        'cash_on_delivery': ' Накладений платіж Нової Пошти',
+        'fop_prepayment': ' Передплата на рахунок ФОП',
+        'partial_prepayment': '️ Часткова передплата'
     };
     return map[pm] || pm;
 }
