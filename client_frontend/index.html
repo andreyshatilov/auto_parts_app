@@ -461,6 +461,10 @@
                                             <option value="Варіатор">Варіатор (CVT)</option>
                                         </select>
                                     </div>
+                                    <div class="form-group" style="flex:1;">
+                                        <label for="clientMileageInput">Поточний пробіг (км)</label>
+                                        <input type="number" id="clientMileageInput" placeholder="напр. 142000" min="0">
+                                    </div>
                                 </div>
 
                                 <button type="submit" class="btn btn-primary" style="margin-top:4px;">
@@ -701,7 +705,16 @@
                 <div><span style="color:var(--text-muted); font-size:11px; display:block;">ТРАНСМІСІЯ (КПП)</span><strong id="detailCarTrans">АКПП 8-ст. Steptronic</strong></div>
                 <div><span style="color:var(--text-muted); font-size:11px; display:block;">КОЛІР КУЗОВА</span><strong id="detailCarColor">Black Sapphire Metallic</strong></div>
                 <div><span style="color:var(--text-muted); font-size:11px; display:block;">КРАЇНА ТА ЗАВОД</span><strong id="detailCarPlant">Німеччина (Мюнхен)</strong></div>
-                <div><span style="color:var(--text-muted); font-size:11px; display:block;">ФІКСОВАНИЙ ПРОБІГ</span><strong id="detailCarMileage" style="color:var(--primary);">142 500 км</strong></div>
+                <div style="grid-column: span 2; background:#ffffff; padding:8px 12px; border-radius:8px; border:1px solid #cbd5e1; display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <span style="color:var(--text-muted); font-size:11px; display:block;">ПОТОЧНИЙ ПРОБІГ АВТО</span>
+                        <strong id="detailCarMileage" style="color:var(--primary); font-size:14px;">142 500 км</strong>
+                    </div>
+                    <div style="display:flex; gap:6px;">
+                        <input type="number" id="editMileageInput" placeholder="Введіть км..." style="width:110px; font-size:11px; padding:4px 8px; border-radius:6px; border:1px solid #cbd5e1;">
+                        <button class="btn btn-secondary" style="font-size:10px; padding:4px 8px; width:auto; white-space:nowrap;" onclick="updateCarMileage()">Оновити км</button>
+                    </div>
+                </div>
             </div>
 
             <!-- ДІЇ З АВТОМОБІЛЕМ -->
@@ -808,7 +821,7 @@
     <!-- Сповіщення Toast -->
     <div id="toastContainer" class="toast-container"></div>
 
-    <script src="app.js?v=12.0"></script>
+    <script src="app.js?v=13.0"></script>
 </body>
 </html>
 

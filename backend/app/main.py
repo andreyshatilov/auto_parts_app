@@ -42,6 +42,13 @@ try:
                 conn.commit()
             except Exception:
                 pass
+
+        # Fix legacy numeric fake test VINs to authentic 17-char ISO VINs
+        try:
+            conn.execute(text("UPDATE cars SET vin = 'WBA33AY05NFP12345' WHERE vin = '23542435345643564' OR vin ~ '^[0-9]+$';"))
+            conn.commit()
+        except Exception:
+            pass
 except Exception as err:
     print(f"⚠️ Database initialization notice: {err}")
 

@@ -416,11 +416,14 @@ function setupEventListeners() {
             return;
         }
 
-        let vinValue = clientVinInput.value.trim();
+        let vinValue = clientVinInput.value.trim().toUpperCase();
         if (!vinValue) {
             vinValue = 'NOVIN-' + Math.random().toString(36).substring(2, 11).toUpperCase();
         } else if (vinValue.length !== 17) {
             showToast(' VIN-код повинен містити ровно 17 символів (або залиште порожнім)!', 'error');
+            return;
+        } else if (/^\d+$/.test(vinValue)) {
+            showToast(' VIN-код не може складатися лише з цифр! Введіть міжнародний VIN (напр., WBA33AY05NFP12345)', 'error');
             return;
         }
 
@@ -440,6 +443,9 @@ function setupEventListeners() {
         if (restyleVal) modParts.push(restyleVal);
         const modificationStr = modParts.length > 0 ? modParts.join(' | ') : null;
 
+        const mileageRaw = document.getElementById('clientMileageInput')?.value.trim();
+        const mileageVal = mileageRaw ? parseInt(mileageRaw) : 120000;
+
         const carData = {
             vin: vinValue,
             brand: finalBrand,
@@ -447,7 +453,8 @@ function setupEventListeners() {
             modification: modificationStr,
             release_date: document.getElementById('clientYearSelect')?.value || null,
             engine_code: engineVal || null,
-            transmission_type: document.getElementById('clientTransInput').value || null
+            transmission_type: document.getElementById('clientTransInput').value || null,
+            mileage: mileageVal
         };
         try {
             const res = await fetch(`${API_BASE_URL}/clients/me/cars`, {
@@ -1287,6 +1294,33 @@ window.saveCustomCarPhoto = async function() {
         if (!res.ok) throw new Error(updatedCar.detail || 'Помилка збереження фото');
 
         showToast(' Фото вашого автомобіля збережено!');
+        await refreshGarage(token);
+        openCarDetailModal(currentDetailCarId);
+    } catch (err) {
+        showToast(err.message, 'error');
+    }
+};
+
+window.updateCarMileage = async function() {
+    if (!currentDetailCarId) return;
+    const mileageInput = document.getElementById('editMileageInput');
+    const newMileage = parseInt(mileageInput.value);
+    if (!newMileage || newMileage <= 0) {
+        showToast(' Будь ласка, введіть дійсний пробіг у кілометрах!', 'error');
+        return;
+    }
+
+    const token = localStorage.getItem(TOKEN_STORAGE_KEY);
+    try {
+        const res = await fetch(`${API_BASE_URL}/cars/${currentDetailCarId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'X-Auth-Token': token },
+            body: JSON.stringify({ mileage: newMileage })
+        });
+        const updatedCar = await res.json();
+        if (!res.ok) throw new Error(updatedCar.detail || 'Помилка оновлення пробігу');
+
+        showToast(` Пробіг авто оновлено на ${newMileage.toLocaleString('uk-UA')} км!`);
         await refreshGarage(token);
         openCarDetailModal(currentDetailCarId);
     } catch (err) {
