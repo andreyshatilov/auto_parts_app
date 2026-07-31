@@ -554,7 +554,8 @@ function switchAuthTab(tabName) {
 
                 currentClient = updatedClient;
                 showMainScreen(currentClient);
-                showToast('Профіль успішно оновлено!');
+                closeEditProfileModal();
+            showToast('Профіль успішно оновлено!');
                 closeEditProfileModal();
             } catch (err) {
                 showToast(err.message, 'error');
@@ -621,7 +622,7 @@ async function refreshGarage(token) {
  * Waits for the CSS transition to complete before setting display:none.
  * @param {HTMLElement} modalEl - The DOM element of the modal to hide.
  */
-function showModal(modalEl) {
+window.showModal = function showModal(modalEl) {
     if (!modalEl) return;
     modalEl.style.display = 'flex';
     requestAnimationFrame(() => {
@@ -629,7 +630,7 @@ function showModal(modalEl) {
     });
 }
 
-function hideModal(modalEl) {
+window.hideModal = function hideModal(modalEl) {
     if (!modalEl) return;
     modalEl.classList.remove('active');
     setTimeout(() => {
@@ -862,7 +863,7 @@ function setupEventListeners() {
 
             localStorage.setItem(TOKEN_STORAGE_KEY, data.auth_token);
             currentClient = data.client;
-            showToast(` ╨Ы╨░╤Б╨║╨░╨▓╨╛ ╨┐╤А╨╛╤Б╨╕╨╝╨╛, ${currentClient.first_name}!`);
+            showToast(` Ласкаво просимо, ${currentClient.first_name}!`);
             showMainScreen(currentClient);
         } catch (err) {
             showToast(` ${err.message}`, 'error');
@@ -889,7 +890,7 @@ function setupEventListeners() {
 
             localStorage.setItem(TOKEN_STORAGE_KEY, data.auth_token);
             currentClient = data.client;
-            showToast(`╨Ч ╨┐╨╛╨▓╨╡╤А╨╜╨╡╨╜╨╜╤П╨╝, ${currentClient.first_name}!`);
+            showToast(`З поверненням, ${currentClient.first_name}!`);
             showMainScreen(currentClient);
         } catch (err) {
             showToast(` ${err.message}`, 'error');
@@ -907,7 +908,7 @@ function setupEventListeners() {
                 body: JSON.stringify({ pin_code: pinCode })
             });
             const car = await res.json();
-            if (!res.ok) throw new Error(car.detail || '╨Я╨╛╨╝╨╕╨╗╨║╨░ ╨┐╤А╨╕╨╣╨╛╨╝╤Г ╨░╨▓╤В╨╛');
+            if (!res.ok) throw new Error(car.detail || '╨Я╨╛╨╝╨╕╨╗╨║╨░ ╨┐╤А╨╕╨╣╨╛╨╝╤Г авто');
 
             showToast(` ╨Т╤Ц╤В╨░╤Ф╨╝╨╛! ╨Р╨▓╤В╨╛╨╝╨╛╨▒╤Ц╨╗╤М ${car.brand} ${car.model} ╤В╨░ ╨▓╤Б╤П ╨╣╨╛╨│╨╛ ╤Ц╤Б╤В╨╛╤А╤Ц╤П ╨┐╤А╨╕╨╣╨╜╤П╤В╤Ц ╤Г ╨▓╨░╤И ╨│╨░╤А╨░╨╢!`);
             document.getElementById('pinInput').value = '';
@@ -933,7 +934,7 @@ function setupEventListeners() {
             : selectedModel;
 
         if (!finalBrand || !finalModel) {
-            showToast(' ╨С╤Г╨┤╤М ╨╗╨░╤Б╨║╨░, ╨╛╨▒╨╡╤А╤Ц╤В╤М ╨░╨▒╨╛ ╨▓╨║╨░╨╢╤Ц╤В╤М ╨╝╨░╤А╨║╤Г ╤В╨░ ╨╝╨╛╨┤╨╡╨╗╤М ╨░╨▓╤В╨╛!', 'error');
+            showToast(' ╨С╤Г╨┤╤М ╨╗╨░╤Б╨║╨░, ╨╛╨▒╨╡╤А╤Ц╤В╤М ╨░╨▒╨╛ ╨▓╨║╨░╨╢╤Ц╤В╤М ╨╝╨░╤А╨║╤Г ╤В╨░ ╨╝╨╛╨┤╨╡╨╗╤М авто!', 'error');
             return;
         }
 
@@ -985,14 +986,14 @@ function setupEventListeners() {
             });
             const data = await res.json();
             if (!res.ok) {
-                let errMsg = '╨Я╨╛╨╝╨╕╨╗╨║╨░ ╨┤╨╛╨┤╨░╨▓╨░╨╜╨╜╤П ╨░╨▓╤В╨╛';
+                let errMsg = '╨Я╨╛╨╝╨╕╨╗╨║╨░ ╨┤╨╛╨┤╨░╨▓╨░╨╜╨╜╤П авто';
                 if (typeof data.detail === 'string') errMsg = data.detail;
                 else if (Array.isArray(data.detail)) errMsg = data.detail.map(d => d.msg || d.detail).join(', ');
                 else if (data.detail && typeof data.detail === 'object') errMsg = JSON.stringify(data.detail);
                 throw new Error(errMsg);
             }
 
-            showToast(` ${data.brand} ${data.model} ╨┤╨╛╨┤╨░╨╜╨╛ ╤Г ╨▓╨░╤И ╨У╨░╤А╨░╨╢!`);
+            showToast(` ${data.brand} ${data.model} додано у ваш Гараж!`);
             addGarageCarForm.reset();
             initBrandAndModelSelects();
             clientVinCounter.textContent = '0/17';
@@ -1003,7 +1004,7 @@ function setupEventListeners() {
                 openVinRecommendationModal(data.id, `${data.brand} ${data.model}`);
             }
         } catch (err) {
-            let errMsg = '╨Я╨╛╨╝╨╕╨╗╨║╨░ ╨┤╨╛╨┤╨░╨▓╨░╨╜╨╜╤П ╨░╨▓╤В╨╛';
+            let errMsg = '╨Я╨╛╨╝╨╕╨╗╨║╨░ ╨┤╨╛╨┤╨░╨▓╨░╨╜╨╜╤П авто';
             if (typeof err === 'string') errMsg = err;
             else if (err && err.message && typeof err.message === 'string') errMsg = err.message;
             else if (err && typeof err === 'object') {
@@ -1020,7 +1021,7 @@ function setupEventListeners() {
         const text = document.getElementById('requestText').value.trim();
 
         if (!carId) {
-            showToast(' ╨Ю╨▒╨╡╤А╤Ц╤В╤М ╨░╨▓╤В╨╛ ╨╖ ╨│╨░╤А╨░╨╢╨░!', 'error');
+            showToast(' ╨Ю╨▒╨╡╤А╤Ц╤В╤М авто ╨╖ ╨│╨░╤А╨░╨╢╨░!', 'error');
             return;
         }
 
@@ -1378,16 +1379,16 @@ function applyPreset(text) {
     if (reqForm) reqForm.scrollIntoView({ behavior: 'smooth' });
 }
 
-async function renderGarage(cars) {
-    garageCountBadge.textContent = `${cars.length}/10 ╨░╨▓╤В╨╛`;
+window.renderGarage = function renderGarage(cars) {
+    garageCountBadge.textContent = `${cars.length}/10 авто`;
     if (cars.length > 0) {
         requestCarSelect.innerHTML = cars.map(c => `<option value="${c.id}">${escapeHtml(c.brand)} ${escapeHtml(c.model)} (VIN: ${escapeHtml(c.vin)})</option>`).join('');
     } else {
-        requestCarSelect.innerHTML = `<option value="">╨б╨┐╨╛╤З╨░╤В╨║╤Г ╨┤╨╛╨┤╨░╨╣╤В╨╡ ╨░╨▓╤В╨╛ ╨▓ ╨│╨░╤А╨░╨╢</option>`;
+        requestCarSelect.innerHTML = `<option value="">╨б╨┐╨╛╤З╨░╤В╨║╤Г ╨┤╨╛╨┤╨░╨╣╤В╨╡ авто ╨▓ ╨│╨░╤А╨░╨╢</option>`;
     }
 
     if (cars.length === 0) {
-        garageContainer.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 24px;"> ╨Т╨░╤И ╨│╨░╤А╨░╨╢ ╨┐╨╛╤А╨╛╨╢╨╜╤Ц╨╣. ╨Ф╨╛╨┤╨░╨╣╤В╨╡ ╨┐╨╡╤А╤И╨╡ ╨░╨▓╤В╨╛ ╨╜╨╕╨╢╤З╨╡ (╨┤╨╛ 10 ╨╝╨░╤И╨╕╨╜).</div>`;
+        garageContainer.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 24px;"> ╨Т╨░╤И ╨│╨░╤А╨░╨╢ ╨┐╨╛╤А╨╛╨╢╨╜╤Ц╨╣. ╨Ф╨╛╨┤╨░╨╣╤В╨╡ ╨┐╨╡╤А╤И╨╡ авто ╨╜╨╕╨╢╤З╨╡ (╨┤╨╛ 10 ╨╝╨░╤И╨╕╨╜).</div>`;
         return;
     }
 
@@ -2119,3 +2120,8 @@ function init3dCarCanvas(car) {
     }
     animate();
 }
+
+
+window.renderGarage = renderGarage;
+window.showModal = showModal;
+window.hideModal = hideModal;
