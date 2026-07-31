@@ -29,6 +29,36 @@ const userAvatar = document.getElementById('userAvatar');
 const garageContainer = document.getElementById('garageContainer');
 const garageCountBadge = document.getElementById('garageCountBadge');
 const addGarageCarForm = document.getElementById('addGarageCarForm');
+const noVinCheckbox = document.getElementById('noVinCheckbox');
+
+if (noVinCheckbox) {
+    noVinCheckbox.addEventListener('change', (e) => {
+        if (e.target.checked) {
+            clientVinInput.disabled = true;
+            clientVinInput.value = '';
+            if(clientVinCounter) clientVinCounter.textContent = '0/17';
+            clientVinInput.removeAttribute('required');
+        } else {
+            clientVinInput.disabled = false;
+        }
+    });
+}
+
+const noVinCheckbox = document.getElementById('noVinCheckbox');
+
+if (noVinCheckbox) {
+    noVinCheckbox.addEventListener('change', (e) => {
+        if (e.target.checked) {
+            clientVinInput.disabled = true;
+            clientVinInput.value = '';
+            clientVinCounter.textContent = '0/17';
+            clientVinInput.removeAttribute('required');
+        } else {
+            clientVinInput.disabled = false;
+        }
+    });
+}
+
 const clientVinInput = document.getElementById('clientVinInput');
 const clientVinCounter = document.getElementById('clientVinCounter');
 const requestCarSelect = document.getElementById('requestCarSelect');
@@ -383,16 +413,19 @@ function switchAuthTab(tabName) {
         }
 
         let vinValue = clientVinInput.value.trim().toUpperCase();
-        if (vinValue) {
+        const noVinCheckbox = document.getElementById('noVinCheckbox');
+        if (noVinCheckbox && noVinCheckbox.checked) {
+            vinValue = 'NOVIN-' + Date.now().toString().slice(-6);
+        } else if (vinValue) {
             if (vinValue.length !== 17) {
-                showToast('❌ VIN-код має містити рівно 17 символів (якщо вказаний)!', 'error');
+                showToast('❌ VIN-код має обов\'язково містити 17 символів (якщо вказаний)!', 'error');
                 return;
             } else if (/^\d+$/.test(vinValue)) {
-                showToast('❌ VIN-код не може складатись лише з цифр! Введіть справжній VIN', 'error');
+                showToast('❌ VIN-код не може складатись лише з цифр! Введіть правильний VIN', 'error');
                 return;
             }
         }
-
+        
         const fuelVal = document.getElementById('clientFuelSelect')?.value || '';
         let engineVal = document.getElementById('clientEngineInput').value.trim();
         if (fuelVal) {
@@ -438,7 +471,7 @@ function switchAuthTab(tabName) {
             }
 
             showToast(` ${data.brand} ${data.model} додано у ваш Гараж!`);
-            addGarageCarForm.reset();
+            addGarageCarForm.reset();\n            if (noVinCheckbox) { noVinCheckbox.checked = false; clientVinInput.disabled = false; }\n            if (noVinCheckbox) { noVinCheckbox.checked = false; clientVinInput.disabled = false; }
             initBrandAndModelSelects();
             clientVinCounter.textContent = '0/17';
             closeAddNewCarModal();
