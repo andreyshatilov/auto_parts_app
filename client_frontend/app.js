@@ -955,7 +955,7 @@ async function loadMyRequests(token) {
 /* ==========================================
  * 6. REQUESTS & ORDERS HISTORY
  * ========================================== */
-/**
+function renderRequests(requests) {
     if (requests.length === 0) {
         requestsHistoryContainer.innerHTML = `<div style="color:var(--text-muted); text-align:center; padding:16px;">У вас поки немає надісланих запитів.</div>`;
         return;
