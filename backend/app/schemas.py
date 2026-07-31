@@ -40,6 +40,7 @@ class CarCreate(CarBase):
 
 class CarUpdate(BaseModel):
     vin: Optional[str] = None
+    client_id: Optional[int] = None
     brand: Optional[str] = None
     model: Optional[str] = None
     modification: Optional[str] = None

@@ -113,11 +113,11 @@
                             <span class="cars-badge" style="background:#fef3c7; color:#d97706; border-color:#fde68a;">Швидкий підбір</span>
                         </div>
 
-                        <!-- ⚡ ПІНІНГ ЗВЕРХУ: ШВИДКЕ ТО ТА РІДИНИ -->
+                        <!-- ПІНІНГ ЗВЕРХУ: ШВИДКЕ ТО ТА РІДИНИ -->
                         <div class="card" style="background: linear-gradient(135deg, #ffffff 0%, #fffbe6 100%); border: 1px solid #fef08a; position:relative; overflow:hidden;">
                             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
                                 <div style="display:flex; align-items:center; gap:8px;">
-                                    <span style="font-size:22px;">⚡</span>
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
                                     <div>
                                         <h4 style="font-size:15px; font-weight:800; color:#b45309;">Швидке ТО & Всі Рідини</h4>
                                         <div style="font-size:11px; color:#d97706;">Мастила, фільтри та технічні рідини</div>
@@ -127,116 +127,126 @@
                             </div>
 
                             <div style="display:flex; flex-wrap:wrap; gap:6px; margin: 10px 0;">
-                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Олива ДВС (Моторне мастило)')">🛢️ Олива ДВС</span>
-                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Масляний фільтр')">🛢️ Масляний фільтр</span>
-                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Повітряний фільтр')">💨 Повітряний фільтр</span>
-                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Салонний фільтр (Вугільний)')">🌿 Фільтр салону</span>
-                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Паливний фільтр')">⛽ Паливний фільтр</span>
-                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Гальмівна рідина DOT4')">🛑 Гальмівна рідина</span>
-                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Антифриз G12 / G13')">❄️ Антифриз</span>
+                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Олива ДВС (Моторне мастило)')">Олива ДВС</span>
+                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Масляний фільтр')">Масляний фільтр</span>
+                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Повітряний фільтр')">Повітряний фільтр</span>
+                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Салонний фільтр (Вугільний)')">Фільтр салону</span>
+                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Паливний фільтр')">Паливний фільтр</span>
+                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Гальмівна рідина DOT4')">Гальмівна рідина</span>
+                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Антифриз G12 / G13')">Антифриз</span>
                             </div>
 
                             <button type="button" class="btn btn-primary" style="font-size:12px; padding:10px; background:linear-gradient(135deg, #d97706 0%, #b45309 100%); border:none;" onclick="applyPreset('Повний комплект Швидкого ТО: Масляний, Повітряний, Салонний фільтр, Паливний фільтр, Олива ДВС 5W-30/5W-40 та Антифриз')">
-                                <span>🚀 Замовити Повний Комплект Швидкого ТО</span>
+                                <span>Замовити Повний Комплект Швидкого ТО</span>
                             </button>
                         </div>
 
-                        <!-- 🏎️ ОСНОВНІ ВУЗЛИ ТА КАТЕГОРІЇ З ЛОГІЧНИМ ЗБЕРЕЖЕННЯМ МАСЛА У ДВС -->
+                        <!-- ОСНОВНІ ВУЗЛИ ТА КАТЕГОРІЇ З ЛОГІЧНИМ ЗБЕРЕЖЕННЯМ МАСЛА У ДВС -->
                         <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin-top:10px;">
                             
                             <!-- 1. Двигун & Олива ДВС -->
                             <div class="card parts-cat-card" onclick="applyPreset('Категорія ДВИГУН: Олива ДВС, Комплект ГРМ, Помпа, Прокладка ГБЦ, Сальники, Опорні подушки')">
                                 <div class="parts-cat-header">
-                                    <span class="cat-icon">🚗</span>
+                                    <span class="cat-icon">
+                                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="4"/></svg>
+                                    </span>
                                     <div>
                                         <div class="cat-title">Двигун & Олива</div>
-                                        <div class="cat-sub">Мастило, ГРМ, помпа, подушки</div>
+                                        <div class="cat-sub">Мастило, ГРМ, помпа</div>
                                     </div>
                                 </div>
                                 <div class="cat-chips-preview">
-                                    <span>🛢️ Олива ДВС</span>
-                                    <span>⚙️ ГРМ</span>
-                                    <span>💧 Помпа</span>
+                                    <span>Олива ДВС</span>
+                                    <span>ГРМ</span>
+                                    <span>Помпа</span>
                                 </div>
                             </div>
 
                             <!-- 2. Гальмівна система -->
                             <div class="card parts-cat-card" onclick="applyPreset('Категорія ГАЛЬМА: Передні/Задні гальмівні диски, Колодки, Супорти, Шланги, Рідина DOT4')">
                                 <div class="parts-cat-header">
-                                    <span class="cat-icon">🛑</span>
+                                    <span class="cat-icon">
+                                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3"/></svg>
+                                    </span>
                                     <div>
                                         <div class="cat-title">Гальмівна система</div>
                                         <div class="cat-sub">Диски, колодки, супорти</div>
                                     </div>
                                 </div>
                                 <div class="cat-chips-preview">
-                                    <span>💿 Диски</span>
-                                    <span>🧩 Колодки</span>
-                                    <span>🧪 Рідина</span>
+                                    <span>Диски</span>
+                                    <span>Колодки</span>
+                                    <span>Рідина</span>
                                 </div>
                             </div>
 
                             <!-- 3. Ходова та Підвіска -->
                             <div class="card parts-cat-card" onclick="applyPreset('Категорія ХОДОВА: Амортизатори, Сайлентблоки, Важелі, Стійки стабілізатора, Ступичні підшипники')">
                                 <div class="parts-cat-header">
-                                    <span class="cat-icon">⚙️</span>
+                                    <span class="cat-icon">
+                                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0f172a" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                                    </span>
                                     <div>
                                         <div class="cat-title">Ходова & Підвіска</div>
-                                        <div class="cat-sub">Амортизатори, важелі, стійки</div>
+                                        <div class="cat-sub">Амортизатори, важелі</div>
                                     </div>
                                 </div>
                                 <div class="cat-chips-preview">
-                                    <span>📉 Амортизатори</span>
-                                    <span>🔩 Важелі</span>
+                                    <span>Амортизатори</span>
+                                    <span>Важелі</span>
                                 </div>
                             </div>
 
                             <!-- 4. Електрика & Запалювання -->
                             <div class="card parts-cat-card" onclick="applyPreset('Категорія ЕЛЕКТРИКА: Свічки запалювання, АКБ, Катушки запалювання, Генератор, Стартер, Датчики')">
                                 <div class="parts-cat-header">
-                                    <span class="cat-icon">⚡</span>
+                                    <span class="cat-icon">
+                                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2563eb" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                                    </span>
                                     <div>
                                         <div class="cat-title">Електрика & Свічки</div>
                                         <div class="cat-sub">Свічки, АКБ, катушки</div>
                                     </div>
                                 </div>
                                 <div class="cat-chips-preview">
-                                    <span>🕯️ Свічки</span>
-                                    <span>🔋 АКБ</span>
-                                    <span>⚡ Катушки</span>
+                                    <span>Свічки</span>
+                                    <span>АКБ</span>
+                                    <span>Катушки</span>
                                 </div>
                             </div>
 
                             <!-- 5. Охолодження & Клімат -->
                             <div class="card parts-cat-card" onclick="applyPreset('Категорія ОХОЛОДЖЕННЯ: Радіатор охолодження, Радіатор печки/кондиціонера, Термостат, Антифриз, Фреон')">
                                 <div class="parts-cat-header">
-                                    <span class="cat-icon">❄️</span>
+                                    <span class="cat-icon">
+                                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2"><line x1="12" y1="2" x2="12" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/><line x1="19.07" y1="4.93" x2="4.93" y2="19.07"/></svg>
+                                    </span>
                                     <div>
                                         <div class="cat-title">Охолодження & Клімат</div>
-                                        <div class="cat-sub">Радіатори, термостат, антифриз</div>
+                                        <div class="cat-sub">Радіатори, термостат</div>
                                     </div>
                                 </div>
                                 <div class="cat-chips-preview">
-                                    <span>🧊 Антифриз</span>
-                                    <span>🌡️ Термостат</span>
+                                    <span>Антифриз</span>
+                                    <span>Термостат</span>
                                 </div>
                             </div>
 
                             <!-- 6. Трансмісія & Зчеплення -->
                             <div class="card parts-cat-card" onclick="applyPreset('Категорія ТРАНСМІСІЯ: Олива КПП, Комплект зчеплення, Маховик, Фільтр АКПП, ШРУС / Приводи')">
                                 <div class="parts-cat-header">
-                                    <span class="cat-icon">🕹️</span>
+                                    <span class="cat-icon">
+                                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#475569" stroke-width="2"><circle cx="12" cy="12" r="8"/><path d="M12 8v8M8 12h8"/></svg>
+                                    </span>
                                     <div>
                                         <div class="cat-title">Трансмісія & Зчеплення</div>
-                                        <div class="cat-sub">Олива КПП, зчеплення, ШРУС</div>
+                                        <div class="cat-sub">Олива КПП, зчеплення</div>
                                     </div>
                                 </div>
                                 <div class="cat-chips-preview">
-                                    <span>⚙️ Олива КПП</span>
-                                    <span>🔘 Зчеплення</span>
+                                    <span>Олива КПП</span>
+                                    <span>Зчеплення</span>
                                 </div>
-                            </div>
-
                         </div>
                     </section>
 
@@ -654,7 +664,7 @@
     <!-- Сповіщення Toast -->
     <div id="toastContainer" class="toast-container"></div>
 
-    <script src="app.js?v=5.0"></script>
+    <script src="app.js?v=6.0"></script>
 </body>
 </html>
 

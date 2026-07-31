@@ -25,6 +25,7 @@
             <nav class="admin-nav">
                 <button class="nav-btn active" id="tabCarsBtn" onclick="switchAdminTab('cars')">База Авто</button>
                 <button class="nav-btn" id="tabClientsBtn" onclick="switchAdminTab('clients')">Клієнти</button>
+                <button class="nav-btn" id="tabGaragesBtn" onclick="switchAdminTab('garages')">Гаражі Клієнтів <span id="garagesBadge" class="badge badge-engine">0</span></button>
                 <button class="nav-btn" id="tabRequestsBtn" onclick="switchAdminTab('requests')">Запити <span id="pendingBadge" class="badge badge-engine">0</span></button>
                 <button class="nav-btn" id="tabOrdersBtn" onclick="switchAdminTab('orders')">Замовлення <span id="ordersBadge" class="badge badge-trans">0</span></button>
                 <button class="nav-btn" id="tabReturnsBtn" onclick="switchAdminTab('returns')">Повернення <span id="returnsBadge" class="badge badge-trans">0</span></button>
@@ -42,10 +43,17 @@
             <section class="card form-section">
                 <div class="card-header">
                     <h2>Внести автомобіль у базу</h2>
-                    <p>Заповніть картку автомобіля для точності майбутніх підборів</p>
+                    <p>Заповніть картку автомобіля та оберіть власника для додавання в його гараж</p>
                 </div>
 
                 <form id="addCarForm" autocomplete="off">
+                    <div class="form-group full-width">
+                        <label for="adminClientSelect">Власник автомобіля (Клієнт)</label>
+                        <select id="adminClientSelect" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); background: var(--bg-card); color: var(--text-main); font-size: 13px;">
+                            <option value="">Без прив'язки (Загальний реєстр авто)</option>
+                        </select>
+                    </div>
+
                     <div class="form-group full-width">
                         <label for="vinInput">VIN-код автомобіля <span class="req">*</span></label>
                         <div class="vin-input-wrapper">
@@ -153,6 +161,27 @@
 
                 <div class="cars-grid" id="clientsContainer">
                     <div class="loading-spinner">Завантаження списку клієнтів...</div>
+                </div>
+            </section>
+        </main>
+
+        <!-- ВКЛАДКА: База Гаражів Клієнтів -->
+        <main class="admin-tab-content" id="garagesTabContent">
+            <section class="card list-section" style="width: 100%;">
+                <div class="list-header" style="display:flex; justify-content:space-between; align-items:center;">
+                    <div>
+                        <h2>Повний Реєстр Гаражів Клієнтів</h2>
+                        <p>Перегляд усіх автомобілів клієнтів з прив'язкою до власників та можливістю додавання за VIN</p>
+                    </div>
+                    <div style="display:flex; gap:12px;">
+                        <div class="search-box">
+                            <input type="text" id="searchGaragesInput" placeholder="Пошук за власником, VIN, маркою...">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cars-grid" id="garagesContainer">
+                    <div class="loading-spinner">Завантаження баз гаражів...</div>
                 </div>
             </section>
         </main>
@@ -340,6 +369,6 @@
     <!-- Контейнер Toast -->
     <div id="toastContainer" class="toast-container"></div>
 
+    <script src="app.js?v=6.0"></script>
 </body>
 </html>
-

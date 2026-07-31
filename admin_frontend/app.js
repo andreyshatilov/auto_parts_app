@@ -69,6 +69,10 @@ function switchAdminTab(tabName) {
         document.getElementById('tabClientsBtn').classList.add('active');
         document.getElementById('clientsTabContent').classList.add('active');
         loadClients();
+    } else if (tabName === 'garages') {
+        document.getElementById('tabGaragesBtn').classList.add('active');
+        document.getElementById('garagesTabContent').classList.add('active');
+        loadGarages();
     } else if (tabName === 'requests') {
         document.getElementById('tabRequestsBtn').classList.add('active');
         document.getElementById('requestsTabContent').classList.add('active');
@@ -239,8 +243,23 @@ async function loadClients(searchQuery = '') {
 
 function renderClients(clients) {
     clientsCountEl.textContent = clients.length;
+
+    // Populate adminClientSelect dropdown for Add Car form
+    const adminClientSelect = document.getElementById('adminClientSelect');
+    if (adminClientSelect) {
+        const currentVal = adminClientSelect.value;
+        adminClientSelect.innerHTML = '<option value="">Без прив\'язки (Загальний реєстр авто)</option>';
+        clients.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c.id;
+            opt.textContent = `👤 ${c.first_name} ${c.last_name} (${c.phone})`;
+            adminClientSelect.appendChild(opt);
+        });
+        if (currentVal) adminClientSelect.value = currentVal;
+    }
+
     if (clients.length === 0) {
-        clientsContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); padding: 20px;">👥 Клієнтів немає.</div>`;
+        clientsContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); padding: 20px;">Клієнтів немає.</div>`;
         return;
     }
 
@@ -248,15 +267,18 @@ function renderClients(clients) {
         <div class="client-card">
             <div class="car-header-row">
                 <div>
-                    <div class="car-title">👤 ${escapeHtml(c.first_name)} ${escapeHtml(c.last_name)}</div>
+                    <div class="car-title">👤 ${escapeHtml(c.first_name)} ${escapeHtml(c.last_name)} (ID #${c.id})</div>
                     <div class="car-modification">📞 ${escapeHtml(c.phone)}</div>
                 </div>
+                <button class="btn btn-secondary" style="font-size:11px; padding:4px 8px;" onclick="prefillAddCarForClient(${c.id}, '${escapeHtml(c.first_name)} ${escapeHtml(c.last_name)}')">
+                    ➕ Додати авто в гараж
+                </button>
             </div>
             <div class="car-details-grid">
                 <div class="detail-item" style="grid-column: 1/-1;"><span class="detail-label">Нова Пошта</span><span class="detail-value">${escapeHtml(c.shipping_address || 'Не вказано')}</span></div>
             </div>
-            <div style="background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px; font-size: 12px;">
-                <strong>🚘 Гараж (${c.cars.length} авто):</strong>
+            <div style="background: rgba(0,0,0,0.3); padding: 8px; border-radius: 6px; font-size: 12px; margin-top: 6px;">
+                <strong>Гараж (${c.cars.length} авто):</strong>
                 ${c.cars.length > 0 ? c.cars.map(car => `<div style="margin-top:2px; color:#60a5fa;">• ${escapeHtml(car.brand)} ${escapeHtml(car.model)} ${car.release_date ? `(${car.release_date} р.в.)` : ''} (VIN: ${escapeHtml(car.vin)})</div>`).join('') : '<div style="color:var(--text-muted);">Порожній</div>'}
             </div>
         </div>
@@ -654,6 +676,8 @@ async function handleProposalSubmit() {
 }
 
 async function handleAddCar() {
+    const clientIdVal = document.getElementById('adminClientSelect')?.value;
+
     const carData = {
         vin: vinInput.value.trim(),
         brand: document.getElementById('brandInput').value.trim(),
@@ -666,6 +690,10 @@ async function handleAddCar() {
         transmission_code: document.getElementById('transmissionCodeInput').value.trim() || null,
         notes: document.getElementById('notesInput').value.trim() || null
     };
+
+    if (clientIdVal) {
+        carData.client_id = parseInt(clientIdVal);
+    }
 
     submitBtn.disabled = true;
     try {
@@ -799,4 +827,97 @@ function formatDate(iso) {
 function escapeHtml(str) {
     if (!str) return '';
     return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+async function loadGarages(searchQuery = '') {
+    const garagesContainer = document.getElementById('garagesContainer');
+    const garagesBadge = document.getElementById('garagesBadge');
+    if (!garagesContainer) return;
+
+    try {
+        let url = `${API_BASE_URL}/clients/`;
+        if (searchQuery) url += `?search=${encodeURIComponent(searchQuery)}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error();
+        const clients = await res.json();
+
+        let totalCarsCount = 0;
+        let allGaragesHtml = '';
+
+        clients.forEach(client => {
+            const clientCars = client.cars || [];
+            totalCarsCount += clientCars.length;
+
+            if (clientCars.length > 0) {
+                clientCars.forEach(car => {
+                    allGaragesHtml += `
+                        <div class="car-card" style="border-left: 4px solid #3b82f6;">
+                            <div class="car-header-row">
+                                <div>
+                                    <div class="car-title">${escapeHtml(car.brand)} ${escapeHtml(car.model)} ${car.release_date ? `(${escapeHtml(car.release_date)} р.в.)` : ''}</div>
+                                    <div class="car-modification">${escapeHtml(car.modification || 'Без специфікації кузова')}</div>
+                                </div>
+                                <button class="btn btn-secondary" style="font-size:11px; padding:4px 8px;" onclick="prefillAddCarForClient(${client.id}, '${escapeHtml(client.first_name)} ${escapeHtml(client.last_name)}')">
+                                    ➕ Додати авто клієнту
+                                </button>
+                            </div>
+                            
+                            <div class="vin-badge" style="background: rgba(59,130,246,0.15); border-color: rgba(59,130,246,0.3);">
+                                <span>VIN: <strong>${escapeHtml(car.vin)}</strong></span>
+                                <button class="copy-vin-btn" onclick="copyToClipboard('${car.vin}')">📋</button>
+                            </div>
+
+                            <div style="background: rgba(15,23,42,0.6); padding: 8px 10px; border-radius: 8px; font-size: 12px; margin-top: 6px; border: 1px solid rgba(255,255,255,0.05);">
+                                <div style="color: #60a5fa; font-weight: 700;">👤 Власник: ${escapeHtml(client.first_name)} ${escapeHtml(client.last_name)} (ID #${client.id})</div>
+                                <div>📞 Телефон: <strong>${escapeHtml(client.phone)}</strong></div>
+                                ${client.email ? `<div>✉️ Email: ${escapeHtml(client.email)}</div>` : ''}
+                                <div>📦 Доставка НП: ${escapeHtml(client.shipping_address || 'Не вказано')}</div>
+                            </div>
+
+                            <div class="car-details-grid" style="margin-top: 8px;">
+                                <div class="detail-item"><span class="detail-label">Двигун</span><span class="detail-value">${escapeHtml(car.engine_code || '—')}</span></div>
+                                <div class="detail-item"><span class="detail-label">КПП</span><span class="detail-value">${escapeHtml(car.transmission_type || '—')}</span></div>
+                                <div class="detail-item"><span class="detail-label">Привід</span><span class="detail-value">${escapeHtml(car.drive_type || '—')}</span></div>
+                            </div>
+
+                            <div class="car-footer" style="margin-top: 8px;">
+                                <span style="font-size:11px; color:var(--text-muted);">Додано: ${formatDate(car.created_at)}</span>
+                                <button class="btn-delete" onclick="deleteCar(${car.id}, '${car.vin}')">Видалити</button>
+                            </div>
+                        </div>
+                    `;
+                });
+            }
+        });
+
+        if (garagesBadge) garagesBadge.textContent = totalCarsCount;
+
+        if (totalCarsCount === 0) {
+            garagesContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); padding: 20px;">Жодного авто в гаражах клієнтів не знайдено.</div>`;
+        } else {
+            garagesContainer.innerHTML = allGaragesHtml;
+        }
+
+        const searchGaragesInput = document.getElementById('searchGaragesInput');
+        if (searchGaragesInput && !searchGaragesInput.dataset.listener) {
+            searchGaragesInput.dataset.listener = 'true';
+            let timeout = null;
+            searchGaragesInput.addEventListener('input', (e) => {
+                clearTimeout(timeout);
+                timeout = setTimeout(() => loadGarages(e.target.value.trim()), 300);
+            });
+        }
+    } catch (err) {
+        console.error(err);
+        garagesContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--danger); padding: 20px;">⚠️ Помилка завантаження гаражів</div>`;
+    }
+}
+
+function prefillAddCarForClient(clientId, clientName) {
+    switchAdminTab('cars');
+    const select = document.getElementById('adminClientSelect');
+    if (select) select.value = clientId;
+    showToast(`📝 Обрано клієнта ${clientName}. Введіть VIN-код для додавання авто в його гараж!`);
+    const vinInp = document.getElementById('vinInput');
+    if (vinInp) vinInp.focus();
 }
