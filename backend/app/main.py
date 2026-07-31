@@ -22,6 +22,26 @@ from app.routers import cars, auth, clients, requests, proposals, transfers, ord
 
 try:
     Base.metadata.create_all(bind=engine)
+    
+    # Auto-migration: ensure new columns exist in cars table in Neon PostgreSQL / SQLite
+    from sqlalchemy import text
+    with engine.connect() as conn:
+        cols = [
+            ("generation", "VARCHAR(50)"),
+            ("body_type", "VARCHAR(50)"),
+            ("fuel_type", "VARCHAR(50)"),
+            ("horse_power", "VARCHAR(50)"),
+            ("color_code", "VARCHAR(50)"),
+            ("assembly_plant", "VARCHAR(100)"),
+            ("mileage", "INTEGER DEFAULT 100000"),
+            ("custom_photo_url", "TEXT")
+        ]
+        for c_name, c_type in cols:
+            try:
+                conn.execute(text(f"ALTER TABLE cars ADD COLUMN {c_name} {c_type};"))
+                conn.commit()
+            except Exception:
+                pass
 except Exception as err:
     print(f"⚠️ Database initialization notice: {err}")
 

@@ -357,12 +357,18 @@ function setupEventListeners() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ phone })
             });
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.detail || 'Помилка');
+            let data = null;
+            const text = await res.text();
+            try { data = JSON.parse(text); } catch (_) {}
+
+            if (!res.ok) {
+                const errMsg = (data && data.detail) ? data.detail : (text || `Помилка сервера (HTTP ${res.status})`);
+                throw new Error(errMsg);
+            }
 
             localStorage.setItem(TOKEN_STORAGE_KEY, data.auth_token);
             currentClient = data.client;
-            showToast(` З поверненням, ${currentClient.first_name}!`);
+            showToast(`З поверненням, ${currentClient.first_name}!`);
             showMainScreen(currentClient);
         } catch (err) {
             showToast(` ${err.message}`, 'error');
