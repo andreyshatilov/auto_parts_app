@@ -570,13 +570,13 @@
 
     <!-- Модальне вікно Редагування Профілю -->
     <div id="editProfileModal" class="modal-backdrop" style="display: none;">
-        <div class="card modal-content" style="max-width: 450px; width: 90%;">
-            <div class="card-header" style="display: flex; justify-content: space-between;">
+        <div class="card modal-content" style="max-width: 450px; width: 90%; background: #ffffff;">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; margin-bottom: 12px;">
                 <div>
-                    <h2>Редагувати Профіль</h2>
-                    <p>Зміна імені, Email та адреси Нової Пошти</p>
+                    <h2 style="font-size: 18px; font-weight: 800; color: #0f172a; margin: 0;">Редагувати Профіль</h2>
+                    <p style="font-size: 12px; color: #64748b; margin: 2px 0 0 0;">Зміна імені, Email та адреси Нової Пошти</p>
                 </div>
-                <button onclick="closeEditProfileModal()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
+                <button type="button" onclick="closeEditProfileModal()" style="background: #f1f5f9; border: 1px solid #cbd5e1; color: #0f172a; width: 32px; height: 32px; border-radius: 50%; font-size: 16px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0;">✕</button>
             </div>
 
             <form id="editProfileForm" style="margin-top: 10px; display:flex; flex-direction:column; gap:12px;">
@@ -654,7 +654,7 @@
     <!-- Сповіщення Toast -->
     <div id="toastContainer" class="toast-container"></div>
 
-    <script src="app.js?v=4.0"></script>
+    <script src="app.js?v=5.0"></script>
 </body>
 </html>
 

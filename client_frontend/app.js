@@ -178,24 +178,50 @@ function setupEventListeners() {
                         const brandSelect = document.getElementById('clientBrandSelect');
                         const modelSelect = document.getElementById('clientModelSelect');
 
-                        let brandFound = Array.from(brandSelect.options).find(opt => opt.value.toUpperCase() === data.brand.toUpperCase());
-                        if (brandFound) {
+                        let rawBrand = (data.brand || '').trim();
+                        let brandFound = null;
+
+                        if (rawBrand) {
+                            brandFound = Array.from(brandSelect.options).find(opt => opt.value.toUpperCase() === rawBrand.toUpperCase());
+                            if (!brandFound) {
+                                brandFound = Array.from(brandSelect.options).find(opt => 
+                                    opt.value.toUpperCase().includes(rawBrand.toUpperCase()) || 
+                                    rawBrand.toUpperCase().includes(opt.value.toUpperCase())
+                                );
+                            }
+                        }
+
+                        if (brandFound && brandFound.value !== '__custom__') {
                             brandSelect.value = brandFound.value;
                         } else {
                             brandSelect.value = '__custom__';
-                            document.getElementById('clientCustomBrandInput').value = data.brand;
                         }
                         brandSelect.onchange();
+                        if (brandSelect.value === '__custom__') {
+                            document.getElementById('clientCustomBrandInput').value = rawBrand;
+                        }
 
-                        if (data.model) {
-                            let modelFound = Array.from(modelSelect.options).find(opt => opt.value.toUpperCase() === data.model.toUpperCase());
+                        let rawModel = (data.model || '').trim();
+                        if (rawModel) {
+                            let modelFound = null;
+                            const opts = Array.from(modelSelect.options).filter(o => o.value && o.value !== '__custom__');
+                            
+                            modelFound = opts.find(opt => opt.value.toUpperCase() === rawModel.toUpperCase());
+                            if (!modelFound) {
+                                modelFound = opts.find(opt => 
+                                    rawModel.toUpperCase().includes(opt.value.toUpperCase()) || 
+                                    opt.value.toUpperCase().includes(rawModel.toUpperCase())
+                                );
+                            }
+
                             if (modelFound) {
                                 modelSelect.value = modelFound.value;
+                                modelSelect.onchange();
                             } else {
                                 modelSelect.value = '__custom__';
-                                document.getElementById('clientCustomModelInput').value = data.model;
+                                modelSelect.onchange();
+                                document.getElementById('clientCustomModelInput').value = rawModel;
                             }
-                            modelSelect.onchange();
                         }
 
                         if (data.release_year) {
@@ -576,14 +602,18 @@ async function refreshGarage(token) {
     }
 }
 
-function openEditProfileModal() {
+window.openEditProfileModal = function() {
     if (!currentClient) return;
     document.getElementById('editFirstName').value = currentClient.first_name || '';
     document.getElementById('editLastName').value = currentClient.last_name || '';
     document.getElementById('editEmail').value = currentClient.email || '';
     document.getElementById('editShipping').value = currentClient.shipping_address || '';
     document.getElementById('editProfileModal').style.display = 'flex';
-}
+};
+
+window.closeEditProfileModal = function() {
+    document.getElementById('editProfileModal').style.display = 'none';
+};
 
 function initYearSelect() {
     const yearSelect = document.getElementById('clientYearSelect');
@@ -636,7 +666,6 @@ function initBrandAndModelSelects() {
         } else {
             customBrandGroup.style.display = 'none';
             customBrandInput.required = false;
-            customBrandInput.value = '';
         }
 
         if (isCustomModel || isCustomBrand) {
@@ -646,7 +675,6 @@ function initBrandAndModelSelects() {
         } else {
             customModelGroup.style.display = 'none';
             customModelInput.required = false;
-            customModelInput.value = '';
         }
 
         if (!isCustomBrand && !isCustomModel) {
