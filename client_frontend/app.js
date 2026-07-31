@@ -615,17 +615,35 @@ async function refreshGarage(token) {
     }
 }
 
+function showModal(modalEl) {
+    if (!modalEl) return;
+    modalEl.style.display = 'flex';
+    requestAnimationFrame(() => {
+        modalEl.classList.add('active');
+    });
+}
+
+function hideModal(modalEl) {
+    if (!modalEl) return;
+    modalEl.classList.remove('active');
+    setTimeout(() => {
+        if (!modalEl.classList.contains('active')) {
+            modalEl.style.display = 'none';
+        }
+    }, 220);
+}
+
 window.openEditProfileModal = function() {
     if (!currentClient) return;
     document.getElementById('editFirstName').value = currentClient.first_name || '';
     document.getElementById('editLastName').value = currentClient.last_name || '';
     document.getElementById('editEmail').value = currentClient.email || '';
     document.getElementById('editShipping').value = currentClient.shipping_address || '';
-    document.getElementById('editProfileModal').style.display = 'flex';
+    showModal(document.getElementById('editProfileModal'));
 };
 
 window.closeEditProfileModal = function() {
-    document.getElementById('editProfileModal').style.display = 'none';
+    hideModal(document.getElementById('editProfileModal'));
 };
 
 function initYearSelect() {
@@ -843,11 +861,11 @@ function openVinRecommendationModal(carId, carName) {
     document.getElementById('vinModalCarName').textContent = `Для автомобіля: ${carName}`;
     document.getElementById('addVinInput').value = '';
     document.getElementById('addVinCounter').textContent = '0/17';
-    document.getElementById('vinRecommendationModal').style.display = 'flex';
+    showModal(document.getElementById('vinRecommendationModal'));
 }
 
 function closeVinRecommendationModal() {
-    document.getElementById('vinRecommendationModal').style.display = 'none';
+    hideModal(document.getElementById('vinRecommendationModal'));
 }
 
 function renderGarage(cars) {
@@ -1199,22 +1217,22 @@ function renderServiceTimeline(orders) {
 function openReturnModal(orderId) {
     activeReturnOrderId = orderId;
     document.getElementById('returnOrderId').textContent = orderId;
-    returnModal.style.display = 'flex';
+    showModal(returnModal);
 }
 
 function closeReturnModal() {
-    returnModal.style.display = 'none';
+    hideModal(returnModal);
 }
 
 async function openChatModal(requestId) {
     activeChatRequestId = requestId;
     document.getElementById('chatRequestId').textContent = requestId;
-    chatModal.style.display = 'flex';
+    showModal(chatModal);
     await loadChatMessages(requestId);
 }
 
 function closeChatModal() {
-    chatModal.style.display = 'none';
+    hideModal(chatModal);
 }
 
 async function loadChatMessages(requestId) {
@@ -1352,11 +1370,11 @@ window.openCarDetailModal = function(carId) {
     document.getElementById('detailPinBtn').onclick = () => generateTransferCode(car.id, `${car.brand} ${car.model}`);
     document.getElementById('detailDeleteBtn').onclick = () => deleteCarFromGarage(car.id, car.brand, car.model, car.vin);
 
-    document.getElementById('carDetailModal').style.display = 'flex';
+    showModal(document.getElementById('carDetailModal'));
 };
 
 window.closeCarDetailModal = function() {
-    document.getElementById('carDetailModal').style.display = 'none';
+    hideModal(document.getElementById('carDetailModal'));
 };
 
 window.saveCustomCarPhoto = async function() {
