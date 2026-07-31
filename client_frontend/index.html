@@ -1281,6 +1281,52 @@
     </div>
     
     <script src="js/car_models.js?v=30.0"></script>
+    <!-- OTP Modal -->
+    <div id="otpModal" class="modal-backdrop" style="display: none;">
+        <div class="card modal-content" style="max-width: 400px; width: 90%;">
+            <div class="card-header" style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                <h2>Підтвердження Email</h2>
+                <button onclick="hideModal(document.getElementById('otpModal'))" class="close-btn" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
+            </div>
+            <div style="padding-top: 15px;">
+                <p style="font-size: 14px; margin-bottom: 15px; color: var(--text-muted);">Введіть код, який ми відправили вам на пошту.</p>
+                <input type="text" id="otpCodeInput" placeholder="Код з листа" style="width:100%; padding: 12px; margin-bottom: 15px; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;">
+                <button class="btn btn-primary" onclick="verifyOtp()" style="width:100%; padding: 12px;">Підтвердити</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgot Password Modal -->
+    <div id="forgotPasswordModal" class="modal-backdrop" style="display: none;">
+        <div class="card modal-content" style="max-width: 400px; width: 90%;">
+            <div class="card-header" style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                <h2>Відновлення пароля</h2>
+                <button onclick="hideModal(document.getElementById('forgotPasswordModal'))" class="close-btn" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
+            </div>
+            <div style="padding-top: 15px;">
+                <p style="font-size: 14px; margin-bottom: 15px; color: var(--text-muted);">Введіть ваш Email для отримання коду скидання.</p>
+                <input type="email" id="forgotEmailInput" placeholder="Ваш Email" style="width:100%; padding: 12px; margin-bottom: 15px; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;">
+                <button class="btn btn-primary" onclick="sendForgotPassword()" style="width:100%; padding: 12px;">Відправити код</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Reset Password Modal -->
+    <div id="resetPasswordModal" class="modal-backdrop" style="display: none;">
+        <div class="card modal-content" style="max-width: 400px; width: 90%;">
+            <div class="card-header" style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
+                <h2>Новий пароль</h2>
+                <button onclick="hideModal(document.getElementById('resetPasswordModal'))" class="close-btn" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
+            </div>
+            <div style="padding-top: 15px;">
+                <p style="font-size: 14px; margin-bottom: 15px; color: var(--text-muted);">Введіть код з листа та новий пароль.</p>
+                <input type="text" id="resetCodeInput" placeholder="Код скидання" style="width:100%; padding: 12px; margin-bottom: 10px; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;">
+                <input type="password" id="resetNewPasswordInput" placeholder="Новий пароль (мінімум 6 символів)" style="width:100%; padding: 12px; margin-bottom: 15px; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;">
+                <button class="btn btn-primary" onclick="submitResetPassword()" style="width:100%; padding: 12px;">Зберегти пароль</button>
+            </div>
+        </div>
+    </div>
+
     <script src="app.js?v=30.0"></script>
 </body>
 </html>

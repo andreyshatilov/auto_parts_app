@@ -478,58 +478,130 @@ function setupEventListeners() {
         });
     }
 
+    let currentRegEmail = '';
+
     registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const payload = {
-            first_name: document.getElementById('regFirstName').value.trim(),
-            last_name: document.getElementById('regLastName').value.trim(),
-            phone: document.getElementById('regPhone').value.trim(),
-            has_messenger: document.getElementById('regHasMessenger').checked
-        };
+        const fName = document.getElementById('regFirstName').value.trim();
+        const lName = document.getElementById('regLastName').value.trim();
+        const phone = document.getElementById('regPhone').value.trim();
+        const email = document.getElementById('regEmail').value.trim();
+        const password = document.getElementById('regPassword').value.trim();
+        const hasMsgr = document.getElementById('regHasMessenger').checked;
+        
+        if (password.length < 6) return showToast('Пароль має містити мінімум 6 символів', 'error');
+
         try {
             const res = await fetch(`${API_BASE_URL}/auth/register`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(payload)
+                body: JSON.stringify({
+                    first_name: fName,
+                    last_name: lName,
+                    phone: phone,
+                    email: email,
+                    password: password,
+                    has_messenger: hasMsgr
+                })
             });
             const data = await res.json();
-            if (!res.ok) throw new Error(data.detail || '╨Я╨╛╨╝╨╕╨╗╨║╨░');
+            if (!res.ok) throw new Error(data.detail || 'Помилка реєстрації');
 
-            localStorage.setItem(TOKEN_STORAGE_KEY, data.auth_token);
-            currentClient = data.client;
-            showToast(` Ласкаво просимо, ${currentClient.first_name}!`);
-            showMainScreen(currentClient);
+            currentRegEmail = email;
+            showToast('OTP відправлено на пошту!', 'info');
+            showModal(document.getElementById('otpModal'));
         } catch (err) {
-            showToast(` ${err.message}`, 'error');
+            showToast(`${err.message}`, 'error');
         }
     });
 
+    window.verifyOtp = async function() {
+        const code = document.getElementById('otpCodeInput').value.trim();
+        if(!code) return;
+        try {
+            const res = await fetch(`${API_BASE_URL}/auth/verify`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: currentRegEmail, code: code })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.detail || 'Помилка OTP');
+            
+            localStorage.setItem(TOKEN_STORAGE_KEY, data.auth_token);
+            hideModal(document.getElementById('otpModal'));
+            showToast('Email підтверджено! Акаунт активовано.', 'success');
+            await fetchProfile(data.auth_token);
+        } catch (err) {
+            showToast(`${err.message}`, 'error');
+        }
+    };
+
     loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const phone = document.getElementById('loginPhone').value.trim();
+        const phoneOrEmail = document.getElementById('loginPhone').value.trim();
+        const password = document.getElementById('loginPassword').value.trim();
         try {
             const res = await fetch(`${API_BASE_URL}/auth/login`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ phone })
+                body: JSON.stringify({ phone_or_email: phoneOrEmail, password: password })
             });
-            let data = null;
-            const text = await res.text();
-            try { data = JSON.parse(text); } catch (_) {}
-
-            if (!res.ok) {
-                const errMsg = (data && data.detail) ? data.detail : (text || `╨Я╨╛╨╝╨╕╨╗╨║╨░ ╤Б╨╡╤А╨▓╨╡╤А╨░ (HTTP ${res.status})`);
-                throw new Error(errMsg);
-            }
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.detail || 'Помилка входу');
 
             localStorage.setItem(TOKEN_STORAGE_KEY, data.auth_token);
-            currentClient = data.client;
-            showToast(`З поверненням, ${currentClient.first_name}!`);
-            showMainScreen(currentClient);
+            showToast('Успішний вхід!', 'success');
+            await fetchProfile(data.auth_token);
         } catch (err) {
-            showToast(` ${err.message}`, 'error');
+            showToast(`${err.message}`, 'error');
         }
     });
+
+    let currentResetEmail = '';
+    window.openForgotPasswordModal = function() {
+        showModal(document.getElementById('forgotPasswordModal'));
+    };
+    window.sendForgotPassword = async function() {
+        const email = document.getElementById('forgotEmailInput').value.trim();
+        if(!email) return;
+        try {
+            const res = await fetch(`${API_BASE_URL}/auth/forgot-password`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: email })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.detail || 'Помилка');
+            
+            currentResetEmail = email;
+            hideModal(document.getElementById('forgotPasswordModal'));
+            showModal(document.getElementById('resetPasswordModal'));
+            showToast('Код відновлення відправлено!', 'info');
+        } catch (err) {
+            showToast(`${err.message}`, 'error');
+        }
+    };
+    window.submitResetPassword = async function() {
+        const code = document.getElementById('resetCodeInput').value.trim();
+        const newPassword = document.getElementById('resetNewPasswordInput').value.trim();
+        if(!code || newPassword.length < 6) return showToast('Заповніть всі поля (пароль мін 6 симв)', 'error');
+        try {
+            const res = await fetch(`${API_BASE_URL}/auth/reset-password`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ email: currentResetEmail, code: code, new_password: newPassword })
+            });
+            const data = await res.json();
+            if (!res.ok) throw new Error(data.detail || 'Помилка зміни пароля');
+            
+            hideModal(document.getElementById('resetPasswordModal'));
+            showToast('Пароль успішно змінено! Увійдіть з новим паролем.', 'success');
+            document.getElementById('loginPhone').value = currentResetEmail;
+            document.getElementById('loginPassword').value = '';
+        } catch (err) {
+            showToast(`${err.message}`, 'error');
+        }
+    };
 
     claimPinForm.addEventListener('submit', async (e) => {
         e.preventDefault();
