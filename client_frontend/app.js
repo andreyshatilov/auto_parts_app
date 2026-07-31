@@ -833,7 +833,7 @@ function getBrandEmblem(brandName) {
         </svg>`;
     }
 
-    return `<div style="width:46px; height:46px; display:flex; align-items:center; justify-content:center; background:#ffffff; border-radius:12px; padding:3px; box-shadow:0 3px 10px rgba(15,23,42,0.08); border:1px solid var(--border-color);">
+    return `<div style="display:inline-flex; align-items:center; justify-content:center;">
         ${svgContent}
     </div>`;
 }
@@ -865,8 +865,7 @@ function renderGarage(cars) {
 
     garageContainer.innerHTML = cars.map(car => {
         const isNoVin = !car.vin || car.vin.startsWith('NOVIN-');
-        const rawVin = (!car.vin || car.vin === '23542435345643564' || /^\d+$/.test(car.vin)) ? 'WBA33AY05NFP12345' : car.vin;
-        const vinDisplay = isNoVin ? '<span style="color:#d97706; font-weight:600;">Не вказано (Рекомендовано додати)</span>' : escapeHtml(rawVin);
+        const vinDisplay = isNoVin ? '<span style="color:#d97706; font-weight:600;">Не вказано (Рекомендовано додати)</span>' : escapeHtml(car.vin);
 
         const genDisplay = car.generation || (car.modification && car.modification.includes('G20') ? car.modification : 'G20 (7-ме покоління)');
         const engineDisplay = `${car.engine_code || '2.0L Turbo B48'} ${car.horse_power ? `(${car.horse_power})` : ' (258 к.с.)'}`;
@@ -1313,9 +1312,7 @@ window.openCarDetailModal = function(carId) {
     currentDetailCarId = carId;
     currentDetailCarObj = car;
 
-    const displayVin = (!car.vin || car.vin === '23542435345643564' || /^\d+$/.test(car.vin)) 
-        ? 'WBA33AY05NFP12345' 
-        : car.vin;
+    const displayVin = car.vin || 'Не вказано';
 
     document.getElementById('detailCarTitle').textContent = `${car.brand} ${car.model}`;
     document.getElementById('detailCarVinBadge').textContent = `VIN: ${displayVin}`;
@@ -1439,79 +1436,160 @@ function init3dCarCanvas(car) {
     const canvas = document.getElementById('car3dCanvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
-    let angle = 0;
 
-    function drawCar() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        
-        ctx.fillStyle = '#0f172a';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+    let rotationAngle = 0;
+    let isDragging = false;
+    let startX = 0;
 
-        // Grid lines
-        ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+    canvas.onmousedown = (e) => { isDragging = true; startX = e.clientX; };
+    canvas.onmousemove = (e) => {
+        if (!isDragging) return;
+        const deltaX = e.clientX - startX;
+        rotationAngle += deltaX * 0.015;
+        startX = e.clientX;
+    };
+    window.onmouseup = () => { isDragging = false; };
+
+    canvas.ontouchstart = (e) => {
+        if (e.touches && e.touches.length === 1) {
+            isDragging = true;
+            startX = e.touches[0].clientX;
+        }
+    };
+    canvas.ontouchmove = (e) => {
+        if (!isDragging || !e.touches || e.touches.length !== 1) return;
+        const deltaX = e.touches[0].clientX - startX;
+        rotationAngle += deltaX * 0.015;
+        startX = e.touches[0].clientX;
+    };
+    canvas.ontouchend = () => { isDragging = false; };
+
+    let bodyColor = '#1d4ed8'; // Alpine Blue for BMW
+    const bName = (car.brand || '').toUpperCase();
+    if (bName.includes('BMW')) bodyColor = '#2563eb';
+    else if (bName.includes('AUDI')) bodyColor = '#dc2626';
+    else if (bName.includes('MERCEDES')) bodyColor = '#334155';
+    else if (bName.includes('PORSCHE')) bodyColor = '#d97706';
+    else if (bName.includes('VOLKSWAGEN')) bodyColor = '#0284c7';
+    else if (bName.includes('FERRARI') || bName.includes('LAMBORGHINI')) bodyColor = '#e11d48';
+
+    function drawStudioShowroom() {
+        const w = canvas.width;
+        const h = canvas.height;
+
+        ctx.clearRect(0, 0, w, h);
+
+        // 1. Bright Luxury Studio Backdrop (Light Pearl/Slate Gradient)
+        const bgGrad = ctx.createLinearGradient(0, 0, 0, h);
+        bgGrad.addColorStop(0, '#ffffff');
+        bgGrad.addColorStop(0.5, '#f1f5f9');
+        bgGrad.addColorStop(1, '#cbd5e1');
+        ctx.fillStyle = bgGrad;
+        ctx.fillRect(0, 0, w, h);
+
+        // 2. Overhead Spotlight
+        const spotGrad = ctx.createRadialGradient(w/2, 10, 5, w/2, 10, w/1.2);
+        spotGrad.addColorStop(0, 'rgba(255, 255, 255, 0.95)');
+        spotGrad.addColorStop(1, 'rgba(241, 245, 249, 0)');
+        ctx.fillStyle = spotGrad;
+        ctx.fillRect(0, 0, w, h);
+
+        // 3. Floor Tiles & Shadow
+        ctx.save();
+        ctx.strokeStyle = 'rgba(148, 163, 184, 0.3)';
         ctx.lineWidth = 1;
-        for (let i = 0; i < canvas.width; i += 20) {
-            ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); ctx.stroke();
+        const horizonY = h * 0.62;
+
+        for (let i = -w; i <= w * 2; i += 36) {
+            ctx.beginPath();
+            ctx.moveTo(i, h);
+            ctx.lineTo(w/2 + (i - w/2) * 0.25, horizonY);
+            ctx.stroke();
+        }
+        for (let y = horizonY; y <= h; y += 12) {
+            ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(w, y); ctx.stroke();
         }
 
-        // Draw 3D Car wireframe silhouette
+        // Car Shadow
+        ctx.fillStyle = 'rgba(15, 23, 42, 0.18)';
+        ctx.beginPath();
+        ctx.ellipse(w/2, h - 20, 115, 16, 0, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+
+        // 4. 3D Car Perspective Model
         ctx.save();
-        ctx.translate(canvas.width / 2, canvas.height / 2 + 10);
-        
-        const scale = 0.9 + Math.sin(angle) * 0.05;
-        ctx.scale(scale, scale);
+        ctx.translate(w / 2, h / 2 + 10);
 
-        // Body outline
-        ctx.strokeStyle = '#dc2626';
+        const cosA = Math.cos(rotationAngle);
+        const carWidth = 144 * (0.8 + 0.2 * Math.abs(cosA));
+        const carHeight = 42;
+
+        // Metallic Car Lower Body
+        ctx.fillStyle = bodyColor;
+        ctx.strokeStyle = '#0f172a';
         ctx.lineWidth = 2.5;
+
         ctx.beginPath();
-        ctx.moveTo(-110, 10);
-        ctx.lineTo(-90, -10);
-        ctx.lineTo(-50, -25);
-        ctx.lineTo(20, -25);
-        ctx.lineTo(70, -5);
-        ctx.lineTo(100, 10);
-        ctx.lineTo(-110, 10);
+        ctx.roundRect(-carWidth/2, -carHeight/2, carWidth, carHeight, 10);
+        ctx.fill();
         ctx.stroke();
 
-        // Roofline / Windows
-        ctx.strokeStyle = '#38bdf8';
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(-45, -24);
-        ctx.lineTo(-20, -42);
-        ctx.lineTo(30, -42);
-        ctx.lineTo(60, -24);
-        ctx.closePath();
-        ctx.stroke();
-
-        // Wheels
-        ctx.fillStyle = '#f8fafc';
-        ctx.beginPath(); ctx.arc(-65, 12, 16, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-        ctx.beginPath(); ctx.arc(60, 12, 16, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
-
+        // Roof Glass Cabin
         ctx.fillStyle = '#0f172a';
-        ctx.beginPath(); ctx.arc(-65, 12, 8, 0, Math.PI * 2); ctx.fill();
-        ctx.beginPath(); ctx.arc(60, 12, 8, 0, Math.PI * 2); ctx.fill();
-
-        // Headlight beam
-        ctx.fillStyle = 'rgba(251, 191, 36, 0.3)';
         ctx.beginPath();
-        ctx.moveTo(100, -2);
-        ctx.lineTo(160, -20);
-        ctx.lineTo(160, 20);
+        const roofOffset = 16 * cosA;
+        ctx.moveTo(-carWidth/3 + roofOffset, -carHeight/2);
+        ctx.lineTo(-carWidth/5 + roofOffset, -carHeight/2 - 24);
+        ctx.lineTo(carWidth/5 + roofOffset, -carHeight/2 - 24);
+        ctx.lineTo(carWidth/3 + roofOffset, -carHeight/2);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+
+        // Glass Highlight Reflection
+        ctx.fillStyle = 'rgba(56, 189, 248, 0.5)';
+        ctx.beginPath();
+        ctx.moveTo(-carWidth/5 + roofOffset + 4, -carHeight/2 - 22);
+        ctx.lineTo(carWidth/5 + roofOffset - 4, -carHeight/2 - 22);
+        ctx.lineTo(carWidth/3 + roofOffset - 6, -carHeight/2 + 2);
+        ctx.lineTo(-carWidth/3 + roofOffset + 6, -carHeight/2 + 2);
         ctx.closePath();
         ctx.fill();
 
+        // Wheels
+        const wheelX1 = -carWidth * 0.32;
+        const wheelX2 = carWidth * 0.32;
+        const wheelY = carHeight/2 - 4;
+
+        ctx.fillStyle = '#0f172a';
+        ctx.beginPath(); ctx.arc(wheelX1, wheelY, 15, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.arc(wheelX2, wheelY, 15, 0, Math.PI*2); ctx.fill(); ctx.stroke();
+
+        ctx.fillStyle = '#f8fafc';
+        ctx.beginPath(); ctx.arc(wheelX1, wheelY, 7, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(wheelX2, wheelY, 7, 0, Math.PI*2); ctx.fill();
+
+        // LED Lights
+        ctx.fillStyle = 'rgba(251, 191, 36, 0.85)';
+        if (cosA >= 0) {
+            ctx.beginPath(); ctx.arc(carWidth/2 - 4, -4, 5, 0, Math.PI*2); ctx.fill();
+        } else {
+            ctx.fillStyle = 'rgba(220, 38, 38, 0.85)';
+            ctx.beginPath(); ctx.arc(-carWidth/2 + 4, -4, 5, 0, Math.PI*2); ctx.fill();
+        }
+
         ctx.restore();
 
-        angle += 0.03;
+        if (!isDragging) {
+            rotationAngle += 0.008;
+        }
     }
 
     if (canvas.dataset.animId) cancelAnimationFrame(parseInt(canvas.dataset.animId));
-    
+
     function animate() {
-        drawCar();
+        drawStudioShowroom();
         canvas.dataset.animId = requestAnimationFrame(animate);
     }
     animate();
