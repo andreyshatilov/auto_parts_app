@@ -41,11 +41,11 @@ try:
                 conn.execute(text(f"ALTER TABLE cars ADD COLUMN {c_name} {c_type};"))
                 conn.commit()
             except Exception:
-                pass
+                conn.rollback()
 
         # Remove legacy numeric fake test VINs and test data entirely
         try:
-            conn.execute(text("DELETE FROM cars WHERE vin = '23542435345643564' OR length(vin) != 17;"))
+            conn.execute(text("DELETE FROM cars WHERE vin = '23542435345643564';"))
             conn.commit()
         except Exception as e:
             print(f"Error purging test cars: {e}")
