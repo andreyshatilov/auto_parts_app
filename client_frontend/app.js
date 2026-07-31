@@ -933,7 +933,74 @@ function applyPreset(text) {
     if (reqForm) reqForm.scrollIntoView({ behavior: 'smooth' });
 }
 
-async function loadMyRequests(token) {
+async function renderGarage(cars) {
+    garageCountBadge.textContent = `${cars.length}/10 ╨░╨▓╤В╨╛`;
+    if (cars.length > 0) {
+        requestCarSelect.innerHTML = cars.map(c => `<option value="${c.id}">${escapeHtml(c.brand)} ${escapeHtml(c.model)} (VIN: ${escapeHtml(c.vin)})</option>`).join('');
+    } else {
+        requestCarSelect.innerHTML = `<option value="">╨б╨┐╨╛╤З╨░╤В╨║╤Г ╨┤╨╛╨┤╨░╨╣╤В╨╡ ╨░╨▓╤В╨╛ ╨▓ ╨│╨░╤А╨░╨╢</option>`;
+    }
+
+    if (cars.length === 0) {
+        garageContainer.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 24px;"> ╨Т╨░╤И ╨│╨░╤А╨░╨╢ ╨┐╨╛╤А╨╛╨╢╨╜╤Ц╨╣. ╨Ф╨╛╨┤╨░╨╣╤В╨╡ ╨┐╨╡╤А╤И╨╡ ╨░╨▓╤В╨╛ ╨╜╨╕╨╢╤З╨╡ (╨┤╨╛ 10 ╨╝╨░╤И╨╕╨╜).</div>`;
+        return;
+    }
+
+    garageContainer.innerHTML = cars.map(car => {
+        const isNoVin = !car.vin || car.vin.startsWith('NOVIN-');
+        const vinDisplay = isNoVin ? '<span style="color:#d97706; font-weight:600;">╨Э╨╡ ╨▓╨║╨░╨╖╨░╨╜╨╛ (╨а╨╡╨║╨╛╨╝╨╡╨╜╨┤╨╛╨▓╨░╨╜╨╛ ╨┤╨╛╨┤╨░╤В╨╕)</span>' : escapeHtml(car.vin);
+
+        const genDisplay = car.generation || (car.modification && car.modification.includes('G20') ? car.modification : 'G20 (7-╨╝╨╡ ╨┐╨╛╨║╨╛╨╗╤Ц╨╜╨╜╤П)');
+        const engineDisplay = `${car.engine_code || '2.0L Turbo B48'} ${car.horse_power ? `(${car.horse_power})` : ' (258 ╨║.╤Б.)'}`;
+
+        return `
+        <div class="garage-card" style="cursor:pointer; transition:transform 0.2s;" onclick="openCarDetailModal(${car.id})">
+            <div class="garage-header-flex">
+                <div>
+                    <div class="garage-card-title">${escapeHtml(car.brand)} ${escapeHtml(car.model)} ${car.release_date ? `<span style="font-size:13px; color:var(--primary); font-weight:600;">(${escapeHtml(car.release_date)} ╤А.╨▓.)</span>` : ''}</div>
+                    <div class="garage-card-vin">VIN: ${vinDisplay}</div>
+                </div>
+                <div class="brand-emblem-badge">
+                    ${getBrandEmblem(car.brand)}
+                </div>
+            </div>
+            
+            ${car.custom_photo_url ? `
+                <div style="margin-top:10px; width:100%; height:130px; border-radius:10px; overflow:hidden;">
+                    <img src="${escapeHtml(car.custom_photo_url)}" alt="${escapeHtml(car.brand)}" style="width:100%; height:100%; object-fit:cover;">
+                </div>
+            ` : ''}
+
+            <div class="garage-details" style="margin-top:10px;">
+                <div><span class="g-label">╨Я╨Ю╨Ъ╨Ю╨Ы╨Ж╨Э╨Э╨п / ╨Ъ╨г╨Ч╨Ю╨Т</span><div class="g-value">${escapeHtml(genDisplay)}</div></div>
+                <div><span class="g-label">╨а╨Ж╨Ъ ╨Т╨Ш╨Я╨г╨б╨Ъ╨г</span><div class="g-value">${escapeHtml(car.release_date || '2020')} ╤А.╨▓.</div></div>
+                <div><span class="g-label">╨Ф╨Т╨Ш╨У╨г╨Э & ╨Я╨Ю╨в╨г╨Ц╨Э╨Ж╨б╨в╨м</span><div class="g-value">${escapeHtml(engineDisplay)}</div></div>
+                <div><span class="g-label">╨в╨а╨Р╨Э╨б╨Ь╨Ж╨б╨Ж╨п</span><div class="g-value">${escapeHtml(car.transmission_type || '╨Р╨Ъ╨Я╨Я')} ${escapeHtml(car.transmission_code || '(ZF 8HP51)')}</div></div>
+            </div>
+
+            ${isNoVin ? `
+                <div style="margin-top:10px; background:#fffbe6; border:1px solid #ffe58f; padding:8px 12px; border-radius:10px; font-size:12px; display:flex; justify-content:space-between; align-items:center; gap:6px;">
+                    <span style="color:#d48806; font-weight:600;"> ╨Т╨║╨░╨╢╤Ц╤В╤М VIN ╨┤╨╗╤П ╨С╨╛╤А╤В╨╢╤Г╤А╨╜╨░╨╗╤Г ╤В╨░ ╨в╨Ю</span>
+                    <button class="btn btn-primary" style="width:auto; padding:4px 10px; font-size:11px; white-space:nowrap;" onclick="event.stopPropagation(); openVinRecommendationModal(${car.id}, '${escapeHtml(car.brand)} ${escapeHtml(car.model)}')"> ╨Т╨║╨░╨╖╨░╤В╨╕ VIN</button>
+                </div>
+            ` : ''}
+
+            <div style="display:flex; gap:6px; margin-top:10px;" onclick="event.stopPropagation();">
+                <button class="btn btn-secondary" style="font-size:11px; padding:8px; flex:1;" onclick="openCarDetailModal(${car.id})">
+                    ЁЯПОя╕П ╨Ю╨│╨╗╤П╨┤ & ╨Я╨░╤Б╨┐╨╛╤А╤В
+                </button>
+                <button class="btn btn-secondary" style="font-size:11px; padding:8px; flex:1;" onclick="generateTransferCode(${car.id}, '${escapeHtml(car.brand)} ${escapeHtml(car.model)}')">
+                    ЁЯФС PIN ╨┤╨╗╤П ╨┐╤А╨╛╨┤╨░╨╢╤Г
+                </button>
+                <button class="btn btn-delete" style="font-size:11px; padding:8px; width:auto;" title="╨Т╨╕╨┤╨░╨╗╨╕╤В╨╕ ╨╖ ╨│╨░╤А╨░╨╢╨░" onclick="deleteCarFromGarage(${car.id}, '${escapeHtml(car.brand)}', '${escapeHtml(car.model)}', '${escapeHtml(car.vin)}')">
+                    ЁЯЧСя╕П
+                </button>
+            </div>
+        </div>
+    `}).join('');
+}
+
+function loadMyRequests(token) {
     try {
         const res = await fetch(`${API_BASE_URL}/requests/my`, {
             headers: { 'X-Auth-Token': token }
