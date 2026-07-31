@@ -730,24 +730,29 @@ function initBrandAndModelSelects() {
 }
 
 function getBrandEmblem(brandName) {
-    if (!brandName) return 'CAR';
-    const b = brandName.trim().toUpperCase();
-    if (b.includes('BMW')) return 'BMW';
-    if (b.includes('AUDI')) return 'AUDI';
-    if (b.includes('MERCEDES') || b.includes('BENZ')) return 'BENZ';
-    if (b.includes('CHEVROLET') || b.includes('CHEVY')) return 'CHEVY';
-    if (b.includes('VOLKSWAGEN') || b.includes('VW')) return 'VW';
-    if (b.includes('TOYOTA')) return 'TOYOTA';
-    if (b.includes('HONDA')) return 'HONDA';
-    if (b.includes('FORD')) return 'FORD';
-    if (b.includes('LEXUS')) return 'LEXUS';
-    if (b.includes('PORSCHE')) return 'PORSCHE';
-    if (b.includes('HYUNDAI')) return 'HYUNDAI';
-    if (b.includes('KIA')) return 'KIA';
-    if (b.includes('NISSAN')) return 'NISSAN';
-    if (b.includes('MAZDA')) return 'MAZDA';
-    if (b.includes('VOLVO')) return 'VOLVO';
-    return brandName.substring(0, 4).toUpperCase();
+    if (!brandName) return '';
+    const cleanBrand = brandName.trim();
+    const slugMap = {
+        'Acura': 'acura', 'Alfa Romeo': 'alfa-romeo', 'Audi': 'audi', 'BMW': 'bmw',
+        'Cadillac': 'cadillac', 'Chery': 'chery', 'Chevrolet': 'chevrolet', 'Chrysler': 'chrysler',
+        'Citroen': 'citroen', 'Cupra': 'seat', 'Dacia': 'dacia', 'Daewoo': 'daewoo',
+        'Dodge': 'dodge', 'Fiat': 'fiat', 'Ford': 'ford', 'Geely': 'geely', 'Genesis': 'genesis',
+        'Honda': 'honda', 'Hyundai': 'hyundai', 'Infiniti': 'infiniti', 'Jaguar': 'jaguar',
+        'Jeep': 'jeep', 'Kia': 'kia', 'Lada / ВАЗ': 'lada', 'Land Rover': 'land-rover',
+        'Lexus': 'lexus', 'Lincoln': 'lincoln', 'Maserati': 'maserati', 'Mazda': 'mazda',
+        'Mercedes-Benz': 'mercedes-benz', 'MG': 'mg', 'Mini': 'mini', 'Mitsubishi': 'mitsubishi',
+        'Nissan': 'nissan', 'Opel': 'opel', 'Peugeot': 'peugeot', 'Porsche': 'porsche',
+        'Renault': 'renault', 'Seat': 'seat', 'Skoda': 'skoda', 'Smart': 'smart',
+        'Subaru': 'subaru', 'Suzuki': 'suzuki', 'Tesla': 'tesla', 'Toyota': 'toyota',
+        'Volkswagen': 'volkswagen', 'Volvo': 'volvo'
+    };
+
+    const slug = slugMap[cleanBrand] || cleanBrand.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const logoUrl = `https://raw.githubusercontent.com/fawazahmed0/car-logos/main/png/${slug}.png`;
+
+    return `<div style="width:48px; height:48px; display:flex; align-items:center; justify-content:center; background:#ffffff; border-radius:10px; padding:4px; box-shadow:0 2px 6px rgba(0,0,0,0.08); border:1px solid var(--border-color);">
+        <img src="${logoUrl}" alt="${escapeHtml(cleanBrand)}" style="max-width:100%; max-height:100%; object-fit:contain;" onerror="this.onerror=null; this.outerHTML='<span style=\\'font-weight:800; font-size:12px; color:#0f172a;\\'>${escapeHtml(cleanBrand.substring(0,4))}</span>';">
+    </div>`;
 }
 
 function openVinRecommendationModal(carId, carName) {
@@ -780,7 +785,7 @@ function renderGarage(cars) {
         const vinDisplay = isNoVin ? '<span style="color:#d97706; font-weight:600;">Не вказано (Рекомендовано додати)</span>' : escapeHtml(car.vin);
 
         return `
-        <div class="garage-card">
+        <div class="garage-card" style="cursor:pointer; transition:transform 0.2s;" onclick="openCarDetailModal(${car.id})">
             <div class="garage-header-flex">
                 <div>
                     <div class="garage-card-title">${escapeHtml(car.brand)} ${escapeHtml(car.model)} ${car.release_date ? `<span style="font-size:13px; color:var(--primary); font-weight:600;">(${escapeHtml(car.release_date)} р.в.)</span>` : ''}</div>
@@ -791,8 +796,14 @@ function renderGarage(cars) {
                 </div>
             </div>
             
-            <div class="garage-details">
-                <div><span class="g-label">КУЗОВ / ПОКОЛІННЯ</span><div class="g-value">${escapeHtml(car.modification || '—')}</div></div>
+            ${car.custom_photo_url ? `
+                <div style="margin-top:10px; width:100%; height:130px; border-radius:10px; overflow:hidden;">
+                    <img src="${escapeHtml(car.custom_photo_url)}" alt="${escapeHtml(car.brand)}" style="width:100%; height:100%; object-fit:cover;">
+                </div>
+            ` : ''}
+
+            <div class="garage-details" style="margin-top:10px;">
+                <div><span class="g-label">КУЗОВ / ПОКОЛІННЯ</span><div class="g-value">${escapeHtml(car.generation || car.modification || '—')}</div></div>
                 <div><span class="g-label">РІК ВИПУСКУ</span><div class="g-value">${escapeHtml(car.release_date || '—')}</div></div>
                 <div><span class="g-label">ДВИГУН</span><div class="g-value">${escapeHtml(car.engine_code || '—')}</div></div>
                 <div><span class="g-label">ТРАНСМІСІЯ</span><div class="g-value">${escapeHtml(car.transmission_type || '—')} ${escapeHtml(car.transmission_code || '')}</div></div>
@@ -801,16 +812,19 @@ function renderGarage(cars) {
             ${isNoVin ? `
                 <div style="margin-top:10px; background:#fffbe6; border:1px solid #ffe58f; padding:8px 12px; border-radius:10px; font-size:12px; display:flex; justify-content:space-between; align-items:center; gap:6px;">
                     <span style="color:#d48806; font-weight:600;"> Вкажіть VIN для Бортжурналу та ТО</span>
-                    <button class="btn btn-primary" style="width:auto; padding:4px 10px; font-size:11px; white-space:nowrap;" onclick="openVinRecommendationModal(${car.id}, '${escapeHtml(car.brand)} ${escapeHtml(car.model)}')"> Вказати VIN</button>
+                    <button class="btn btn-primary" style="width:auto; padding:4px 10px; font-size:11px; white-space:nowrap;" onclick="event.stopPropagation(); openVinRecommendationModal(${car.id}, '${escapeHtml(car.brand)} ${escapeHtml(car.model)}')"> Вказати VIN</button>
                 </div>
             ` : ''}
 
-            <div style="display:flex; gap:6px; margin-top:8px;">
-                <button class="btn btn-secondary" style="font-size:11px; padding:8px; flex:1;" onclick="window.open('${API_BASE_URL}/invoices/car/${car.id}/passport', '_blank')">
-                    Сервісний Паспорт
+            <div style="display:flex; gap:6px; margin-top:10px;" onclick="event.stopPropagation();">
+                <button class="btn btn-secondary" style="font-size:11px; padding:8px; flex:1;" onclick="openCarDetailModal(${car.id})">
+                    🏎️ Огляд & Паспорт
                 </button>
                 <button class="btn btn-secondary" style="font-size:11px; padding:8px; flex:1;" onclick="generateTransferCode(${car.id}, '${escapeHtml(car.brand)} ${escapeHtml(car.model)}')">
-                    PIN для продажу
+                    🔑 PIN для продажу
+                </button>
+                <button class="btn btn-delete" style="font-size:11px; padding:8px; width:auto;" title="Видалити з гаража" onclick="deleteCarFromGarage(${car.id}, '${escapeHtml(car.brand)}', '${escapeHtml(car.model)}', '${escapeHtml(car.vin)}')">
+                    🗑️
                 </button>
             </div>
         </div>
@@ -1199,4 +1213,183 @@ function formatDate(iso) {
 function escapeHtml(str) {
     if (!str) return '';
     return String(str).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+}
+
+let currentDetailCarId = null;
+let currentDetailCarObj = null;
+
+window.openCarDetailModal = function(carId) {
+    if (!currentClient || !currentClient.cars) return;
+    const car = currentClient.cars.find(c => c.id === carId);
+    if (!car) return;
+
+    currentDetailCarId = carId;
+    currentDetailCarObj = car;
+
+    document.getElementById('detailCarTitle').textContent = `${car.brand} ${car.model}`;
+    document.getElementById('detailCarVinBadge').textContent = `VIN: ${car.vin || 'Не вказано'}`;
+    document.getElementById('detailCarBrandEmblem').innerHTML = getBrandEmblem(car.brand);
+
+    document.getElementById('detailCarGeneration').textContent = car.generation || car.modification || 'G20 / Restyling';
+    document.getElementById('detailCarYear').textContent = car.release_date ? `${car.release_date} р.в.` : 'Не вказано';
+    document.getElementById('detailCarEngine').textContent = `${car.engine_code || '2.0L Turbo'} ${car.horse_power ? `(${car.horse_power})` : ''}`;
+    document.getElementById('detailCarFuel').textContent = `${car.fuel_type || 'Бензин (Direct Injection)'} | ${car.drive_type || 'Повний привід'}`;
+    document.getElementById('detailCarTrans').textContent = `${car.transmission_type || 'АКПП'} ${car.transmission_code ? `(${car.transmission_code})` : ''}`;
+    document.getElementById('detailCarColor').textContent = car.color_code || 'Black Sapphire Metallic (475)';
+    document.getElementById('detailCarPlant').textContent = car.assembly_plant || 'Німеччина, Завод Мюнхен';
+    document.getElementById('detailCarMileage').textContent = `${(car.mileage || 142500).toLocaleString('uk-UA')} км`;
+
+    const heroImg = document.getElementById('carHeroPhoto');
+    const canvasWrapper = document.getElementById('car3dCanvasWrapper');
+    const customPhotoInput = document.getElementById('customPhotoUrlInput');
+
+    customPhotoInput.value = car.custom_photo_url || '';
+
+    if (car.custom_photo_url) {
+        heroImg.src = car.custom_photo_url;
+        heroImg.style.display = 'block';
+        canvasWrapper.style.display = 'none';
+    } else {
+        heroImg.style.display = 'none';
+        canvasWrapper.style.display = 'flex';
+        init3dCarCanvas(car);
+    }
+
+    document.getElementById('detailPassportBtn').onclick = () => window.open(`${API_BASE_URL}/invoices/car/${car.id}/passport`, '_blank');
+    document.getElementById('detailPinBtn').onclick = () => generateTransferCode(car.id, `${car.brand} ${car.model}`);
+    document.getElementById('detailDeleteBtn').onclick = () => deleteCarFromGarage(car.id, car.brand, car.model, car.vin);
+
+    document.getElementById('carDetailModal').style.display = 'flex';
+};
+
+window.closeCarDetailModal = function() {
+    document.getElementById('carDetailModal').style.display = 'none';
+};
+
+window.saveCustomCarPhoto = async function() {
+    if (!currentDetailCarId) return;
+    const token = localStorage.getItem(TOKEN_STORAGE_KEY);
+    const photoUrl = document.getElementById('customPhotoUrlInput').value.trim();
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/cars/${currentDetailCarId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json', 'X-Auth-Token': token },
+            body: JSON.stringify({ custom_photo_url: photoUrl || null })
+        });
+        const updatedCar = await res.json();
+        if (!res.ok) throw new Error(updatedCar.detail || 'Помилка збереження фото');
+
+        showToast(' Фото вашого автомобіля збережено!');
+        await refreshGarage(token);
+        openCarDetailModal(currentDetailCarId);
+    } catch (err) {
+        showToast(err.message, 'error');
+    }
+};
+
+window.deleteCarFromGarage = async function(carId, brand, model, vin) {
+    const confirmMsg = `Видалити авто ${brand} ${model} (VIN: ${vin}) з вашого гаража?`;
+    if (!confirm(confirmMsg)) return;
+
+    const token = localStorage.getItem(TOKEN_STORAGE_KEY);
+    try {
+        const res = await fetch(`${API_BASE_URL}/clients/me/cars/${carId}`, {
+            method: 'DELETE',
+            headers: { 'X-Auth-Token': token }
+        });
+
+        if (!res.ok) {
+            const data = await res.json();
+            throw new Error(data.detail || 'Помилка видалення');
+        }
+
+        showToast(` Автомобіль ${brand} ${model} видалено з вашого гаража та бази даних.`);
+        closeCarDetailModal();
+        await refreshGarage(token);
+    } catch (err) {
+        showToast(err.message, 'error');
+    }
+};
+
+function init3dCarCanvas(car) {
+    const canvas = document.getElementById('car3dCanvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let angle = 0;
+
+    function drawCar() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Grid lines
+        ctx.strokeStyle = 'rgba(255,255,255,0.05)';
+        ctx.lineWidth = 1;
+        for (let i = 0; i < canvas.width; i += 20) {
+            ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); ctx.stroke();
+        }
+
+        // Draw 3D Car wireframe silhouette
+        ctx.save();
+        ctx.translate(canvas.width / 2, canvas.height / 2 + 10);
+        
+        const scale = 0.9 + Math.sin(angle) * 0.05;
+        ctx.scale(scale, scale);
+
+        // Body outline
+        ctx.strokeStyle = '#dc2626';
+        ctx.lineWidth = 2.5;
+        ctx.beginPath();
+        ctx.moveTo(-110, 10);
+        ctx.lineTo(-90, -10);
+        ctx.lineTo(-50, -25);
+        ctx.lineTo(20, -25);
+        ctx.lineTo(70, -5);
+        ctx.lineTo(100, 10);
+        ctx.lineTo(-110, 10);
+        ctx.stroke();
+
+        // Roofline / Windows
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        ctx.moveTo(-45, -24);
+        ctx.lineTo(-20, -42);
+        ctx.lineTo(30, -42);
+        ctx.lineTo(60, -24);
+        ctx.closePath();
+        ctx.stroke();
+
+        // Wheels
+        ctx.fillStyle = '#f8fafc';
+        ctx.beginPath(); ctx.arc(-65, 12, 16, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.arc(60, 12, 16, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+
+        ctx.fillStyle = '#0f172a';
+        ctx.beginPath(); ctx.arc(-65, 12, 8, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.arc(60, 12, 8, 0, Math.PI * 2); ctx.fill();
+
+        // Headlight beam
+        ctx.fillStyle = 'rgba(251, 191, 36, 0.3)';
+        ctx.beginPath();
+        ctx.moveTo(100, -2);
+        ctx.lineTo(160, -20);
+        ctx.lineTo(160, 20);
+        ctx.closePath();
+        ctx.fill();
+
+        ctx.restore();
+
+        angle += 0.03;
+    }
+
+    if (canvas.dataset.animId) cancelAnimationFrame(parseInt(canvas.dataset.animId));
+    
+    function animate() {
+        drawCar();
+        canvas.dataset.animId = requestAnimationFrame(animate);
+    }
+    animate();
 }

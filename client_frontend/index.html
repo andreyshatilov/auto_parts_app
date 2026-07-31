@@ -660,6 +660,68 @@
         </div>
     </div>
 
+    <!-- 🏎️ МОДАЛЬНЕ ВІКНО: ЦИФРОВИЙ ДВІЙНИК ТА ПАСПОРТ АВТОМОБІЛЯ -->
+    <div id="carDetailModal" class="modal-backdrop" style="display: none; align-items:center; justify-content:center; padding:16px;">
+        <div class="card modal-content" style="max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; background: var(--bg-card); color: var(--text-main); border-radius: 16px; padding: 20px; position:relative;">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:12px; margin-bottom:16px;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <div id="detailCarBrandEmblem"></div>
+                    <div>
+                        <h2 id="detailCarTitle" style="font-size:18px; font-weight:800; color:var(--text-main); margin:0;">BMW 330i</h2>
+                        <div id="detailCarVinBadge" style="font-size:12px; font-family:monospace; color:var(--primary); font-weight:700;">VIN: WBA33AY05NFP12345</div>
+                    </div>
+                </div>
+                <button onclick="closeCarDetailModal()" style="background:#f1f5f9; border:none; color:#0f172a; width:32px; height:32px; border-radius:50%; font-size:16px; font-weight:bold; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
+            </div>
+
+            <!-- 3D / 360° ГАРАЖНИЙ ПЕРЕГЛЯДАЧ ТА ФОТО АВТО -->
+            <div style="position:relative; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius:12px; overflow:hidden; min-height:200px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#ffffff; padding:16px; margin-bottom:16px; border:1px solid rgba(255,255,255,0.1);">
+                <div id="carHeroPhotoContainer" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+                    <img id="carHeroPhoto" src="" alt="Auto Photo" style="max-height:180px; width:100%; object-fit:cover; border-radius:8px; display:none;">
+                    
+                    <div id="car3dCanvasWrapper" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+                        <canvas id="car3dCanvas" width="360" height="150" style="max-width:100%; border-radius:8px;"></canvas>
+                        <div style="font-size:10px; color:#94a3b8; margin-top:4px;">3D Цифровий Двійник 360° (потягніть для обертання)</div>
+                    </div>
+                </div>
+
+                <!-- Завантаження власного фото авто -->
+                <div style="margin-top:12px; display:flex; gap:8px; width:100%;">
+                    <input type="text" id="customPhotoUrlInput" placeholder="Вставте посилання на фотку свого авто (URL)..." style="flex:1; font-size:11px; padding:6px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.2); background:rgba(0,0,0,0.4); color:white;">
+                    <button class="btn btn-secondary" style="font-size:11px; padding:6px 10px; width:auto; white-space:nowrap;" onclick="saveCustomCarPhoto()">Зберегти фото</button>
+                </div>
+            </div>
+
+            <!-- ПОВНА ТЕХНІЧНА КАРТКА АВТОМОБІЛЯ -->
+            <div style="font-size:13px; display:grid; grid-template-columns: 1fr 1fr; gap:10px; background:#f8fafc; padding:14px; border-radius:12px; border:1px solid var(--border-color); margin-bottom:16px;">
+                <div><span style="color:var(--text-muted); font-size:11px; display:block;">ПОКОЛІННЯ / КУЗОВ</span><strong id="detailCarGeneration">G20 / LCI</strong></div>
+                <div><span style="color:var(--text-muted); font-size:11px; display:block;">РІК ВИПУСКУ</span><strong id="detailCarYear">2020 р.в.</strong></div>
+                <div><span style="color:var(--text-muted); font-size:11px; display:block;">ДВИГУН & ПОТУЖНІСТЬ</span><strong id="detailCarEngine">2.0L Turbo B48 (258 к.с.)</strong></div>
+                <div><span style="color:var(--text-muted); font-size:11px; display:block;">ПАЛЬНЕ & ПРИВІД</span><strong id="detailCarFuel">Бензин | Повний (xDrive)</strong></div>
+                <div><span style="color:var(--text-muted); font-size:11px; display:block;">ТРАНСМІСІЯ (КПП)</span><strong id="detailCarTrans">АКПП 8-ст. Steptronic</strong></div>
+                <div><span style="color:var(--text-muted); font-size:11px; display:block;">КОЛІР КУЗОВА</span><strong id="detailCarColor">Black Sapphire Metallic</strong></div>
+                <div><span style="color:var(--text-muted); font-size:11px; display:block;">КРАЇНА ТА ЗАВОД</span><strong id="detailCarPlant">Німеччина (Мюнхен)</strong></div>
+                <div><span style="color:var(--text-muted); font-size:11px; display:block;">ФІКСОВАНИЙ ПРОБІГ</span><strong id="detailCarMileage" style="color:var(--primary);">142 500 км</strong></div>
+            </div>
+
+            <!-- ДІЇ З АВТОМОБІЛЕМ -->
+            <div style="display:flex; flex-direction:column; gap:8px;">
+                <button class="btn btn-primary" style="font-size:12px; padding:10px;" id="detailPassportBtn">
+                    📄 Завантажити / Роздрукувати Сервісний Паспорт (PDF)
+                </button>
+                
+                <div style="display:flex; gap:8px;">
+                    <button class="btn btn-secondary" style="font-size:12px; padding:10px; flex:1;" id="detailPinBtn">
+                        🔑 PIN для продажу авто
+                    </button>
+                    <button class="btn btn-delete" style="font-size:12px; padding:10px; flex:1;" id="detailDeleteBtn">
+                        🗑️ Видалити з гаража
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Модальне вікно Редагування Профілю -->
     <div id="editProfileModal" class="modal-backdrop" style="display: none;">
         <div class="card modal-content" style="max-width: 450px; width: 90%; background: #ffffff;">
@@ -746,7 +808,7 @@
     <!-- Сповіщення Toast -->
     <div id="toastContainer" class="toast-container"></div>
 
-    <script src="app.js?v=10.0"></script>
+    <script src="app.js?v=11.0"></script>
 </body>
 </html>
 

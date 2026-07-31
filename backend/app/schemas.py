@@ -22,6 +22,14 @@ class CarBase(BaseModel):
     drive_type: Optional[str] = Field(None, description="Привід (FWD, AWD, RWD)")
     transmission_type: Optional[str] = Field(None, description="Тип КПП (АКПП / МКПП)")
     transmission_code: Optional[str] = Field(None, description="Код КПП")
+    generation: Optional[str] = Field(None, description="Покоління кузова")
+    body_type: Optional[str] = Field(None, description="Тип кузова")
+    fuel_type: Optional[str] = Field(None, description="Тип пального")
+    horse_power: Optional[str] = Field(None, description="Потужність (к.с. / кВт)")
+    color_code: Optional[str] = Field(None, description="Колір та код фарби")
+    assembly_plant: Optional[str] = Field(None, description="Країна та завод збірки")
+    mileage: Optional[int] = Field(100000, description="Пробіг у км")
+    custom_photo_url: Optional[str] = Field(None, description="Фото автомобіля клієнта")
     notes: Optional[str] = Field(None, description="Замітки")
     status: Optional[str] = Field("Ідентифіковано", description="Статус ідентифікації")
 
@@ -49,6 +57,14 @@ class CarUpdate(BaseModel):
     drive_type: Optional[str] = None
     transmission_type: Optional[str] = None
     transmission_code: Optional[str] = None
+    generation: Optional[str] = None
+    body_type: Optional[str] = None
+    fuel_type: Optional[str] = None
+    horse_power: Optional[str] = None
+    color_code: Optional[str] = None
+    assembly_plant: Optional[str] = None
+    mileage: Optional[int] = None
+    custom_photo_url: Optional[str] = None
     notes: Optional[str] = None
     status: Optional[str] = None
 

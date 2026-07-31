@@ -64,6 +64,26 @@ def add_car_to_my_garage(
     return new_car
 
 
+@router.delete("/me/cars/{car_id}", status_code=status.HTTP_204_NO_CONTENT)
+def delete_my_car(
+    car_id: int,
+    current_client: Client = Depends(get_current_client),
+    db: Session = Depends(get_db)
+):
+    """Повне видалення авто з гаража клієнта та бази даних"""
+    car = db.query(Car).filter(Car.id == car_id, Car.client_id == current_client.id).first()
+    if not car:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Автомобіль з ID {car_id} не знайдено у вашому гаражі"
+        )
+
+    # Видаляємо авто з бази даних повністю
+    db.delete(car)
+    db.commit()
+    return None
+
+
 @router.put("/me", response_model=ClientResponse)
 def update_my_profile(
     data: ClientUpdate,

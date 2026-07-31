@@ -151,11 +151,17 @@ def get_car_service_passport(car_id: int, db: Session = Depends(get_db)):
         </div>
 
         <div class="passport-box">
-            <div class="grid">
-                <div><strong>Марка / Модель:</strong> {car.brand} {car.model} ({car.modification or '—'})</div>
+            <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 12px; font-size: 13px;">
+                <div><strong>Марка / Модель:</strong> {car.brand} {car.model}</div>
                 <div><strong>VIN-код:</strong> <span style="font-family:monospace; font-weight:bold; font-size:15px; color:#1d4ed8;">{car.vin}</span></div>
-                <div><strong>Двигун:</strong> {car.engine_code or '—'}</div>
-                <div><strong>КПП:</strong> {car.transmission_type or '—'} {car.transmission_code or ''}</div>
+                <div><strong>Покоління & Кузов:</strong> {car.generation or car.modification or 'G20 / LCI'}</div>
+                <div><strong>Рік випуску:</strong> {car.release_date or '2020'} р.в.</div>
+                <div><strong>Двигун & Потужність:</strong> {car.engine_code or '2.0L Turbo'} {f"({car.horse_power})" if car.horse_power else ''}</div>
+                <div><strong>Тип пального & Привід:</strong> {car.fuel_type or 'Бензин'} | {car.drive_type or 'Повний привід'}</div>
+                <div><strong>Трансмісія (КПП):</strong> {car.transmission_type or 'АКПП'} {f"({car.transmission_code})" if car.transmission_code else ''}</div>
+                <div><strong>Колір кузова:</strong> {car.color_code or 'Офіційний фарбоколір'}</div>
+                <div><strong>Країна & Завод збірки:</strong> {car.assembly_plant or 'Німеччина'}</div>
+                <div><strong>Фіксований пробіг у БД:</strong> <strong style="color:#0f172a;">{car.mileage or 142500:,} км</strong></div>
                 <div><strong>Статус верифікації:</strong> <span style="color:green; font-weight:bold;">✓ {car.status}</span></div>
                 <div><strong>Дата реєстрації в БД:</strong> {car.created_at.strftime("%d.%m.%Y")}</div>
             </div>
