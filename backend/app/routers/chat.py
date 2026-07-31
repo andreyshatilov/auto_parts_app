@@ -9,7 +9,7 @@ from sqlalchemy.orm import Session
 from app.database import get_db
 from app.models import Client, OrderRequest, ChatMessage
 from app.schemas import ChatMessageCreate, ChatMessageResponse
-from app.routers.auth import get_current_client
+from app.routers.auth import get_current_client, get_current_client_optional
 
 router = APIRouter(
     prefix="/api/v1/chat",
@@ -21,7 +21,7 @@ router = APIRouter(
 def send_chat_message(
     data: ChatMessageCreate,
     sender_type: str = Query("client", description="client або manager"),
-    current_client: Optional[Client] = Depends(get_current_client),
+    current_client: Optional[Client] = Depends(get_current_client_optional),
     db: Session = Depends(get_db)
 ):
     """
