@@ -358,121 +358,10 @@
                         </div>
                     </section>
 
-                    <!-- Зареєструвати нове авто -->
-                    <section class="section" style="margin-top: 16px;">
-                        <div class="card add-car-card">
-                            <h4>Додати авто в гараж</h4>
-                            <form id="addGarageCarForm" autocomplete="off" style="margin-top: 10px; display:flex; flex-direction:column; gap:10px;">
-                                <div class="form-group">
-                                    <label for="clientVinInput">VIN-код (17 символів, автозаповнення )</label>
-                                    <div class="vin-input-wrapper">
-                                        <input type="text" id="clientVinInput" placeholder="3G1BE6SM7JS652422 (введіть для автопідбору)">
-                                        <span class="vin-counter" id="clientVinCounter">0/17</span>
-                                    </div>
-                                </div>
-
-                                <div class="form-row" style="display:flex; gap:8px;">
-                                    <div class="form-group" style="flex:1;">
-                                        <label for="clientBrandSelect">Марка авто <span class="req">*</span></label>
-                                        <select id="clientBrandSelect" required>
-                                            <option value="">Завантаження марок...</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group" style="flex:1;">
-                                        <label for="clientModelSelect">Модель авто <span class="req">*</span></label>
-                                        <select id="clientModelSelect" required disabled>
-                                            <option value="">Спочатку оберіть марку</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-row" id="customBrandModelRow" style="display:none; gap:8px; margin-top:8px;">
-                                    <div class="form-group" id="customBrandGroup" style="flex:1; display:none;">
-                                        <label for="clientCustomBrandInput">Власний бренд / Марка <span class="req">*</span></label>
-                                        <input type="text" id="clientCustomBrandInput" placeholder="наприклад: Lada, Bugatti">
-                                    </div>
-                                    <div class="form-group" id="customModelGroup" style="flex:1; display:none;">
-                                        <label for="clientCustomModelInput">Власна модель <span class="req">*</span></label>
-                                        <input type="text" id="clientCustomModelInput" placeholder="наприклад: 2107, Chiron">
-                                    </div>
-                                </div>
-
-                                <div class="form-row" style="display:flex; gap:8px;">
-                                    <div class="form-group" style="flex:1;">
-                                        <label for="clientYearSelect">Рік випуску</label>
-                                        <select id="clientYearSelect">
-                                            <option value="">Не вказано</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group" style="flex:1;">
-                                        <label for="clientFuelSelect">Тип палива</label>
-                                        <select id="clientFuelSelect">
-                                            <option value="">Не вказано</option>
-                                            <option value="Бензин">Бензин</option>
-                                            <option value="Дизель">Дизель</option>
-                                            <option value="Газ / Бензин (ГБО)">Газ / Бензин (ГБО)</option>
-                                            <option value="Гібрид">Гібрид (Hybrid)</option>
-                                            <option value="Електро">Електро (EV)</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-row" style="display:flex; gap:8px;">
-                                    <div class="form-group" style="flex:1;">
-                                        <label for="clientBodySelect">Тип кузова</label>
-                                        <select id="clientBodySelect">
-                                            <option value="">Не вказано</option>
-                                            <option value="Седан">Седан</option>
-                                            <option value="Хетчбек">Хетчбек</option>
-                                            <option value="Універсал">Універсал</option>
-                                            <option value="Кросовер / Позашляховик">Кросовер / Позашляховик</option>
-                                            <option value="Купе">Купе</option>
-                                            <option value="Кабріолет">Кабріолет</option>
-                                            <option value="Мінівен">Мінівен</option>
-                                            <option value="Пікап">Пікап</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group" style="flex:1;">
-                                        <label for="clientGenInput">Поколення / Код кузова</label>
-                                        <input type="text" id="clientGenInput" placeholder="напр. B8, E60, W212, Mk7...">
-                                    </div>
-                                    <div class="form-group" style="flex:1;">
-                                        <label for="clientRestyleSelect">Виконання</label>
-                                        <select id="clientRestyleSelect">
-                                            <option value="">Не вказано</option>
-                                            <option value="Дорестайлінг">Дорестайлінг (Pre-facelift)</option>
-                                            <option value="Рестайлінг">Рестайлінг (Facelift / LCI)</option>
-                                        </select>
-                                    </div>
-                                </div>
-
-                                <div class="form-row" style="display:flex; gap:8px;">
-                                    <div class="form-group" style="flex:1;">
-                                        <label for="clientEngineInput">Двигун / Об'єм</label>
-                                        <input type="text" id="clientEngineInput" placeholder="2.0 TFSI, 3.0 TDI...">
-                                    </div>
-                                    <div class="form-group" style="flex:1;">
-                                        <label for="clientTransInput">Тип КПП</label>
-                                        <select id="clientTransInput">
-                                            <option value="">Не обрано</option>
-                                            <option value="АКПП">АКПП (Автомат)</option>
-                                            <option value="МКПП">МКПП (Механіка)</option>
-                                            <option value="Робот">Робот (DSG)</option>
-                                            <option value="Варіатор">Варіатор (CVT)</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group" style="flex:1;">
-                                        <label for="clientMileageInput">Поточний пробіг (км)</label>
-                                        <input type="number" id="clientMileageInput" placeholder="напр. 142000" min="0">
-                                    </div>
-                                </div>
-
-                                <button type="submit" class="btn btn-primary" style="margin-top:4px;">
-                                    <span>Зберегти в Мій Гараж</span>
-                                </button>
-                            </form>
-                        </div>
-                    </section>
+                    <!-- Кнопка додавання ще одного авто в гараж -->
+                    <button class="btn btn-secondary" onclick="openAddNewCarModal()" style="margin-top:16px; width:100%; border:2px dashed var(--primary); color:var(--primary); font-size:14px; padding:14px; border-radius:12px; font-weight:700;">
+                        <span>+ Додати ще одне авто в гараж</span>
+                    </button>
                 </div>
 
                 <!-- ВКЛАДКА 2: ЗАПИТИ ТА ШВИДКІ КОМПЛЕКТИ ТО -->
@@ -506,6 +395,224 @@
                                     <span>Надіслати запит експерту</span>
                                 </button>
                             </form>
+                        </div>
+                    </section>
+
+                    <!-- ШВИДКИЙ ПІДБІР З КАТЕГОРІЯМИ ТА ІКОНКАМИ -->
+                    <section class="section" style="margin-top: 16px;">
+                        <div class="card" style="padding: 14px; background: rgba(254, 243, 199, 0.4); border: 1px solid #fde047;">
+                            <div style="display:flex; align-items:center; justify-content:space-between;">
+                                <div style="display:flex; align-items:center; gap:8px;">
+                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#fef3c7; border-radius:8px;">
+                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M12 28V52C12 54.2 13.8 56 16 56H36C38.2 56 40 54.2 40 52V28C40 25.8 38.2 24 36 24H16C13.8 24 12 25.8 12 28Z" stroke="#b45309" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                                            <path d="M22 24V14H28V24" stroke="#b45309" stroke-width="2.5" stroke-linecap="round"/>
+                                            <path d="M34 24L46 16V22L38 28" stroke="#b45309" stroke-width="2.5" stroke-linecap="round"/>
+                                            <rect x="40" y="32" width="14" height="16" rx="2" stroke="#b45309" stroke-width="2.5"/>
+                                        </svg>
+                                    </span>
+                                    <div>
+                                        <h4 style="font-size:15px; font-weight:800; color:#b45309;">Швидке ТО & Всі Рідини</h4>
+                                        <div style="font-size:11px; color:#d97706;">Мастила, фільтри та технічні рідини</div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div style="display:flex; flex-wrap:wrap; gap:6px; margin: 10px 0;">
+                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Олива ДВС (Моторне мастило)')">Олива ДВС</span>
+                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Масляний фільтр')">Масляний фільтр</span>
+                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Повітряний фільтр')">Повітряний фільтр</span>
+                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Салонний фільтр (Вугільний)')">Фільтр салону</span>
+                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Паливний фільтр')">Паливний фільтр</span>
+                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Гальмівна рідина DOT4')">Гальмівна рідина</span>
+                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Антифриз G12 / G13')">Антифриз</span>
+                            </div>
+
+                            <button type="button" class="btn btn-primary" style="font-size:12px; padding:10px; background:linear-gradient(135deg, #d97706 0%, #b45309 100%); border:none;" onclick="applyPreset('Повний комплект Швидкого ТО: Масляний, Повітряний, Салонний фільтр, Паливний фільтр, Олива ДВС 5W-30/5W-40 та Антифриз')">
+                                <span>Замовити Повний Комплект Швидкого ТО</span>
+                            </button>
+                        </div>
+
+                        <!-- ОСНОВНІ ВУЗЛИ ТА КАТЕГОРІЇ -->
+                        <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin-top:10px;">
+                            
+                            <!-- 1. Двигун & Олива ДВС -->
+                            <div class="card parts-cat-card" onclick="applyPreset('Категорія ДВИГУН: Олива ДВС, Комплект ГРМ, Помпа, Прокладка ГБЦ, Сальники, Опорні подушки')">
+                                <div class="parts-cat-header">
+                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:8px;">
+                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M12 16C12 13.8 13.8 12 16 12H48C50.2 12 52 13.8 52 16V22H12V16Z" stroke="#0f172a" stroke-width="2.5" fill="#f8fafc"/>
+                                            <rect x="26" y="8" width="12" height="4" rx="1" stroke="#0f172a" stroke-width="2" fill="#0f172a"/>
+                                            <path d="M12 22H52V42C52 44.2 50.2 46 48 46H16C13.8 46 12 44.2 12 42V22Z" stroke="#0f172a" stroke-width="2.5" fill="#ffffff"/>
+                                            <rect x="15" y="25" width="7" height="12" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
+                                            <rect x="24" y="27" width="7" height="12" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
+                                            <rect x="33" y="25" width="7" height="12" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
+                                            <rect x="42" y="27" width="7" height="12" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
+                                            <path d="M18.5 37V42M27.5 39V42M36.5 37V42M45.5 39V42" stroke="#0f172a" stroke-width="1.5"/>
+                                            <path d="M16 42H48" stroke="#0f172a" stroke-width="2"/>
+                                            <path d="M18 46L22 54H42L46 46" stroke="#0f172a" stroke-width="2.5" fill="#f8fafc"/>
+                                            <circle cx="8" cy="26" r="3.5" stroke="#0f172a" stroke-width="2"/>
+                                            <circle cx="8" cy="38" r="4.5" stroke="#0f172a" stroke-width="2"/>
+                                            <path d="M8 22.5V33.5" stroke="#0f172a" stroke-width="1.5"/>
+                                            <path d="M52 24H58V28H52M52 32H58V36H52" stroke="#0f172a" stroke-width="2"/>
+                                        </svg>
+                                    </span>
+                                    <div>
+                                        <div class="cat-title">Двигун & Олива</div>
+                                        <div class="cat-sub">Мастило, ГРМ, помпа</div>
+                                    </div>
+                                </div>
+                                <div class="cat-chips-preview">
+                                    <span>Олива ДВС</span>
+                                    <span>ГРМ</span>
+                                    <span>Помпа</span>
+                                </div>
+                            </div>
+
+                            <!-- 2. Гальмівна система -->
+                            <div class="card parts-cat-card" onclick="applyPreset('Категорія ГАЛЬМА: Передні/Задні гальмівні диски, Колодки, Супорти, Шланги, Рідина DOT4')">
+                                <div class="parts-cat-header">
+                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:8px;">
+                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="32" cy="32" r="22" stroke="#0f172a" stroke-width="2.5" fill="#ffffff"/>
+                                            <circle cx="32" cy="32" r="14" stroke="#0f172a" stroke-width="1.5"/>
+                                            <circle cx="32" cy="32" r="7" stroke="#0f172a" stroke-width="2"/>
+                                            <circle cx="32" cy="27" r="1.2" fill="#0f172a"/>
+                                            <circle cx="37" cy="30" r="1.2" fill="#0f172a"/>
+                                            <circle cx="35" cy="36" r="1.2" fill="#0f172a"/>
+                                            <circle cx="29" cy="36" r="1.2" fill="#0f172a"/>
+                                            <circle cx="27" cy="30" r="1.2" fill="#0f172a"/>
+                                            <circle cx="20" cy="20" r="1" fill="#0f172a"/>
+                                            <circle cx="44" cy="44" r="1" fill="#0f172a"/>
+                                            <circle cx="20" cy="44" r="1" fill="#0f172a"/>
+                                            <circle cx="44" cy="20" r="1" fill="#0f172a"/>
+                                            <path d="M22 10C22 10 32 6 44 10C48 14 50 20 50 26C42 26 36 24 22 18V10Z" stroke="#0f172a" stroke-width="2.5" fill="#f1f5f9"/>
+                                        </svg>
+                                    </span>
+                                    <div>
+                                        <div class="cat-title">Гальмівна система</div>
+                                        <div class="cat-sub">Диски, колодки, супорти</div>
+                                    </div>
+                                </div>
+                                <div class="cat-chips-preview">
+                                    <span>Диски</span>
+                                    <span>Колодки</span>
+                                    <span>Рідина</span>
+                                </div>
+                            </div>
+
+                            <!-- 3. Ходова та Підвіска -->
+                            <div class="card parts-cat-card" onclick="applyPreset('Категорія ХОДОВА: Амортизатори, Сайлентблоки, Важелі, Стійки стабілізатора, Ступичні підшипники')">
+                                <div class="parts-cat-header">
+                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:8px;">
+                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="26" y="6" width="12" height="5" rx="1" stroke="#0f172a" stroke-width="2"/>
+                                            <line x1="32" y1="11" x2="32" y2="48" stroke="#0f172a" stroke-width="2.5"/>
+                                            <path d="M22 16C22 16 42 18 42 22C42 26 22 26 22 30C22 34 42 34 42 38C42 42 22 42 22 46" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
+                                            <rect x="27" y="34" width="10" height="18" rx="1" stroke="#0f172a" stroke-width="2" fill="#ffffff"/>
+                                            <circle cx="32" cy="56" r="3.5" stroke="#0f172a" stroke-width="2"/>
+                                            <path d="M12 56H28M36 56H52" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+                                        </svg>
+                                    </span>
+                                    <div>
+                                        <div class="cat-title">Ходова & Підвіска</div>
+                                        <div class="cat-sub">Амортизатори, важелі</div>
+                                    </div>
+                                </div>
+                                <div class="cat-chips-preview">
+                                    <span>Амортизатори</span>
+                                    <span>Важелі</span>
+                                </div>
+                            </div>
+
+                            <!-- 4. Електрика & Запалювання -->
+                            <div class="card parts-cat-card" onclick="applyPreset('Категорія ЕЛЕКТРИКА: Свічки запалювання, АКБ, Катушки запалювання, Генератор, Стартер, Датчики')">
+                                <div class="parts-cat-header">
+                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:8px;">
+                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="18" y="6" width="6" height="5" rx="1" stroke="#0f172a" stroke-width="2"/>
+                                            <path d="M17 11H25V24H17V11Z" stroke="#0f172a" stroke-width="2"/>
+                                            <line x1="15" y1="15" x2="27" y2="15" stroke="#0f172a" stroke-width="1"/>
+                                            <line x1="15" y1="19" x2="27" y2="19" stroke="#0f172a" stroke-width="1"/>
+                                            <path d="M14 24H28V32H14V24Z" stroke="#0f172a" stroke-width="2"/>
+                                            <rect x="16" y="32" width="10" height="16" stroke="#0f172a" stroke-width="2"/>
+                                            <path d="M21 48V54H25" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+                                            <rect x="36" y="24" width="20" height="24" rx="2" stroke="#0f172a" stroke-width="2"/>
+                                            <rect x="40" y="20" width="4" height="4" fill="#0f172a"/>
+                                            <rect x="48" y="20" width="4" height="4" fill="#0f172a"/>
+                                        </svg>
+                                    </span>
+                                    <div>
+                                        <div class="cat-title">Електрика & Свічки</div>
+                                        <div class="cat-sub">Свічки, АКБ, катушки</div>
+                                    </div>
+                                </div>
+                                <div class="cat-chips-preview">
+                                    <span>Свічки</span>
+                                    <span>АКБ</span>
+                                    <span>Катушки</span>
+                                </div>
+                            </div>
+
+                            <!-- 5. Охолодження & Клімат -->
+                            <div class="card parts-cat-card" onclick="applyPreset('Категорія ОХОЛОДЖЕННЯ: Радіатор охолодження, Радіатор печки/кондиціонера, Термостат, Антифриз, Фреон')">
+                                <div class="parts-cat-header">
+                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:8px;">
+                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <rect x="8" y="14" width="48" height="36" rx="3" stroke="#0f172a" stroke-width="2.5" fill="#ffffff"/>
+                                            <path d="M16 14V50M24 14V50M32 14V50M40 14V50M48 14V50" stroke="#0f172a" stroke-width="1" stroke-dasharray="2 2"/>
+                                            <circle cx="32" cy="32" r="13" stroke="#0f172a" stroke-width="2" fill="#ffffff"/>
+                                            <circle cx="32" cy="32" r="3" fill="#0f172a"/>
+                                            <path d="M32 19C35 23 35 28 32 28" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+                                            <path d="M32 45C29 41 29 36 32 36" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+                                            <path d="M19 32C23 29 28 29 28 32" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+                                            <path d="M45 32C41 35 36 35 36 32" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+                                        </svg>
+                                    </span>
+                                    <div>
+                                        <div class="cat-title">Охолодження & Клімат</div>
+                                        <div class="cat-sub">Радіатори, термостат</div>
+                                    </div>
+                                </div>
+                                <div class="cat-chips-preview">
+                                    <span>Антифриз</span>
+                                    <span>Термостат</span>
+                                </div>
+                            </div>
+
+                            <!-- 6. Трансмісія & Зчеплення -->
+                            <div class="card parts-cat-card" onclick="applyPreset('Категорія ТРАНСМІСІЯ: Олива КПП, Комплект зчеплення, Маховик, Фільтр АКПП, ШРУС / Приводи')">
+                                <div class="parts-cat-header">
+                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:8px;">
+                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <circle cx="20" cy="34" r="17" stroke="#0f172a" stroke-width="2" stroke-dasharray="3 2" fill="#ffffff"/>
+                                            <circle cx="20" cy="34" r="12" stroke="#0f172a" stroke-width="1.5"/>
+                                            <circle cx="20" cy="34" r="5" stroke="#0f172a" stroke-width="2"/>
+                                            <rect x="18" y="24" width="4" height="2.5" rx="0.5" fill="#0f172a"/>
+                                            <rect x="18" y="41.5" width="4" height="2.5" rx="0.5" fill="#0f172a"/>
+                                            <path d="M30 20H56C58.2 20 60 21.8 60 24V44C60 46.2 58.2 48 56 48H30V20Z" stroke="#0f172a" stroke-width="2.5" fill="#f8fafc"/>
+                                            <line x1="20" y1="34" x2="56" y2="34" stroke="#0f172a" stroke-width="2.5"/>
+                                            <line x1="32" y1="42" x2="54" y2="42" stroke="#0f172a" stroke-width="2"/>
+                                            <rect x="34" y="27" width="5" height="14" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
+                                            <rect x="34" y="38" width="5" height="8" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
+                                            <rect x="42" y="25" width="6" height="18" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
+                                            <rect x="42" y="39" width="6" height="6" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
+                                            <rect x="50" y="29" width="5" height="10" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
+                                            <path d="M44 20V12" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
+                                            <path d="M44 12L49 7" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
+                                            <circle cx="51" cy="5" r="3" stroke="#0f172a" stroke-width="2" fill="#0f172a"/>
+                                        </svg>
+                                    </span>
+                                    <div>
+                                        <div class="cat-title">Трансмісія & Зчеплення</div>
+                                        <div class="cat-sub">Олива КПП, зчеплення</div>
+                                    </div>
+                                </div>
+                                <div class="cat-chips-preview">
+                                    <span>Олива КПП</span>
+                                    <span>Зчеплення</span>
+                                </div>
+                            </div>
                         </div>
                     </section>
 
@@ -774,6 +881,128 @@
         </div>
     </div>
 
+    <!-- 🚘 МОДАЛЬНЕ ВІКНО: ДОДАТИ АВТО В ГАРАЖ -->
+    <div id="addNewCarModal" class="modal-backdrop" style="display: none; align-items:center; justify-content:center; padding:16px;">
+        <div class="card modal-content" style="max-width: 580px; width: 100%; max-height: 90vh; overflow-y: auto; background: var(--bg-card); color: var(--text-main); border-radius: 16px; padding: 20px; position:relative;">
+            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:12px; margin-bottom:16px;">
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <button onclick="closeAddNewCarModal()" class="ios-back-btn">‹ Назад</button>
+                    <h2 style="font-size:18px; font-weight:800; color:var(--text-main); margin:0;">Додати авто в гараж</h2>
+                </div>
+            </div>
+
+            <form id="addGarageCarForm" autocomplete="off" style="margin-top: 10px; display:flex; flex-direction:column; gap:10px;">
+                <div class="form-group">
+                    <label for="clientVinInput">VIN-код (17 символів, автозаповнення )</label>
+                    <div class="vin-input-wrapper">
+                        <input type="text" id="clientVinInput" placeholder="3G1BE6SM7JS652422 (введіть для автопідбору)">
+                        <span class="vin-counter" id="clientVinCounter">0/17</span>
+                    </div>
+                </div>
+
+                <div class="form-row" style="display:flex; gap:8px;">
+                    <div class="form-group" style="flex:1;">
+                        <label for="clientBrandSelect">Марка авто <span class="req">*</span></label>
+                        <select id="clientBrandSelect" required>
+                            <option value="">Завантаження марок...</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <label for="clientModelSelect">Модель авто <span class="req">*</span></label>
+                        <select id="clientModelSelect" required disabled>
+                            <option value="">Спочатку оберіть марку</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row" id="customBrandModelRow" style="display:none; gap:8px; margin-top:8px;">
+                    <div class="form-group" id="customBrandGroup" style="flex:1; display:none;">
+                        <label for="clientCustomBrandInput">Власний бренд / Марка <span class="req">*</span></label>
+                        <input type="text" id="clientCustomBrandInput" placeholder="наприклад: Lada, Bugatti">
+                    </div>
+                    <div class="form-group" id="customModelGroup" style="flex:1; display:none;">
+                        <label for="clientCustomModelInput">Власна модель <span class="req">*</span></label>
+                        <input type="text" id="clientCustomModelInput" placeholder="наприклад: 2107, Chiron">
+                    </div>
+                </div>
+
+                <div class="form-row" style="display:flex; gap:8px;">
+                    <div class="form-group" style="flex:1;">
+                        <label for="clientYearSelect">Рік випуску</label>
+                        <select id="clientYearSelect">
+                            <option value="">Не вказано</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <label for="clientFuelSelect">Тип палива</label>
+                        <select id="clientFuelSelect">
+                            <option value="">Не вказано</option>
+                            <option value="Бензин">Бензин</option>
+                            <option value="Дизель">Дизель</option>
+                            <option value="Газ / Бензин (ГБО)">Газ / Бензин (ГБО)</option>
+                            <option value="Гібрид">Гібрид (Hybrid)</option>
+                            <option value="Електро">Електро (EV)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row" style="display:flex; gap:8px;">
+                    <div class="form-group" style="flex:1;">
+                        <label for="clientBodySelect">Тип кузова</label>
+                        <select id="clientBodySelect">
+                            <option value="">Не вказано</option>
+                            <option value="Седан">Седан</option>
+                            <option value="Хетчбек">Хетчбек</option>
+                            <option value="Універсал">Універсал</option>
+                            <option value="Кросовер / Позашляховик">Кросовер / Позашляховик</option>
+                            <option value="Купе">Купе</option>
+                            <option value="Кабріолет">Кабріолет</option>
+                            <option value="Мінівен">Мінівен</option>
+                            <option value="Пікап">Пікап</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <label for="clientGenInput">Поколення / Код кузова</label>
+                        <input type="text" id="clientGenInput" placeholder="напр. B8, E60, W212, Mk7...">
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <label for="clientRestyleSelect">Виконання</label>
+                        <select id="clientRestyleSelect">
+                            <option value="">Не вказано</option>
+                            <option value="Дорестайлінг">Дорестайлінг (Pre-facelift)</option>
+                            <option value="Рестайлінг">Рестайлінг (Facelift / LCI)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row" style="display:flex; gap:8px;">
+                    <div class="form-group" style="flex:1;">
+                        <label for="clientEngineInput">Двигун / Об'єм</label>
+                        <input type="text" id="clientEngineInput" placeholder="2.0 TFSI, 3.0 TDI...">
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <label for="clientTransInput">Тип КПП</label>
+                        <select id="clientTransInput">
+                            <option value="">Не обрано</option>
+                            <option value="АКПП">АКПП (Автомат)</option>
+                            <option value="МКПП">МКПП (Механіка)</option>
+                            <option value="Робот">Робот (DSG)</option>
+                            <option value="Варіатор">Варіатор (CVT)</option>
+                        </select>
+                    </div>
+                    <div class="form-group" style="flex:1;">
+                        <label for="clientMileageInput">Поточний пробіг (км)</label>
+                        <input type="number" id="clientMileageInput" placeholder="напр. 142000" min="0">
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="margin-top:8px;">
+                    <span>Зберегти в Мій Гараж</span>
+                </button>
+            </form>
+        </div>
+    </div>
+
     <!-- Модальне вікно Рекомендації додати VIN-код -->
     <div id="vinRecommendationModal" class="modal-backdrop" style="display: none;">
         <div class="card modal-content" style="max-width: 480px; width: 92%;">
@@ -821,7 +1050,7 @@
     <!-- Сповіщення Toast -->
     <div id="toastContainer" class="toast-container"></div>
 
-    <script src="app.js?v=17.0"></script>
+    <script src="app.js?v=18.0"></script>
 </body>
 </html>
 

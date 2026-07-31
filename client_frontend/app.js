@@ -463,19 +463,32 @@ function setupEventListeners() {
                 body: JSON.stringify(carData)
             });
             const data = await res.json();
-            if (!res.ok) throw new Error(data.detail || 'Помилка');
+            if (!res.ok) {
+                let errMsg = 'Помилка додавання авто';
+                if (typeof data.detail === 'string') errMsg = data.detail;
+                else if (Array.isArray(data.detail)) errMsg = data.detail.map(d => d.msg || d.detail).join(', ');
+                else if (data.detail && typeof data.detail === 'object') errMsg = JSON.stringify(data.detail);
+                throw new Error(errMsg);
+            }
 
             showToast(` ${data.brand} ${data.model} додано у ваш Гараж!`);
             addGarageCarForm.reset();
             initBrandAndModelSelects();
             clientVinCounter.textContent = '0/17';
+            closeAddNewCarModal();
             await refreshGarage(token);
 
             if (vinValue.startsWith('NOVIN-')) {
                 openVinRecommendationModal(data.id, `${data.brand} ${data.model}`);
             }
         } catch (err) {
-            showToast(` ${err.message}`, 'error');
+            let errMsg = 'Помилка додавання авто';
+            if (typeof err === 'string') errMsg = err;
+            else if (err && err.message && typeof err.message === 'string') errMsg = err.message;
+            else if (err && typeof err === 'object') {
+                try { errMsg = JSON.stringify(err); } catch(e) {}
+            }
+            showToast(` ${errMsg}`, 'error');
         }
     });
 
@@ -632,6 +645,14 @@ function hideModal(modalEl) {
         }
     }, 220);
 }
+
+window.openAddNewCarModal = function() {
+    showModal(document.getElementById('addNewCarModal'));
+};
+
+window.closeAddNewCarModal = function() {
+    hideModal(document.getElementById('addNewCarModal'));
+};
 
 window.openEditProfileModal = function() {
     if (!currentClient) return;
