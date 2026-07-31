@@ -13,7 +13,7 @@ import re
 # --- СХЕМИ АВТОМОБІЛЯ ТА ПЕРЕДАЧІ ---
 
 class CarBase(BaseModel):
-    vin: str = Field(..., description="VIN-код автомобіля (17 символів)")
+    vin: Optional[str] = Field(None, description="VIN-код автомобіля (17 символів, або порожньо)")
     brand: str = Field(..., min_length=1, max_length=50, description="Марка авто")
     model: str = Field(..., min_length=1, max_length=50, description="Модель авто")
     modification: Optional[str] = Field(None, description="Модифікація / кузов")

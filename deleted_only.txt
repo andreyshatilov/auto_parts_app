@@ -1,0 +1,240 @@
+-                    <!--  ¦Ò¦Æ¦×¦ã¦Ð¦Û¦ì¦Ý¦Ø¦Ù ¦Ú¦Ð¦â¦Ð¦Û¦Þ¦Ó ¦Ò¦ã¦×¦Û¦Æ¦Ò ¦â¦Ð ¦è¦Ò¦Ø¦Ô¦Ú¦Õ ¦â¦Þ -->
+-                    <section class="section" style="margin-top: 16px;">
+-                        <div class="section-header">
+-                            <h3>¦ÒTÃ¦¬¦¬¦¬ TÂ¦- ¦Ú¦-¦-¦¬¦-¦-¦¦¦-TÂ¦¬ ¦Ð¦-TÂ¦-</h3>
+-                            <span class="cars-badge" style="background:#fef3c7; color:#d97706; border-color:#fde68a;">¦è¦-¦¬¦+¦¦¦¬¦¦ ¦¬TÖ¦+¦-TÖTÀ</span>
+-                        </div>
+-                        <!-- ¦ß¦Æ¦Ý¦Æ¦Ý¦Ó ¦×¦Ò¦Õ¦à¦å¦ã: ¦è¦Ò¦Ø¦Ô¦Ú¦Õ ¦â¦Þ ¦â¦Ð ¦à¦Æ¦Ô¦Ø¦Ý¦Ø -->
+-                        <div class="card" style="background: linear-gradient(135deg, #ffffff 0%, #fffbe6 100%); border: 1px solid #fef08a; position:relative; overflow:hidden;">
+-                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+-                                <div style="display:flex; align-items:center; gap:10px;">
+-                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#fef3c7; border-radius:8px;">
+-                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+-                                            <path d="M12 28V52C12 54.2 13.8 56 16 56H36C38.2 56 40 54.2 40 52V28C40 25.8 38.2 24 36 24H16C13.8 24 12 25.8 12 28Z" stroke="#b45309" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+-                                            <path d="M22 24V14H28V24" stroke="#b45309" stroke-width="2.5" stroke-linecap="round"/>
+-                                            <path d="M34 24L46 16V22L38 28" stroke="#b45309" stroke-width="2.5" stroke-linecap="round"/>
+-                                            <rect x="40" y="32" width="14" height="16" rx="2" stroke="#b45309" stroke-width="2.5"/>
+-                                        </svg>
+-                                    </span>
+-                                    <div>
+-                                        <h4 style="font-size:15px; font-weight:800; color:#b45309;">¦è¦-¦¬¦+¦¦¦¦ ¦â¦Þ & ¦ÒTÁTÖ ¦àTÖ¦+¦¬¦-¦¬</h4>
+-                                        <div style="font-size:11px; color:#d97706;">¦Ü¦-TÁTÂ¦¬¦¬¦-, TÄTÖ¦¬TÌTÂTÀ¦¬ TÂ¦- TÂ¦¦TÅ¦-TÖTÇ¦-TÖ TÀTÖ¦+¦¬¦-¦¬</div>
+-                                    </div>
+-                                </div>
+-                                <span style="background:#fef3c7; color:#b45309; padding:3px 8px; border-radius:12px; font-size:10px; font-weight:800;">¦ß¦Æ¦Ý¦Þ¦Ò¦Ð¦Ý¦Þ ¦Ò¦Ó¦Þ¦à¦Æ</span>
+-                            </div>
+-                            <div style="display:flex; flex-wrap:wrap; gap:6px; margin: 10px 0;">
+-                                <span class="chip-item" onclick="applyPreset('¦è¦-¦¬¦+¦¦¦¦ ¦â¦Þ: ¦Þ¦¬¦¬¦-¦- ¦Ô¦Ò¦á (¦Ü¦-TÂ¦-TÀ¦-¦¦ ¦-¦-TÁTÂ¦¬¦¬¦-)')">¦Þ¦¬¦¬¦-¦- ¦Ô¦Ò¦á</span>
+-                                <span class="chip-item" onclick="applyPreset('¦è¦-¦¬¦+¦¦¦¦ ¦â¦Þ: ¦Ü¦-TÁ¦¬TÏ¦-¦¬¦¦ TÄTÖ¦¬TÌTÂTÀ')">¦Ü¦-TÁ¦¬TÏ¦-¦¬¦¦ TÄTÖ¦¬TÌTÂTÀ</span>
+-                                <span class="chip-item" onclick="applyPreset('¦è¦-¦¬¦+¦¦¦¦ ¦â¦Þ: ¦ß¦-¦-TÖTÂTÀTÏ¦-¦¬¦¦ TÄTÖ¦¬TÌTÂTÀ')">¦ß¦-¦-TÖTÂTÀTÏ¦-¦¬¦¦ TÄTÖ¦¬TÌTÂTÀ</span>
+-                                <span class="chip-item" onclick="applyPreset('¦è¦-¦¬¦+¦¦¦¦ ¦â¦Þ: ¦á¦-¦¬¦-¦-¦-¦¬¦¦ TÄTÖ¦¬TÌTÂTÀ (¦ÒTÃ¦¦TÖ¦¬TÌ¦-¦¬¦¦)')">¦äTÖ¦¬TÌTÂTÀ TÁ¦-¦¬¦-¦-TÃ</span>
+-                                <span class="chip-item" onclick="applyPreset('¦è¦-¦¬¦+¦¦¦¦ ¦â¦Þ: ¦ß¦-¦¬¦¬¦-¦-¦¬¦¦ TÄTÖ¦¬TÌTÂTÀ')">¦ß¦-¦¬¦¬¦-¦-¦¬¦¦ TÄTÖ¦¬TÌTÂTÀ</span>
+-                                <span class="chip-item" onclick="applyPreset('¦è¦-¦¬¦+¦¦¦¦ ¦â¦Þ: ¦Ó¦-¦¬TÌ¦-TÖ¦-¦-¦- TÀTÖ¦+¦¬¦-¦- DOT4')">¦Ó¦-¦¬TÌ¦-TÖ¦-¦-¦- TÀTÖ¦+¦¬¦-¦-</span>
+-                                <span class="chip-item" onclick="applyPreset('¦è¦-¦¬¦+¦¦¦¦ ¦â¦Þ: ¦Ð¦-TÂ¦¬TÄTÀ¦¬¦¬ G12 / G13')">¦Ð¦-TÂ¦¬TÄTÀ¦¬¦¬</span>
+-                            </div>
+-                            <button type="button" class="btn btn-primary" style="font-size:12px; padding:10px; background:linear-gradient(135deg, #d97706 0%, #b45309 100%); border:none;" onclick="applyPreset('¦ß¦-¦-¦-¦¬¦¦ ¦¦¦-¦-¦¬¦¬¦¦¦¦TÂ ¦è¦-¦¬¦+¦¦¦-¦¦¦- ¦â¦Þ: ¦Ü¦-TÁ¦¬TÏ¦-¦¬¦¦, ¦ß¦-¦-TÖTÂTÀTÏ¦-¦¬¦¦, ¦á¦-¦¬¦-¦-¦-¦¬¦¦ TÄTÖ¦¬TÌTÂTÀ, ¦ß¦-¦¬¦¬¦-¦-¦¬¦¦ TÄTÖ¦¬TÌTÂTÀ, ¦Þ¦¬¦¬¦-¦- ¦Ô¦Ò¦á 5W-30/5W-40 TÂ¦- ¦Ð¦-TÂ¦¬TÄTÀ¦¬¦¬')">
+-                                <span>¦×¦-¦-¦-¦-¦¬TÂ¦¬ ¦ß¦-¦-¦-¦¬¦¦ ¦Ú¦-¦-¦¬¦¬¦¦¦¦TÂ ¦è¦-¦¬¦+¦¦¦-¦¦¦- ¦â¦Þ</span>
+-                            </button>
+-                        </div>
+-                        <!-- ¦Þ¦á¦Ý¦Þ¦Ò¦Ý¦Æ ¦Ò¦ã¦×¦Û¦Ø ¦â¦Ð ¦Ú¦Ð¦â¦Õ¦Ó¦Þ¦à¦Æ¦Ç ¦× ¦Û¦Þ¦Ó¦Æ¦ç¦Ý¦Ø¦Ü ¦×¦Ñ¦Õ¦à¦Õ¦Ö¦Õ¦Ý¦Ý¦ï¦Ü ¦Ü¦Ð¦á¦Û¦Ð ¦ã ¦Ô¦Ò¦á -->
+-                        <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin-top:10px;">
+-                            
+-                            <!-- 1. ¦Ô¦-¦¬¦¦TÃ¦- & ¦Þ¦¬¦¬¦-¦- ¦Ô¦Ò¦á -->
+-                            <div class="card parts-cat-card" onclick="applyPreset('¦Ú¦-TÂ¦¦¦¦¦-TÀTÖTÏ ¦Ô¦Ò¦Ø¦Ó¦ã¦Ý: ¦Þ¦¬¦¬¦-¦- ¦Ô¦Ò¦á, ¦Ú¦-¦-¦¬¦¬¦¦¦¦TÂ ¦Ó¦à¦Ü, ¦ß¦-¦-¦¬¦-, ¦ßTÀ¦-¦¦¦¬¦-¦+¦¦¦- ¦Ó¦Ñ¦æ, ¦á¦-¦¬TÌ¦-¦¬¦¦¦¬, ¦Þ¦¬¦-TÀ¦-TÖ ¦¬¦-¦+TÃTÈ¦¦¦¬')">
+-                                <div class="parts-cat-header">
+-                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:8px;">
+-                                        <!-- Realistic 4-Cylinder Engine Block with Valve Cover, Pistons, Sump & Pulleys -->
+-                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+-                                            <path d="M12 16C12 13.8 13.8 12 16 12H48C50.2 12 52 13.8 52 16V22H12V16Z" stroke="#0f172a" stroke-width="2.5" fill="#f8fafc"/>
+-                                            <rect x="26" y="8" width="12" height="4" rx="1" stroke="#0f172a" stroke-width="2" fill="#0f172a"/>
+-                                            <path d="M12 22H52V42C52 44.2 50.2 46 48 46H16C13.8 46 12 44.2 12 42V22Z" stroke="#0f172a" stroke-width="2.5" fill="#ffffff"/>
+-                                            <rect x="15" y="25" width="7" height="12" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
+-                                            <rect x="24" y="27" width="7" height="12" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
+-                                            <rect x="33" y="25" width="7" height="12" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
+-                                            <rect x="42" y="27" width="7" height="12" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
+-                                            <path d="M18.5 37V42M27.5 39V42M36.5 37V42M45.5 39V42" stroke="#0f172a" stroke-width="1.5"/>
+-                                            <path d="M16 42H48" stroke="#0f172a" stroke-width="2"/>
+-                                            <path d="M18 46L22 54H42L46 46" stroke="#0f172a" stroke-width="2.5" fill="#f8fafc"/>
+-                                            <circle cx="8" cy="26" r="3.5" stroke="#0f172a" stroke-width="2"/>
+-                                            <circle cx="8" cy="38" r="4.5" stroke="#0f172a" stroke-width="2"/>
+-                                            <path d="M8 22.5V33.5" stroke="#0f172a" stroke-width="1.5"/>
+-                                            <path d="M52 24H58V28H52M52 32H58V36H52" stroke="#0f172a" stroke-width="2"/>
+-                                        </svg>
+-                                    </span>
+-                                    <div>
+-                                        <div class="cat-title">¦Ô¦-¦¬¦¦TÃ¦- & ¦Þ¦¬¦¬¦-¦-</div>
+-                                        <div class="cat-sub">¦Ü¦-TÁTÂ¦¬¦¬¦-, ¦Ó¦à¦Ü, ¦¬¦-¦-¦¬¦-</div>
+-                                    </div>
+-                                </div>
+-                                <div class="cat-chips-preview">
+-                                    <span>¦Þ¦¬¦¬¦-¦- ¦Ô¦Ò¦á</span>
+-                                    <span>¦Ó¦à¦Ü</span>
+-                                    <span>¦ß¦-¦-¦¬¦-</span>
+-                                </div>
+-                            </div>
+-                            <!-- 2. ¦Ó¦-¦¬TÌ¦-TÖ¦-¦-¦- TÁ¦¬TÁTÂ¦¦¦-¦- -->
+-                            <div class="card parts-cat-card" onclick="applyPreset('¦Ú¦-TÂ¦¦¦¦¦-TÀTÖTÏ ¦Ó¦Ð¦Û¦ì¦Ü¦Ð: ¦ß¦¦TÀ¦¦¦+¦-TÖ/¦×¦-¦+¦-TÖ ¦¦¦-¦¬TÌ¦-TÖ¦-¦-TÖ ¦+¦¬TÁ¦¦¦¬, ¦Ú¦-¦¬¦-¦+¦¦¦¬, ¦áTÃ¦¬¦-TÀTÂ¦¬, ¦è¦¬¦-¦-¦¦¦¬, ¦àTÖ¦+¦¬¦-¦- DOT4')">
+-                                <div class="parts-cat-header">
+-                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:8px;">
+-                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+-                                            <circle cx="32" cy="32" r="22" stroke="#0f172a" stroke-width="2.5" fill="#ffffff"/>
+-                                            <circle cx="32" cy="32" r="14" stroke="#0f172a" stroke-width="1.5"/>
+-                                            <circle cx="32" cy="32" r="7" stroke="#0f172a" stroke-width="2"/>
+-                                            <circle cx="32" cy="27" r="1.2" fill="#0f172a"/>
+-                                            <circle cx="37" cy="30" r="1.2" fill="#0f172a"/>
+-                                            <circle cx="35" cy="36" r="1.2" fill="#0f172a"/>
+-                                            <circle cx="29" cy="36" r="1.2" fill="#0f172a"/>
+-                                            <circle cx="27" cy="30" r="1.2" fill="#0f172a"/>
+-                                            <circle cx="20" cy="20" r="1" fill="#0f172a"/>
+-                                            <circle cx="44" cy="44" r="1" fill="#0f172a"/>
+-                                            <circle cx="20" cy="44" r="1" fill="#0f172a"/>
+-                                            <circle cx="44" cy="20" r="1" fill="#0f172a"/>
+-                                            <path d="M22 10C22 10 32 6 44 10C48 14 50 20 50 26C42 26 36 24 22 18V10Z" stroke="#0f172a" stroke-width="2.5" fill="#f1f5f9"/>
+-                                        </svg>
+-                                    </span>
+-                                    <div>
+-                                        <div class="cat-title">¦Ó¦-¦¬TÌ¦-TÖ¦-¦-¦- TÁ¦¬TÁTÂ¦¦¦-¦-</div>
+-                                        <div class="cat-sub">¦Ô¦¬TÁ¦¦¦¬, ¦¦¦-¦¬¦-¦+¦¦¦¬, TÁTÃ¦¬¦-TÀTÂ¦¬</div>
+-                                    </div>
+-                                </div>
+-                                <div class="cat-chips-preview">
+-                                    <span>¦Ô¦¬TÁ¦¦¦¬</span>
+-                                    <span>¦Ú¦-¦¬¦-¦+¦¦¦¬</span>
+-                                    <span>¦àTÖ¦+¦¬¦-¦-</span>
+-                                </div>
+-                            </div>
+-                            <!-- 3. ¦å¦-¦+¦-¦-¦- TÂ¦- ¦ßTÖ¦+¦-TÖTÁ¦¦¦- -->
+-                            <div class="card parts-cat-card" onclick="applyPreset('¦Ú¦-TÂ¦¦¦¦¦-TÀTÖTÏ ¦å¦Þ¦Ô¦Þ¦Ò¦Ð: ¦Ð¦-¦-TÀTÂ¦¬¦¬¦-TÂ¦-TÀ¦¬, ¦á¦-¦¦¦¬¦¦¦-TÂ¦-¦¬¦-¦¦¦¬, ¦Ò¦-¦¦¦¦¦¬TÖ, ¦áTÂTÖ¦¦¦¦¦¬ TÁTÂ¦-¦-TÖ¦¬TÖ¦¬¦-TÂ¦-TÀ¦-, ¦áTÂTÃ¦¬¦¬TÇ¦-TÖ ¦¬TÖ¦+TÈ¦¬¦¬¦-¦¬¦¦¦¬')">
+-                                <div class="parts-cat-header">
+-                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:8px;">
+-                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+-                                            <rect x="26" y="6" width="12" height="5" rx="1" stroke="#0f172a" stroke-width="2"/>
+-                                            <line x1="32" y1="11" x2="32" y2="48" stroke="#0f172a" stroke-width="2.5"/>
+-                                            <path d="M22 16C22 16 42 18 42 22C42 26 22 26 22 30C22 34 42 34 42 38C42 42 22 42 22 46" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
+-                                            <rect x="27" y="34" width="10" height="18" rx="1" stroke="#0f172a" stroke-width="2" fill="#ffffff"/>
+-                                            <circle cx="32" cy="56" r="3.5" stroke="#0f172a" stroke-width="2"/>
+-                                            <path d="M12 56H28M36 56H52" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+-                                        </svg>
+-                                    </span>
+-                                    <div>
+-                                        <div class="cat-title">¦å¦-¦+¦-¦-¦- & ¦ßTÖ¦+¦-TÖTÁ¦¦¦-</div>
+-                                        <div class="cat-sub">¦Ð¦-¦-TÀTÂ¦¬¦¬¦-TÂ¦-TÀ¦¬, ¦-¦-¦¦¦¦¦¬TÖ</div>
+-                                    </div>
+-                                </div>
+-                                <div class="cat-chips-preview">
+-                                    <span>¦Ð¦-¦-TÀTÂ¦¬¦¬¦-TÂ¦-TÀ¦¬</span>
+-                                    <span>¦Ò¦-¦¦¦¦¦¬TÖ</span>
+-                                </div>
+-                            </div>
+-                            <!-- 4. ¦Õ¦¬¦¦¦¦TÂTÀ¦¬¦¦¦- & ¦×¦-¦¬¦-¦¬TÎ¦-¦-¦-¦-TÏ -->
+-                            <div class="card parts-cat-card" onclick="applyPreset('¦Ú¦-TÂ¦¦¦¦¦-TÀTÖTÏ ¦Õ¦Û¦Õ¦Ú¦â¦à¦Ø¦Ú¦Ð: ¦á¦-TÖTÇ¦¦¦¬ ¦¬¦-¦¬¦-¦¬TÎ¦-¦-¦-¦-TÏ, ¦Ð¦Ú¦Ñ, ¦Ú¦-TÂTÃTÈ¦¦¦¬ ¦¬¦-¦¬¦-¦¬TÎ¦-¦-¦-¦-TÏ, ¦Ó¦¦¦-¦¦TÀ¦-TÂ¦-TÀ, ¦áTÂ¦-TÀTÂ¦¦TÀ, ¦Ô¦-TÂTÇ¦¬¦¦¦¬')">
+-                                <div class="parts-cat-header">
+-                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:8px;">
+-                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+-                                            <rect x="18" y="6" width="6" height="5" rx="1" stroke="#0f172a" stroke-width="2"/>
+-                                            <path d="M17 11H25V24H17V11Z" stroke="#0f172a" stroke-width="2"/>
+-                                            <line x1="15" y1="15" x2="27" y2="15" stroke="#0f172a" stroke-width="1"/>
+-                                            <line x1="15" y1="19" x2="27" y2="19" stroke="#0f172a" stroke-width="1"/>
+-                                            <path d="M14 24H28V32H14V24Z" stroke="#0f172a" stroke-width="2"/>
+-                                            <rect x="16" y="32" width="10" height="16" stroke="#0f172a" stroke-width="2"/>
+-                                            <path d="M21 48V54H25" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+-                                            <rect x="36" y="24" width="20" height="24" rx="2" stroke="#0f172a" stroke-width="2"/>
+-                                            <rect x="40" y="20" width="4" height="4" fill="#0f172a"/>
+-                                            <rect x="48" y="20" width="4" height="4" fill="#0f172a"/>
+-                                        </svg>
+-                                    </span>
+-                                    <div>
+-                                        <div class="cat-title">¦Õ¦¬¦¦¦¦TÂTÀ¦¬¦¦¦- & ¦á¦-TÖTÇ¦¦¦¬</div>
+-                                        <div class="cat-sub">¦á¦-TÖTÇ¦¦¦¬, ¦Ð¦Ú¦Ñ, ¦¦¦-TÂTÃTÈ¦¦¦¬</div>
+-                                    </div>
+-                                </div>
+-                                <div class="cat-chips-preview">
+-                                    <span>¦á¦-TÖTÇ¦¦¦¬</span>
+-                                    <span>¦Ð¦Ú¦Ñ</span>
+-                                    <span>¦Ú¦-TÂTÃTÈ¦¦¦¬</span>
+-                                </div>
+-                            </div>
+-                            <!-- 5. ¦ÞTÅ¦-¦¬¦-¦+¦¦¦¦¦-¦-TÏ & ¦Ú¦¬TÖ¦-¦-TÂ -->
+-                            <div class="card parts-cat-card" onclick="applyPreset('¦Ú¦-TÂ¦¦¦¦¦-TÀTÖTÏ ¦Þ¦å¦Þ¦Û¦Þ¦Ô¦Ö¦Õ¦Ý¦Ý¦ï: ¦à¦-¦+TÖ¦-TÂ¦-TÀ ¦-TÅ¦-¦¬¦-¦+¦¦¦¦¦-¦-TÏ, ¦à¦-¦+TÖ¦-TÂ¦-TÀ ¦¬¦¦TÇ¦¦¦¬/¦¦¦-¦-¦+¦¬TÆTÖ¦-¦-¦¦TÀ¦-, ¦â¦¦TÀ¦-¦-TÁTÂ¦-TÂ, ¦Ð¦-TÂ¦¬TÄTÀ¦¬¦¬, ¦äTÀ¦¦¦-¦-')">
+-                                <div class="parts-cat-header">
+-                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:8px;">
+-                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+-                                            <rect x="8" y="14" width="48" height="36" rx="3" stroke="#0f172a" stroke-width="2.5" fill="#ffffff"/>
+-                                            <path d="M16 14V50M24 14V50M32 14V50M40 14V50M48 14V50" stroke="#0f172a" stroke-width="1" stroke-dasharray="2 2"/>
+-                                            <circle cx="32" cy="32" r="13" stroke="#0f172a" stroke-width="2" fill="#ffffff"/>
+-                                            <circle cx="32" cy="32" r="3" fill="#0f172a"/>
+-                                            <path d="M32 19C35 23 35 28 32 28" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+-                                            <path d="M32 45C29 41 29 36 32 36" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+-                                            <path d="M19 32C23 29 28 29 28 32" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+-                                            <path d="M45 32C41 35 36 35 36 32" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
+-                                        </svg>
+-                                    </span>
+-                                    <div>
+-                                        <div class="cat-title">¦ÞTÅ¦-¦¬¦-¦+¦¦¦¦¦-¦-TÏ & ¦Ú¦¬TÖ¦-¦-TÂ</div>
+-                                        <div class="cat-sub">¦à¦-¦+TÖ¦-TÂ¦-TÀ¦¬, TÂ¦¦TÀ¦-¦-TÁTÂ¦-TÂ</div>
+-                                    </div>
+-                                </div>
+-                                <div class="cat-chips-preview">
+-                                    <span>¦Ð¦-TÂ¦¬TÄTÀ¦¬¦¬</span>
+-                                    <span>¦â¦¦TÀ¦-¦-TÁTÂ¦-TÂ</span>
+-                                </div>
+-                            </div>
+-                            <!-- 6. ¦âTÀ¦-¦-TÁ¦-TÖTÁTÖTÏ & ¦×TÇ¦¦¦¬¦¬¦¦¦-¦-TÏ -->
+-                            <div class="card parts-cat-card" onclick="applyPreset('¦Ú¦-TÂ¦¦¦¦¦-TÀTÖTÏ ¦â¦à¦Ð¦Ý¦á¦Ü¦Æ¦á¦Æ¦ï: ¦Þ¦¬¦¬¦-¦- ¦Ú¦ß¦ß, ¦Ú¦-¦-¦¬¦¬¦¦¦¦TÂ ¦¬TÇ¦¦¦¬¦¬¦¦¦-¦-TÏ, ¦Ü¦-TÅ¦-¦-¦¬¦¦, ¦äTÖ¦¬TÌTÂTÀ ¦Ð¦Ú¦ß¦ß, ¦è¦à¦ã¦á / ¦ßTÀ¦¬¦-¦-¦+¦¬')">
+-                                <div class="parts-cat-header">
+-                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:8px;">
+-                                        <!-- Realistic Transmission Gearbox Housing & Clutch Friction Disc Assembly -->
+-                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+-                                            <circle cx="20" cy="34" r="17" stroke="#0f172a" stroke-width="2" stroke-dasharray="3 2" fill="#ffffff"/>
+-                                            <circle cx="20" cy="34" r="12" stroke="#0f172a" stroke-width="1.5"/>
+-                                            <circle cx="20" cy="34" r="5" stroke="#0f172a" stroke-width="2"/>
+-                                            <rect x="18" y="24" width="4" height="2.5" rx="0.5" fill="#0f172a"/>
+-                                            <rect x="18" y="41.5" width="4" height="2.5" rx="0.5" fill="#0f172a"/>
+-                                            <path d="M30 20H56C58.2 20 60 21.8 60 24V44C60 46.2 58.2 48 56 48H30V20Z" stroke="#0f172a" stroke-width="2.5" fill="#f8fafc"/>
+-                                            <line x1="20" y1="34" x2="56" y2="34" stroke="#0f172a" stroke-width="2.5"/>
+-                                            <line x1="32" y1="42" x2="54" y2="42" stroke="#0f172a" stroke-width="2"/>
+-                                            <rect x="34" y="27" width="5" height="14" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
+-                                            <rect x="34" y="38" width="5" height="8" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
+-                                            <rect x="42" y="25" width="6" height="18" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
+-                                            <rect x="42" y="39" width="6" height="6" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
+-                                            <rect x="50" y="29" width="5" height="10" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
+-                                            <path d="M44 20V12" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
+-                                            <path d="M44 12L49 7" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
+-                                            <circle cx="51" cy="5" r="3" stroke="#0f172a" stroke-width="2" fill="#0f172a"/>
+-                                        </svg>
+-                                    </span>
+-                                    <div>
+-                                        <div class="cat-title">¦âTÀ¦-¦-TÁ¦-TÖTÁTÖTÏ & ¦×TÇ¦¦¦¬¦¬¦¦¦-¦-TÏ</div>
+-                                        <div class="cat-sub">¦Þ¦¬¦¬¦-¦- ¦Ú¦ß¦ß, ¦¬TÇ¦¦¦¬¦¬¦¦¦-¦-TÏ</div>
+-                                    </div>
+-                                </div>
+-                                <div class="cat-chips-preview">
+-                                    <span>¦Þ¦¬¦¬¦-¦- ¦Ú¦ß¦ß</span>
+-                                    <span>¦×TÇ¦¦¦¬¦¬¦¦¦-¦-TÏ</span>
+-                                </div>
+-                        </div>
+-                    </section>
+-                        </div>
+-                        <div class="timeline" id="serviceTimelineContainer">
+-                            <div class="timeline-item">
+-                                <div class="timeline-dot"></div>
+-                                <div style="font-size: 12px; color: var(--text-muted);">¦ÆTÁTÂ¦-TÀTÖTÏ ¦-¦-TÁ¦¬TÃ¦¦¦-¦-TÃ¦-¦-¦-¦-TÏ ¦¬¦-¦¬¦-¦-¦-TÎTÔTÂTÌTÁTÏ ¦¬TÖTÁ¦¬TÏ ¦¬¦¦TÀTÈ¦-¦¦¦- ¦¬¦-¦-¦-¦-¦¬¦¦¦-¦-TÏ</div>
+-                            </div>
+-                        </div>
+-                    </section>
+-                    <!-- ¦ßTÀ¦¬¦¦¦-TÏTÂ¦¬ ¦-¦-TÂ¦- ¦¬¦- PIN-¦¦¦-¦+¦-¦- -->
+-                    <section class="section" style="margin-top: 16px;">
+-                        <div class="card claim-card">
+-                            <h4>¦ßTÀ¦¬¦¦¦-TÏTÂ¦¬ ¦¦TÃ¦¬¦¬¦¦¦-¦¦ ¦-¦-TÂ¦- ¦¬¦- PIN-¦¦¦-¦+¦-¦-</h4>
+-                            <p class="card-desc">¦Ò¦-¦¦¦+TÖTÂTÌ 6-¦¬¦-¦-TÇ¦-¦¬¦¦ ¦¦¦-¦+ ¦-TÖ¦+ ¦¬TÀ¦-¦+¦-¦-TÆTÏ ¦+¦¬TÏ ¦¬¦¦TÀ¦¦¦-¦-TÁTÃ ¦-¦-TÂ¦- TÂ¦- ¦-TÁTÖTÔT× ¦¦¦-¦¦¦- TÁ¦¦TÀ¦-TÖTÁ¦-¦-T× ¦¦¦-¦¬¦¦¦¦¦¬</p>
+-                            
+-                            <form id="claimPinForm" style="display: flex; gap: 8px; margin-top: 10px;">
+-                                <input type="text" id="pinInput" placeholder="748-291" required style="font-family: monospace; text-transform: uppercase; flex: 1;">
+-                                <button type="submit" class="btn btn-accent" style="width: 120px; padding: 10px;">¦ßTÀ¦¬¦¦¦-TÏTÂ¦¬</button>
+-                            </form>
+-                        </div>
+-                    </section>
+-                        <div id="detailCarVinBadge" style="font-size:12px; font-family:monospace; color:var(--primary); font-weight:700;">VIN: WBA33AY05NFP12345</div>
+-                        <input type="text" id="clientVinInput" placeholder="3G1BE6SM7JS652422 (¦-¦-¦¦¦+TÖTÂTÌ ¦+¦¬TÏ ¦-¦-TÂ¦-¦¬TÖ¦+¦-¦-TÀTÃ)">
+-                        <input type="text" id="addVinInput" placeholder="3G1BE6SM7JS652422" maxlength="17" required>
+-    <script src="app.js?v=18.0"></script>

@@ -43,12 +43,12 @@ try:
             except Exception:
                 pass
 
-        # Fix legacy numeric fake test VINs to authentic 17-char ISO VINs and enrich specs
+        # Remove legacy numeric fake test VINs and test data entirely
         try:
-            conn.execute(text("UPDATE cars SET vin = 'WBA33AY05NFP12345', generation = 'G20 (7-ме покоління)', horse_power = '258 к.с. (190 кВт / 400 Нм)', engine_code = '2.0L Turbo B48B20O1', color_code = 'Black Sapphire Metallic (475)' WHERE vin = '23542435345643564' OR vin ~ '^[0-9]+$' OR (brand ILIKE '%BMW%' AND model ILIKE '%330i%');"))
+            conn.execute(text("DELETE FROM cars WHERE vin = '23542435345643564' OR length(vin) != 17;"))
             conn.commit()
-        except Exception:
-            pass
+        except Exception as e:
+            print(f"Error purging test cars: {e}")
 except Exception as err:
     print(f"⚠️ Database initialization notice: {err}")
 

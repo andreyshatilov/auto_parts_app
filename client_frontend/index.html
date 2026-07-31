@@ -109,6 +109,15 @@
                     <!--  ВІЗУАЛЬНИЙ КАТАЛОГ ВУЗЛІВ ТА ШВИДКЕ ТО -->
                     <section class="section" style="margin-top: 16px;">
                         <div class="section-header">
+                    <!-- Кнопка додавання ще одного авто в гараж -->
+                    <button class="btn btn-secondary" onclick="openAddNewCarModal()" style="margin-top:16px; width:100%; border:2px dashed var(--primary); color:var(--primary); font-size:14px; padding:14px; border-radius:12px; font-weight:700;">
+                        <span>+ Додати ще одне авто в гараж</span>
+                    </button>
+                </div>
+
+                <!-- ВКЛАДКА 2: ЗАПИТИ ТА ШВИДКІ КОМПЛЕКТИ ТО -->
+                <div id="viewRequests" class="view-content" style="display: none;">
+                    <section class="section">
                             <h3>Вузли та Компоненти Авто</h3>
                             <span class="cars-badge" style="background:#fef3c7; color:#d97706; border-color:#fde68a;">Швидкий підбір</span>
                         </div>
@@ -358,15 +367,6 @@
                         </div>
                     </section>
 
-                    <!-- Кнопка додавання ще одного авто в гараж -->
-                    <button class="btn btn-secondary" onclick="openAddNewCarModal()" style="margin-top:16px; width:100%; border:2px dashed var(--primary); color:var(--primary); font-size:14px; padding:14px; border-radius:12px; font-weight:700;">
-                        <span>+ Додати ще одне авто в гараж</span>
-                    </button>
-                </div>
-
-                <!-- ВКЛАДКА 2: ЗАПИТИ ТА ШВИДКІ КОМПЛЕКТИ ТО -->
-                <div id="viewRequests" class="view-content" style="display: none;">
-                    <section class="section">
                         <div class="card action-card">
                             <h4>Замовити підбір запчастин експерту</h4>
                             <p class="card-desc">Опишіть деталі або оберіть готовий комплект нижче</p>
@@ -780,7 +780,7 @@
                     <div id="detailCarBrandEmblem" style="display:flex; align-items:center; justify-content:center;"></div>
                     <div>
                         <h2 id="detailCarTitle" style="font-size:18px; font-weight:800; color:var(--text-main); margin:0;">BMW 330i</h2>
-                        <div id="detailCarVinBadge" style="font-size:12px; font-family:monospace; color:var(--primary); font-weight:700;">VIN: WBA33AY05NFP12345</div>
+                        <div id="detailCarVinBadge" style="font-size:12px; font-family:monospace; color:var(--primary); font-weight:700;">VIN: ---</div>
                     </div>
                 </div>
             </div>
@@ -895,7 +895,7 @@
                 <div class="form-group">
                     <label for="clientVinInput">VIN-код (17 символів, автозаповнення )</label>
                     <div class="vin-input-wrapper">
-                        <input type="text" id="clientVinInput" placeholder="3G1BE6SM7JS652422 (введіть для автопідбору)">
+                        <input type="text" id="clientVinInput" placeholder="17 символів (введіть для автопідбору)">
                         <span class="vin-counter" id="clientVinCounter">0/17</span>
                     </div>
                 </div>
@@ -1030,7 +1030,7 @@
                 <div class="form-group">
                     <label for="addVinInput">Введіть 17 символів VIN-коду</label>
                     <div class="vin-input-wrapper">
-                        <input type="text" id="addVinInput" placeholder="3G1BE6SM7JS652422" maxlength="17" required>
+                        <input type="text" id="addVinInput" placeholder="17 символів" maxlength="17" required>
                         <span class="vin-counter" id="addVinCounter">0/17</span>
                     </div>
                 </div>

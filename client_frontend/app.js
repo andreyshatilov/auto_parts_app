@@ -13,6 +13,10 @@ const API_BASE_URL = window.location.origin.includes(':8000') || window.location
 const TOKEN_STORAGE_KEY = 'min_zapchasty_client_token';
 
 
+
+/* ==========================================
+ * 1. DOM ELEMENTS & GLOBAL STATE
+ * ========================================== */
 // DOM Елементи
 const authScreen = document.getElementById('authScreen');
 const mainScreen = document.getElementById('mainScreen');
@@ -44,62 +48,6 @@ let currentClient = null;
 let activeReturnOrderId = null;
 let activeChatRequestId = null;
 
-const CAR_DATABASE = {
-    "Acura": ["MDX", "RDX", "TLX", "ILX", "TSX", "ZDX", "Integra", "RLX"],
-    "Alfa Romeo": ["Giulia", "Stelvio", "159", "Giulietta", "Tonale", "Mito", "Brera", "147", "156", "4C"],
-    "Audi": ["A1", "A3", "A4", "A5", "A6", "A7", "A8", "Q2", "Q3", "Q4 e-tron", "Q5", "Q7", "Q8", "e-tron", "TT", "R8", "RS3", "RS4", "RS5", "RS6", "RS7", "RS Q8", "80 / 100"],
-    "BMW": ["1 Series", "2 Series", "3 Series", "4 Series", "5 Series", "6 Series", "7 Series", "8 Series", "X1", "X2", "X3", "X4", "X5", "X6", "X7", "XM", "Z4", "i3", "i4", "i7", "iX", "M2", "M3", "M4", "M5", "M8"],
-    "BYD": ["Song Plus", "Tang", "Han", "Yuan Plus / Atto 3", "Dolphin", "Seal", "Qin Plus"],
-    "Cadillac": ["Escalade", "XT5", "XT4", "XT6", "CTS", "ATS", "SRX", "Lyriq"],
-    "Changan": ["CS35 Plus", "CS55 Plus", "CS75 Plus", "UNI-K", "UNI-V", "UNI-T"],
-    "Chery": ["Tiggo 2", "Tiggo 4", "Tiggo 7 Pro", "Tiggo 8 Pro", "Amulet", "QQ", "Arrizo 6"],
-    "Chevrolet": ["Cruze", "Aveo", "Captiva", "Lacetti", "Camaro", "Tahoe", "Suburban", "Corvette", "Bolt EV", "Equinox", "Trax", "Epica", "Orlando", "Spark", "Evanda", "Niva"],
-    "Chrysler": ["300C", "Pacificia", "Town & Country", "Voyager", "200", "Sebring", "PT Cruiser"],
-    "Citroen": ["C4", "C5", "C3", "C3 Aircross", "C5 Aircross", "Berlingo", "Jumper", "Jumpy", "SpaceTourer", "C-Elysee", "C4 Picasso", "C1", "C2", "Xsara"],
-    "Cupra": ["Formentor", "Born", "Ateca", "Leon"],
-    "Dacia": ["Duster", "Logan", "Sandero", "Jogger", "Spring", "Dokker", "Lodgy"],
-    "Daewoo": ["Lanos", "Sens", "Matiz", "NEXIA", "Nubira", "Gentra", "Tacuma", "Esperanto"],
-    "Dodge": ["Challenger", "Charger", "Durango", "Journey", "Ram 1500", "Caliber", "Dart", "Avenger", "Grand Caravan", "Nitro"],
-    "Fiat": ["500", "500X", "Doblo", "Ducato", "Punto", "Tipo", "Panda", "Fiorino", "Freemont", "Bravo", "Scudo"],
-    "Ford": ["Focus", "Fusion (US)", "Fusion (EU)", "Mondeo", "Fiesta", "Kuga", "Escape", "Explorer", "Edge", "EcoSport", "Mustang", "Mustang Mach-E", "Transit", "Custom", "C-Max", "S-Max", "Galaxy", "Ranger", "F-150", "Scorpio", "Sierra"],
-    "GAZ / ГАЗ": ["24 Волга", "3110 Волга", "Газель", "Газель Next", "Соболь"],
-    "Geely": ["Coolray", "Atlas Pro", "Monjaro", "Tugella", "Emgrand", "Geometry C", "CK", "MK"],
-    "Genesis": ["G70", "G80", "G90", "GV70", "GV80"],
-    "Great Wall / Haval": ["H6", "Jolion", "F7", "H9", "Dargo", "Hover H3/H5", "Wingle"],
-    "Honda": ["Civic", "CR-V", "Accord", "HR-V", "Pilot", "Fit / Jazz", "Insight", "Odyssey", "Element", "Ridgeline", "e:NS1"],
-    "Hyundai": ["Tucson", "Santa Fe", "Elantra", "Sonata", "Accent", "i10", "i20", "i30", "i40", "Kona", "Palisade", "Getz", "IX35", "Ioniq 5", "Ioniq 6", "Staria", "H-1 / Starex", "Matrix", "Coupe"],
-    "Infiniti": ["FX35 / QX70", "FX37", "Q50", "Q60", "QX60", "QX80", "EX35 / QX50", "G35 / G37", "M37 / Q70"],
-    "Jaguar": ["F-Pace", "E-Pace", "I-Pace", "XF", "XJ", "XE", "F-Type"],
-    "Jeep": ["Grand Cherokee", "Cherokee", "Compass", "Renegade", "Wrangler", "Patriot", "Commander", "Gladiator"],
-    "Kia": ["Sportage", "Ceed", "Optima", "Sorento", "Rio", "K5", "Stinger", "Telluride", "Soul", "Cerato", "Niro", "EV6", "Carnival", "Mohave", "Picanto", "Magentis"],
-    "Lada / ВАЗ": ["2101-2107", "2108 / 2109 / 21099", "2110 / 2111 / 2112", "Samara", "Kalina", "Priora", "Granta", "Vesta", "Niva / 4x4", "XRAY"],
-    "Land Rover": ["Range Rover", "Range Rover Sport", "Range Rover Evoque", "Discovery", "Discovery Sport", "Defender", "Velar", "Freelander"],
-    "Lexus": ["RX 300/350/450h", "NX 200/300/350h", "GX 460/550", "LX 470/570/600", "ES 250/300h/350", "IS 250/300/350", "GS 300/350", "UX 200/250h", "LS 460/500", "CT 200h"],
-    "Lincoln": ["MKZ", "MKX", "Nautilus", "Aviator", "Navigator", "Corsair", "Town Car"],
-    "Maserati": ["Ghibli", "Levante", "Quattroporte", "Grecale"],
-    "Mazda": ["3", "6", "CX-3", "CX-5", "CX-7", "CX-9", "CX-30", "CX-50", "CX-60", "MX-5", "2", "323 / 626", "RX-8"],
-    "Mercedes-Benz": ["A-Class", "B-Class", "C-Class", "E-Class", "S-Class", "CLA", "CLS", "GLA", "GLB", "GLC", "GLE", "GLS", "G-Class (Geländewagen)", "Vito", "V-Class", "Sprinter", "ML-Class", "GL-Class", "W124 / W210 / W211", "CLK"],
-    "MG": ["ZS", "HS", "MG 4", "MG 5", "MG 350"],
-    "Mini": ["Cooper", "Countryman", "Clubman", "Paceman"],
-    "Mitsubishi": ["Outlander", "Lancer", "Pajero", "Pajero Sport", "ASX", "L200", "Eclipse Cross", "Galant", "Colt", "Grandis"],
-    "Nissan": ["Qashqai", "X-Trail", "Rogue", "Juke", "Leaf", "Almera", "Teana", "Patrol", "Navara", "Murano", "Micra", "Note", "Pathfinder", "Tiida", "Sentra", "Maxima", "350Z / 370Z", "Ariya"],
-    "Opel": ["Astra F/G/H/J/K", "Insignia", "Vectra A/B/C", "Zafira", "Mokka", "Vivaro", "Corsa", "Omega", "Meriva", "Combo", "Crossland", "Grandland"],
-    "Peugeot": ["208", "308", "407", "508", "2008", "3008", "5008", "Partner", "Rifter", "Boxer", "Expert", "206", "207", "307", "406"],
-    "Porsche": ["Cayenne", "Macan", "Panamera", "911 Carrera", "Taycan", "Boxster", "Cayman"],
-    "Renault": ["Megane", "Duster", "Logan", "Sandero", "Kadjar", "Koleos", "Scenic", "Fluence", "Trafic", "Master", "Clio", "Kangoo", "Symbol", "Arkana", "Zoe"],
-    "SAAB": ["9-3", "9-5", "900"],
-    "SEAT": ["Leon", "Ibiza", "Ateca", "Tarraco", "Alhambra", "Altea", "Toledo", "Arona"],
-    "Skoda": ["Octavia Tour/A5/A7/A8", "Superb", "Kodiaq", "Karoq", "Fabia", "Rapid", "Scala", "Kamiq", "Yeti", "Felicia", "Enyaq"],
-    "Smart": ["Fortwo", "Forfour"],
-    "SsangYong / KGM": ["Korando", "Rexton", "Kyron", "Actyon", "Tivoli", "Rodius"],
-    "Subaru": ["Forester", "Outback", "Legacy", "Impreza", "XV / Crosstrek", "Tribeca", "BRZ", "Solterra"],
-    "Suzuki": ["Grand Vitara", "Vitara", "SX4", "Jimny", "Swift", "Liana", "Splash"],
-    "Tesla": ["Model 3", "Model Y", "Model S", "Model X", "Cybertruck"],
-    "Toyota": ["Camry", "Corolla", "RAV4", "Land Cruiser 200/300", "Land Cruiser Prado 120/150/250", "Highlander", "C-HR", "Yaris", "Avensis", "Hilux", "Prius", "Venza", "Sequoia", "Tundra", "Tacoma", "Sienna", "Auris", "Matrix", "Solara"],
-    "Volkswagen": ["Golf III/IV/V/VI/VII/VIII", "Passat B5/B6/B7/B8/NMS", "Tiguan", "Touareg", "Jetta", "Polo", "Arteon", "Transporter T4/T5/T6", "Multivan", "Caddy", "ID.4", "CC", "Amarok", "Bora", "Touran", "Sharan", "Taos"],
-    "Volvo": ["XC60", "XC90", "XC40", "S60", "S90", "V60", "V90", "V40", "S80", "V50", "C30", "XC70"],
-    "ZAZ / ЗАЗ": ["Lanos / Chance", "Sens", "Forza", "Vida", "Tavria", "Slavuta"]
-};
 
 document.addEventListener('DOMContentLoaded', () => {
     initBrandAndModelSelects();
@@ -130,6 +78,11 @@ async function fetchProfile(token) {
     showMainScreen(currentClient);
 }
 
+/**
+ * Switches the main navigation tabs in the client interface.
+ * Hides all main views and displays the requested view.
+ * @param {string} tabName - The ID of the view to display (e.g., 'viewGarage', 'viewRequests').
+ */
 function switchNavTab(tabName) {
     document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.view-content').forEach(v => v.style.display = 'none');
@@ -149,6 +102,10 @@ function switchNavTab(tabName) {
     }
 }
 
+/**
+ * Switches between Login and Register tabs on the Authentication screen.
+ * @param {string} tabName - 'login' or 'register'.
+ */
 function switchAuthTab(tabName) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
@@ -161,7 +118,16 @@ function switchAuthTab(tabName) {
     }
 }
 
-function setupEventListeners() {
+/**
+ * Initializes all global event listeners for the application.
+ * Binds form submissions (login, register, add car, etc.) and global UI clicks.
+ * @returns {void}
+ */
+
+/* ==========================================
+ * 3. EVENT LISTENERS
+ * ========================================== */
+/**
     let lastDecodedVin = '';
     clientVinInput.addEventListener('input', async (e) => {
         let val = e.target.value.replace(/\s+/g, '').toUpperCase();
@@ -417,14 +383,14 @@ function setupEventListeners() {
         }
 
         let vinValue = clientVinInput.value.trim().toUpperCase();
-        if (!vinValue) {
-            vinValue = 'NOVIN-' + Math.random().toString(36).substring(2, 11).toUpperCase();
-        } else if (vinValue.length !== 17) {
-            showToast(' VIN-код повинен містити ровно 17 символів (або залиште порожнім)!', 'error');
-            return;
-        } else if (/^\d+$/.test(vinValue)) {
-            showToast(' VIN-код не може складатися лише з цифр! Введіть міжнародний VIN (напр., WBA33AY05NFP12345)', 'error');
-            return;
+        if (vinValue) {
+            if (vinValue.length !== 17) {
+                showToast('❌ VIN-код має містити рівно 17 символів (якщо вказаний)!', 'error');
+                return;
+            } else if (/^\d+$/.test(vinValue)) {
+                showToast('❌ VIN-код не може складатись лише з цифр! Введіть справжній VIN', 'error');
+                return;
+            }
         }
 
         const fuelVal = document.getElementById('clientFuelSelect')?.value || '';
@@ -597,6 +563,11 @@ function setupEventListeners() {
     }
 }
 
+/**
+ * Transitions the UI from the Authentication screen to the Main application screen.
+ * Updates the UI with the client's profile information.
+ * @param {Object} client - The authenticated client object containing profile data.
+ */
 function showMainScreen(client) {
     currentClient = client;
     authScreen.classList.remove('active');
@@ -628,7 +599,16 @@ async function refreshGarage(token) {
     }
 }
 
-function showModal(modalEl) {
+/**
+ * Displays a modal dialog with a smooth fade-in animation.
+ * Uses requestAnimationFrame to ensure CSS transitions trigger correctly.
+ * @param {HTMLElement} modalEl - The DOM element of the modal to show.
+ */
+
+/* ==========================================
+ * 4. UI COMPONENTS (MODALS, TOASTS)
+ * ========================================== */
+/**
     if (!modalEl) return;
     modalEl.style.display = 'flex';
     requestAnimationFrame(() => {
@@ -636,6 +616,11 @@ function showModal(modalEl) {
     });
 }
 
+/**
+ * Hides a modal dialog with a smooth fade-out animation.
+ * Waits for the CSS transition to complete before setting display:none.
+ * @param {HTMLElement} modalEl - The DOM element of the modal to hide.
+ */
 function hideModal(modalEl) {
     if (!modalEl) return;
     modalEl.classList.remove('active');
@@ -667,6 +652,10 @@ window.closeEditProfileModal = function() {
     hideModal(document.getElementById('editProfileModal'));
 };
 
+/**
+ * Populates the 'Year of Release' dropdown in the Add Car modal.
+ * Generates options from the current year down to 1970.
+ */
 function initYearSelect() {
     const yearSelect = document.getElementById('clientYearSelect');
     if (!yearSelect) return;
@@ -680,6 +669,11 @@ function initYearSelect() {
     }
 }
 
+/**
+ * Initializes the Brand and Model dropdowns in the Add Car modal.
+ * Uses the global CAR_DATABASE (loaded from car_models.js) to populate brands.
+ * Binds an event listener to dynamically update models when a brand is selected.
+ */
 function initBrandAndModelSelects() {
     initYearSelect();
     const brandSelect = document.getElementById('clientBrandSelect');
@@ -781,100 +775,25 @@ function initBrandAndModelSelects() {
     };
 }
 
+/**
+ * Generates an HTML snippet for a car brand emblem.
+ * Uses a public CDN (car-logos.org) for high-quality PNG logos.
+ * Includes an 'onerror' fallback to display a text-based initial if the logo fails to load.
+ * @param {string} brandName - The name of the car brand.
+ * @returns {string} HTML string representing the emblem image or fallback.
+ */
 function getBrandEmblem(brandName) {
     if (!brandName) return '';
-    const b = brandName.trim().toUpperCase();
-
-    let svgContent = '';
-    if (b.includes('BMW')) {
-        svgContent = `<svg width="38" height="38" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="48" fill="#0f172a" stroke="#cbd5e1" stroke-width="3"/>
-            <circle cx="50" cy="50" r="32" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
-            <path d="M50 18 A32 32 0 0 1 82 50 L50 50 Z" fill="#0284c7"/>
-            <path d="M18 50 A32 32 0 0 1 50 82 L50 50 Z" fill="#0284c7"/>
-            <text x="50" y="14" font-family="Arial" font-weight="bold" font-size="11" fill="#ffffff" text-anchor="middle">B M W</text>
-        </svg>`;
-    } else if (b.includes('AUDI')) {
-        svgContent = `<svg width="42" height="22" viewBox="0 0 110 50">
-            <circle cx="22" cy="25" r="18" stroke="#0f172a" stroke-width="4.5" fill="none"/>
-            <circle cx="42" cy="25" r="18" stroke="#0f172a" stroke-width="4.5" fill="none"/>
-            <circle cx="62" cy="25" r="18" stroke="#0f172a" stroke-width="4.5" fill="none"/>
-            <circle cx="82" cy="25" r="18" stroke="#0f172a" stroke-width="4.5" fill="none"/>
-        </svg>`;
-    } else if (b.includes('MERCEDES') || b.includes('BENZ')) {
-        svgContent = `<svg width="38" height="38" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="46" stroke="#0f172a" stroke-width="5" fill="none"/>
-            <path d="M50 10 L44 50 L50 48 L56 50 Z" fill="#0f172a"/>
-            <path d="M50 10 L50 48 L84 70 L78 62 Z" fill="#334155"/>
-            <path d="M50 10 L50 48 L16 70 L22 62 Z" fill="#334155"/>
-            <path d="M50 50 L84 70 L48 54 Z" fill="#0f172a"/>
-            <path d="M50 50 L16 70 L52 54 Z" fill="#0f172a"/>
-        </svg>`;
-    } else if (b.includes('VOLKSWAGEN') || b.includes('VW')) {
-        svgContent = `<svg width="38" height="38" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="46" fill="#1e3a8a" stroke="#ffffff" stroke-width="3"/>
-            <path d="M28 25 L40 65 L50 65 L38 25 Z" fill="#ffffff"/>
-            <path d="M72 25 L60 65 L50 65 L62 25 Z" fill="#ffffff"/>
-            <path d="M50 35 L42 60 L46 60 L50 48 L54 60 L58 60 Z" fill="#ffffff"/>
-            <circle cx="50" cy="50" r="43" stroke="#ffffff" stroke-width="3" fill="none"/>
-        </svg>`;
-    } else if (b.includes('PORSCHE')) {
-        svgContent = `<svg width="34" height="38" viewBox="0 0 80 100">
-            <path d="M10 10 H70 L65 70 L40 95 L15 70 Z" fill="#d97706" stroke="#0f172a" stroke-width="3"/>
-            <path d="M15 15 H65 V45 H15 Z" fill="#dc2626"/>
-            <path d="M20 50 H60 V80 H20 Z" fill="#0f172a"/>
-            <text x="40" y="24" font-family="Arial" font-weight="900" font-size="9" fill="#ffffff" text-anchor="middle">PORSCHE</text>
-        </svg>`;
-    } else if (b.includes('LEXUS')) {
-        svgContent = `<svg width="42" height="28" viewBox="0 0 100 65">
-            <ellipse cx="50" cy="32.5" rx="46" ry="28" stroke="#0f172a" stroke-width="5" fill="none"/>
-            <path d="M30 18 V46 H65 L60 38 H38 V18 Z" fill="#0f172a"/>
-        </svg>`;
-    } else if (b.includes('TOYOTA')) {
-        svgContent = `<svg width="42" height="28" viewBox="0 0 100 65">
-            <ellipse cx="50" cy="32.5" rx="46" ry="28" stroke="#dc2626" stroke-width="4" fill="none"/>
-            <ellipse cx="50" cy="32.5" rx="30" ry="16" stroke="#dc2626" stroke-width="4" fill="none"/>
-            <ellipse cx="50" cy="24" rx="12" ry="20" stroke="#dc2626" stroke-width="4" fill="none"/>
-        </svg>`;
-    } else if (b.includes('FORD')) {
-        svgContent = `<svg width="44" height="24" viewBox="0 0 110 60">
-            <ellipse cx="55" cy="30" rx="52" ry="27" fill="#1e3a8a" stroke="#ffffff" stroke-width="3"/>
-            <text x="55" y="38" font-family="Georgia, serif" font-style="italic" font-weight="bold" font-size="26" fill="#ffffff" text-anchor="middle">Ford</text>
-        </svg>`;
-    } else if (b.includes('HONDA')) {
-        svgContent = `<svg width="36" height="36" viewBox="0 0 90 90">
-            <rect x="5" y="5" width="80" height="80" rx="14" fill="#ffffff" stroke="#0f172a" stroke-width="4"/>
-            <path d="M22 20 H32 V40 H58 V20 H68 V70 H56 V48 H34 V70 H22 Z" fill="#0f172a"/>
-        </svg>`;
-    } else if (b.includes('HYUNDAI')) {
-        svgContent = `<svg width="42" height="28" viewBox="0 0 100 65">
-            <ellipse cx="50" cy="32.5" rx="46" ry="28" stroke="#0284c7" stroke-width="4" fill="none"/>
-            <path d="M30 16 L42 48 M70 16 L58 48 M34 32 H66" stroke="#0284c7" stroke-width="6" stroke-linecap="round"/>
-        </svg>`;
-    } else if (b.includes('KIA')) {
-        svgContent = `<svg width="42" height="22" viewBox="0 0 100 50">
-            <ellipse cx="50" cy="25" rx="46" ry="22" stroke="#dc2626" stroke-width="4" fill="none"/>
-            <text x="50" y="33" font-family="Arial Black" font-weight="900" font-size="20" fill="#dc2626" text-anchor="middle" letter-spacing="2">KIA</text>
-        </svg>`;
-    } else if (b.includes('CHEVROLET') || b.includes('CHEVY')) {
-        svgContent = `<svg width="42" height="22" viewBox="0 0 100 50">
-            <path d="M10 20 H35 L40 10 H60 L65 20 H90 V30 H65 L60 40 H40 L35 30 H10 Z" fill="#d97706" stroke="#0f172a" stroke-width="3"/>
-        </svg>`;
-    } else if (b.includes('TESLA')) {
-        svgContent = `<svg width="34" height="36" viewBox="0 0 80 90">
-            <path d="M10 15 C30 10, 50 10, 70 15 L62 23 C48 18, 32 18, 18 23 Z" fill="#dc2626"/>
-            <path d="M40 25 V80 M28 32 H52" stroke="#dc2626" stroke-width="6" stroke-linecap="round"/>
-        </svg>`;
-    } else {
-        svgContent = `<svg width="34" height="34" viewBox="0 0 80 80">
-            <rect x="5" y="5" width="70" height="70" rx="14" fill="#0f172a"/>
-            <text x="40" y="48" font-family="Arial" font-weight="800" font-size="20" fill="#ffffff" text-anchor="middle">${escapeHtml(brandName.substring(0,3).toUpperCase())}</text>
-        </svg>`;
-    }
-
-    return `<div style="display:inline-flex; align-items:center; justify-content:center;">
-        ${svgContent}
-    </div>`;
+    const b = brandName.trim();
+    let imgName = b.toLowerCase().replace(/ /g, '-');
+    if (imgName === 'mercedes' || imgName === 'mercedes-benz') imgName = 'mercedes';
+    if (imgName === 'vw') imgName = 'volkswagen';
+    if (imgName === 'alfa-romeo') imgName = 'alfa-romeo';
+    
+    // Fallback HTML if image fails to load
+    const fallbackHtml = `<div style="display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:12px;background:#f1f5f9;color:#0f172a;font-weight:800;font-size:11px; text-align:center; overflow:hidden; border: 1px solid #e2e8f0; margin:auto;">${b.substring(0,5)}</div>`;
+    
+    return `<img src="https://www.car-logos.org/wp-content/uploads/maker/${imgName}.png" alt="${b}" style="width:100%; height:100%; object-fit:contain; border-radius:12px; max-width:48px; max-height:48px;" onerror="this.outerHTML=\`${fallbackHtml}\`">`;
 }
 
 function openVinRecommendationModal(carId, carName) {
@@ -889,7 +808,16 @@ function closeVinRecommendationModal() {
     hideModal(document.getElementById('vinRecommendationModal'));
 }
 
-function renderGarage(cars) {
+/**
+ * Renders the Garage view, displaying a list of the client's cars.
+ * Updates the Add Car button state (large dashed if empty, small solid if populated).
+ * @param {Array<Object>} cars - Array of car objects belonging to the client.
+ */
+
+/* ==========================================
+ * 5. GARAGE & CAR MANAGEMENT
+ * ========================================== */
+/**
     garageCountBadge.textContent = `${cars.length}/10 авто`;
     if (cars.length > 0) {
         requestCarSelect.innerHTML = cars.map(c => `<option value="${c.id}">${escapeHtml(c.brand)} ${escapeHtml(c.model)} (VIN: ${escapeHtml(c.vin)})</option>`).join('');
@@ -902,12 +830,35 @@ function renderGarage(cars) {
         return;
     }
 
+    const addCarBtn = document.querySelector('button[onclick="openAddNewCarModal()"]');
+    if (addCarBtn) {
+        if (cars.length > 0) {
+            addCarBtn.style.border = 'none';
+            addCarBtn.style.background = 'var(--primary)';
+            addCarBtn.style.color = '#fff';
+            addCarBtn.style.padding = '10px';
+            addCarBtn.style.width = '100%';
+            addCarBtn.style.marginTop = '24px';
+            addCarBtn.innerHTML = '<span>+ Додати ще авто</span>';
+        } else {
+            addCarBtn.style.border = '2px dashed var(--primary)';
+            addCarBtn.style.background = 'transparent';
+            addCarBtn.style.color = 'var(--primary)';
+            addCarBtn.style.padding = '14px';
+            addCarBtn.style.width = '100%';
+            addCarBtn.innerHTML = '<span>+ Додати авто в гараж</span>';
+        }
+    }
+
     garageContainer.innerHTML = cars.map(car => {
         const isNoVin = !car.vin || car.vin.startsWith('NOVIN-');
         const vinDisplay = isNoVin ? '<span style="color:#d97706; font-weight:600;">Не вказано (Рекомендовано додати)</span>' : escapeHtml(car.vin);
 
-        const genDisplay = car.generation || (car.modification && car.modification.includes('G20') ? car.modification : 'G20 (7-ме покоління)');
-        const engineDisplay = `${car.engine_code || '2.0L Turbo B48'} ${car.horse_power ? `(${car.horse_power})` : ' (258 к.с.)'}`;
+        const genDisplay = car.generation ? car.generation : (car.body_type ? car.body_type : '-');
+        const engineStr = car.engine_code ? car.engine_code : '-';
+        const hpStr = car.horse_power ? car.horse_power : '-';
+        const engineDisplay = `${engineStr} | ${hpStr}`;
+        const transmissionDisplay = `${car.transmission_type || '-'} ${car.transmission_code ? '('+car.transmission_code+')' : ''}`;
 
         return `
         <div class="garage-card" style="cursor:pointer; transition:transform 0.2s;" onclick="openCarDetailModal(${car.id})">
@@ -928,10 +879,10 @@ function renderGarage(cars) {
             ` : ''}
 
             <div class="garage-details" style="margin-top:10px;">
-                <div><span class="g-label">ПОКОЛІННЯ / КУЗОВ</span><div class="g-value">${escapeHtml(genDisplay)}</div></div>
-                <div><span class="g-label">РІК ВИПУСКУ</span><div class="g-value">${escapeHtml(car.release_date || '2020')} р.в.</div></div>
-                <div><span class="g-label">ДВИГУН & ПОТУЖНІСТЬ</span><div class="g-value">${escapeHtml(engineDisplay)}</div></div>
-                <div><span class="g-label">ТРАНСМІСІЯ</span><div class="g-value">${escapeHtml(car.transmission_type || 'АКПП')} ${escapeHtml(car.transmission_code || '(ZF 8HP51)')}</div></div>
+                <div><span class="g-label">Кузов / Покоління</span><div class="g-value">${escapeHtml(genDisplay)}</div></div>
+                <div><span class="g-label">Рік випуску</span><div class="g-value">${escapeHtml(car.release_date || '-')}</div></div>
+                <div><span class="g-label">Двигун & Потужність</span><div class="g-value">${escapeHtml(engineDisplay)}</div></div>
+                <div><span class="g-label">Трансмісія</span><div class="g-value">${escapeHtml(transmissionDisplay)}</div></div>
             </div>
 
             ${isNoVin ? `
@@ -995,7 +946,16 @@ async function loadMyRequests(token) {
     }
 }
 
-function renderRequests(requests) {
+/**
+ * Renders the active Requests list for the client.
+ * Groups items and displays statuses using badges.
+ * @param {Array<Object>} requests - Array of request objects.
+ */
+
+/* ==========================================
+ * 6. REQUESTS & ORDERS HISTORY
+ * ========================================== */
+/**
     if (requests.length === 0) {
         requestsHistoryContainer.innerHTML = `<div style="color:var(--text-muted); text-align:center; padding:16px;">У вас поки немає надісланих запитів.</div>`;
         return;
@@ -1144,6 +1104,11 @@ async function loadMyOrders(token) {
     }
 }
 
+/**
+ * Renders the Order History view (completed or processing orders).
+ * Allows the user to initiate returns for eligible orders.
+ * @param {Array<Object>} orders - Array of order objects.
+ */
 function renderMyOrders(orders) {
     if (orders.length === 0) {
         myOrdersContainer.innerHTML = `<div style="color:var(--text-muted); text-align:center; padding:16px;">У вас поки немає оформлених замовлень.</div>`;
@@ -1309,6 +1274,9 @@ function getPaymentTitle(pm) {
     return map[pm] || pm;
 }
 
+/**
+ * Logs out the current user by removing tokens from localStorage and resetting UI state.
+ */
 function handleLogout() {
     if (confirm('Вийти з Особистого Кабінету?')) {
         localStorage.removeItem(TOKEN_STORAGE_KEY);
@@ -1322,6 +1290,12 @@ function showAuthScreen() {
     authScreen.classList.add('active');
 }
 
+/**
+ * Displays a temporary toast notification on the screen.
+ * Automatically dismisses after 3.5 seconds.
+ * @param {string} msg - The message to display.
+ * @param {string} [type='info'] - The type of toast ('info', 'success', 'error').
+ */
 function showToast(msg, type = 'info') {
     const t = document.createElement('div');
     t.className = 'toast';
@@ -1357,19 +1331,19 @@ window.openCarDetailModal = function(carId) {
     document.getElementById('detailCarVinBadge').textContent = `VIN: ${displayVin}`;
     document.getElementById('detailCarBrandEmblem').innerHTML = getBrandEmblem(car.brand);
 
-    const genDisplay = car.generation || (car.modification && car.modification.includes('G20') ? car.modification : 'G20 (7-ме покоління)');
+    const genDisplay = car.generation ? car.generation : (car.body_type ? car.body_type : '-');
     document.getElementById('detailCarGeneration').textContent = genDisplay;
-    document.getElementById('detailCarYear').textContent = car.release_date ? `${car.release_date} р.в.` : '2020 р.в.';
+    document.getElementById('detailCarYear').textContent = car.release_date ? `${car.release_date} р.в.` : '-';
     
-    const engineDisplay = car.engine_code || '2.0L Turbo B48B20O1';
-    const hpDisplay = car.horse_power || '258 к.с. (190 кВт / 400 Нм)';
+    const engineDisplay = car.engine_code || '-';
+    const hpDisplay = car.horse_power || '-';
     document.getElementById('detailCarEngine').textContent = `${engineDisplay} | ${hpDisplay}`;
     
-    document.getElementById('detailCarFuel').textContent = `${car.fuel_type || 'Бензин (Direct Injection)'} | ${car.drive_type || 'Повний привід (xDrive)'}`;
-    document.getElementById('detailCarTrans').textContent = `${car.transmission_type || 'АКПП'} ${car.transmission_code ? `(${car.transmission_code})` : '(ZF 8HP51)'}`;
-    document.getElementById('detailCarColor').textContent = car.color_code || 'Black Sapphire Metallic (475)';
-    document.getElementById('detailCarPlant').textContent = car.assembly_plant || 'Німеччина, Завод Мюнхен';
-    document.getElementById('detailCarMileage').textContent = `${(car.mileage || 142500).toLocaleString('uk-UA')} км`;
+    document.getElementById('detailCarFuel').textContent = `${car.fuel_type || '-'} | ${car.drive_type || '-'}`;
+    document.getElementById('detailCarTrans').textContent = `${car.transmission_type || '-'} ${car.transmission_code ? `(${car.transmission_code})` : ''}`;
+    document.getElementById('detailCarColor').textContent = car.color_code || '-';
+    document.getElementById('detailCarPlant').textContent = car.assembly_plant || '-';
+    document.getElementById('detailCarMileage').textContent = `${(car.mileage || 0).toLocaleString('uk-UA')} км`;
 
     const heroImg = document.getElementById('carHeroPhoto');
     const canvasWrapper = document.getElementById('car3dCanvasWrapper');
