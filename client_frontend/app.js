@@ -744,27 +744,97 @@ function initBrandAndModelSelects() {
 
 function getBrandEmblem(brandName) {
     if (!brandName) return '';
-    const cleanBrand = brandName.trim();
-    const slugMap = {
-        'Acura': 'acura', 'Alfa Romeo': 'alfa-romeo', 'Audi': 'audi', 'BMW': 'bmw',
-        'Cadillac': 'cadillac', 'Chery': 'chery', 'Chevrolet': 'chevrolet', 'Chrysler': 'chrysler',
-        'Citroen': 'citroen', 'Cupra': 'seat', 'Dacia': 'dacia', 'Daewoo': 'daewoo',
-        'Dodge': 'dodge', 'Fiat': 'fiat', 'Ford': 'ford', 'Geely': 'geely', 'Genesis': 'genesis',
-        'Honda': 'honda', 'Hyundai': 'hyundai', 'Infiniti': 'infiniti', 'Jaguar': 'jaguar',
-        'Jeep': 'jeep', 'Kia': 'kia', 'Lada / ВАЗ': 'lada', 'Land Rover': 'land-rover',
-        'Lexus': 'lexus', 'Lincoln': 'lincoln', 'Maserati': 'maserati', 'Mazda': 'mazda',
-        'Mercedes-Benz': 'mercedes-benz', 'MG': 'mg', 'Mini': 'mini', 'Mitsubishi': 'mitsubishi',
-        'Nissan': 'nissan', 'Opel': 'opel', 'Peugeot': 'peugeot', 'Porsche': 'porsche',
-        'Renault': 'renault', 'Seat': 'seat', 'Skoda': 'skoda', 'Smart': 'smart',
-        'Subaru': 'subaru', 'Suzuki': 'suzuki', 'Tesla': 'tesla', 'Toyota': 'toyota',
-        'Volkswagen': 'volkswagen', 'Volvo': 'volvo'
-    };
+    const b = brandName.trim().toUpperCase();
 
-    const slug = slugMap[cleanBrand] || cleanBrand.toLowerCase().replace(/[^a-z0-9]/g, '');
-    const logoUrl = `https://raw.githubusercontent.com/fawazahmed0/car-logos/main/png/${slug}.png`;
+    let svgContent = '';
+    if (b.includes('BMW')) {
+        svgContent = `<svg width="38" height="38" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="48" fill="#0f172a" stroke="#cbd5e1" stroke-width="3"/>
+            <circle cx="50" cy="50" r="32" fill="#ffffff" stroke="#cbd5e1" stroke-width="2"/>
+            <path d="M50 18 A32 32 0 0 1 82 50 L50 50 Z" fill="#0284c7"/>
+            <path d="M18 50 A32 32 0 0 1 50 82 L50 50 Z" fill="#0284c7"/>
+            <text x="50" y="14" font-family="Arial" font-weight="bold" font-size="11" fill="#ffffff" text-anchor="middle">B M W</text>
+        </svg>`;
+    } else if (b.includes('AUDI')) {
+        svgContent = `<svg width="42" height="22" viewBox="0 0 110 50">
+            <circle cx="22" cy="25" r="18" stroke="#0f172a" stroke-width="4.5" fill="none"/>
+            <circle cx="42" cy="25" r="18" stroke="#0f172a" stroke-width="4.5" fill="none"/>
+            <circle cx="62" cy="25" r="18" stroke="#0f172a" stroke-width="4.5" fill="none"/>
+            <circle cx="82" cy="25" r="18" stroke="#0f172a" stroke-width="4.5" fill="none"/>
+        </svg>`;
+    } else if (b.includes('MERCEDES') || b.includes('BENZ')) {
+        svgContent = `<svg width="38" height="38" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="46" stroke="#0f172a" stroke-width="5" fill="none"/>
+            <path d="M50 10 L44 50 L50 48 L56 50 Z" fill="#0f172a"/>
+            <path d="M50 10 L50 48 L84 70 L78 62 Z" fill="#334155"/>
+            <path d="M50 10 L50 48 L16 70 L22 62 Z" fill="#334155"/>
+            <path d="M50 50 L84 70 L48 54 Z" fill="#0f172a"/>
+            <path d="M50 50 L16 70 L52 54 Z" fill="#0f172a"/>
+        </svg>`;
+    } else if (b.includes('VOLKSWAGEN') || b.includes('VW')) {
+        svgContent = `<svg width="38" height="38" viewBox="0 0 100 100">
+            <circle cx="50" cy="50" r="46" fill="#1e3a8a" stroke="#ffffff" stroke-width="3"/>
+            <path d="M28 25 L40 65 L50 65 L38 25 Z" fill="#ffffff"/>
+            <path d="M72 25 L60 65 L50 65 L62 25 Z" fill="#ffffff"/>
+            <path d="M50 35 L42 60 L46 60 L50 48 L54 60 L58 60 Z" fill="#ffffff"/>
+            <circle cx="50" cy="50" r="43" stroke="#ffffff" stroke-width="3" fill="none"/>
+        </svg>`;
+    } else if (b.includes('PORSCHE')) {
+        svgContent = `<svg width="34" height="38" viewBox="0 0 80 100">
+            <path d="M10 10 H70 L65 70 L40 95 L15 70 Z" fill="#d97706" stroke="#0f172a" stroke-width="3"/>
+            <path d="M15 15 H65 V45 H15 Z" fill="#dc2626"/>
+            <path d="M20 50 H60 V80 H20 Z" fill="#0f172a"/>
+            <text x="40" y="24" font-family="Arial" font-weight="900" font-size="9" fill="#ffffff" text-anchor="middle">PORSCHE</text>
+        </svg>`;
+    } else if (b.includes('LEXUS')) {
+        svgContent = `<svg width="42" height="28" viewBox="0 0 100 65">
+            <ellipse cx="50" cy="32.5" rx="46" ry="28" stroke="#0f172a" stroke-width="5" fill="none"/>
+            <path d="M30 18 V46 H65 L60 38 H38 V18 Z" fill="#0f172a"/>
+        </svg>`;
+    } else if (b.includes('TOYOTA')) {
+        svgContent = `<svg width="42" height="28" viewBox="0 0 100 65">
+            <ellipse cx="50" cy="32.5" rx="46" ry="28" stroke="#dc2626" stroke-width="4" fill="none"/>
+            <ellipse cx="50" cy="32.5" rx="30" ry="16" stroke="#dc2626" stroke-width="4" fill="none"/>
+            <ellipse cx="50" cy="24" rx="12" ry="20" stroke="#dc2626" stroke-width="4" fill="none"/>
+        </svg>`;
+    } else if (b.includes('FORD')) {
+        svgContent = `<svg width="44" height="24" viewBox="0 0 110 60">
+            <ellipse cx="55" cy="30" rx="52" ry="27" fill="#1e3a8a" stroke="#ffffff" stroke-width="3"/>
+            <text x="55" y="38" font-family="Georgia, serif" font-style="italic" font-weight="bold" font-size="26" fill="#ffffff" text-anchor="middle">Ford</text>
+        </svg>`;
+    } else if (b.includes('HONDA')) {
+        svgContent = `<svg width="36" height="36" viewBox="0 0 90 90">
+            <rect x="5" y="5" width="80" height="80" rx="14" fill="#ffffff" stroke="#0f172a" stroke-width="4"/>
+            <path d="M22 20 H32 V40 H58 V20 H68 V70 H56 V48 H34 V70 H22 Z" fill="#0f172a"/>
+        </svg>`;
+    } else if (b.includes('HYUNDAI')) {
+        svgContent = `<svg width="42" height="28" viewBox="0 0 100 65">
+            <ellipse cx="50" cy="32.5" rx="46" ry="28" stroke="#0284c7" stroke-width="4" fill="none"/>
+            <path d="M30 16 L42 48 M70 16 L58 48 M34 32 H66" stroke="#0284c7" stroke-width="6" stroke-linecap="round"/>
+        </svg>`;
+    } else if (b.includes('KIA')) {
+        svgContent = `<svg width="42" height="22" viewBox="0 0 100 50">
+            <ellipse cx="50" cy="25" rx="46" ry="22" stroke="#dc2626" stroke-width="4" fill="none"/>
+            <text x="50" y="33" font-family="Arial Black" font-weight="900" font-size="20" fill="#dc2626" text-anchor="middle" letter-spacing="2">KIA</text>
+        </svg>`;
+    } else if (b.includes('CHEVROLET') || b.includes('CHEVY')) {
+        svgContent = `<svg width="42" height="22" viewBox="0 0 100 50">
+            <path d="M10 20 H35 L40 10 H60 L65 20 H90 V30 H65 L60 40 H40 L35 30 H10 Z" fill="#d97706" stroke="#0f172a" stroke-width="3"/>
+        </svg>`;
+    } else if (b.includes('TESLA')) {
+        svgContent = `<svg width="34" height="36" viewBox="0 0 80 90">
+            <path d="M10 15 C30 10, 50 10, 70 15 L62 23 C48 18, 32 18, 18 23 Z" fill="#dc2626"/>
+            <path d="M40 25 V80 M28 32 H52" stroke="#dc2626" stroke-width="6" stroke-linecap="round"/>
+        </svg>`;
+    } else {
+        svgContent = `<svg width="34" height="34" viewBox="0 0 80 80">
+            <rect x="5" y="5" width="70" height="70" rx="14" fill="#0f172a"/>
+            <text x="40" y="48" font-family="Arial" font-weight="800" font-size="20" fill="#ffffff" text-anchor="middle">${escapeHtml(brandName.substring(0,3).toUpperCase())}</text>
+        </svg>`;
+    }
 
-    return `<div style="width:48px; height:48px; display:flex; align-items:center; justify-content:center; background:#ffffff; border-radius:10px; padding:4px; box-shadow:0 2px 6px rgba(0,0,0,0.08); border:1px solid var(--border-color);">
-        <img src="${logoUrl}" alt="${escapeHtml(cleanBrand)}" style="max-width:100%; max-height:100%; object-fit:contain;" onerror="this.onerror=null; this.outerHTML='<span style=\\'font-weight:800; font-size:12px; color:#0f172a;\\'>${escapeHtml(cleanBrand.substring(0,4))}</span>';">
+    return `<div style="width:46px; height:46px; display:flex; align-items:center; justify-content:center; background:#ffffff; border-radius:12px; padding:3px; box-shadow:0 3px 10px rgba(15,23,42,0.08); border:1px solid var(--border-color);">
+        ${svgContent}
     </div>`;
 }
 

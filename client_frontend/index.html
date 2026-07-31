@@ -669,6 +669,7 @@
         <div class="card modal-content" style="max-width: 600px; width: 100%; max-height: 90vh; overflow-y: auto; background: var(--bg-card); color: var(--text-main); border-radius: 16px; padding: 20px; position:relative;">
             <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:12px; margin-bottom:16px;">
                 <div style="display:flex; align-items:center; gap:12px;">
+                    <button onclick="closeCarDetailModal()" class="ios-back-btn">‹ Назад</button>
                     <div id="detailCarBrandEmblem"></div>
                     <div>
                         <h2 id="detailCarTitle" style="font-size:18px; font-weight:800; color:var(--text-main); margin:0;">BMW 330i</h2>
@@ -678,21 +679,21 @@
                 <button onclick="closeCarDetailModal()" style="background:#f1f5f9; border:none; color:#0f172a; width:32px; height:32px; border-radius:50%; font-size:16px; font-weight:bold; cursor:pointer; display:flex; align-items:center; justify-content:center;">✕</button>
             </div>
 
-            <!-- 3D / 360° ГАРАЖНИЙ ПЕРЕГЛЯДАЧ ТА ФОТО АВТО -->
-            <div style="position:relative; background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%); border-radius:12px; overflow:hidden; min-height:200px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#ffffff; padding:16px; margin-bottom:16px; border:1px solid rgba(255,255,255,0.1);">
+            <!-- 3D / 360° ГАРАЖНИЙ ПЕРЕГЛЯДАЧ ТА ФОТО АВТО (СВІТЛИЙ ШОУРУМ) -->
+            <div style="position:relative; background: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 70%, #cbd5e1 100%); border-radius:14px; overflow:hidden; min-height:220px; display:flex; flex-direction:column; align-items:center; justify-content:center; color:#0f172a; padding:16px; margin-bottom:16px; border:1px solid rgba(203,213,225,0.8); box-shadow: inset 0 2px 8px rgba(255,255,255,0.9);">
                 <div id="carHeroPhotoContainer" style="width:100%; display:flex; flex-direction:column; align-items:center;">
                     <img id="carHeroPhoto" src="" alt="Auto Photo" style="max-height:180px; width:100%; object-fit:cover; border-radius:8px; display:none;">
                     
                     <div id="car3dCanvasWrapper" style="width:100%; display:flex; flex-direction:column; align-items:center;">
-                        <canvas id="car3dCanvas" width="360" height="150" style="max-width:100%; border-radius:8px;"></canvas>
-                        <div style="font-size:10px; color:#94a3b8; margin-top:4px;">3D Цифровий Двійник 360° (потягніть для обертання)</div>
+                        <canvas id="car3dCanvas" width="380" height="160" style="max-width:100%; border-radius:8px; cursor:grab;"></canvas>
+                        <div style="font-size:11px; color:#475569; font-weight:600; margin-top:4px;">3D Шоурум 360° (потягніть для обертання)</div>
                     </div>
                 </div>
 
                 <!-- Завантаження власного фото авто -->
                 <div style="margin-top:12px; display:flex; gap:8px; width:100%;">
-                    <input type="text" id="customPhotoUrlInput" placeholder="Вставте посилання на фотку свого авто (URL)..." style="flex:1; font-size:11px; padding:6px 10px; border-radius:6px; border:1px solid rgba(255,255,255,0.2); background:rgba(0,0,0,0.4); color:white;">
-                    <button class="btn btn-secondary" style="font-size:11px; padding:6px 10px; width:auto; white-space:nowrap;" onclick="saveCustomCarPhoto()">Зберегти фото</button>
+                    <input type="text" id="customPhotoUrlInput" placeholder="Вставте посилання на фотку свого авто (URL)..." style="flex:1; font-size:11px; padding:8px 12px; border-radius:8px; border:1px solid #cbd5e1; background:#ffffff; color:#0f172a;">
+                    <button class="btn btn-secondary" style="font-size:11px; padding:8px 12px; width:auto; white-space:nowrap;" onclick="saveCustomCarPhoto()">Зберегти фото</button>
                 </div>
             </div>
 
@@ -821,7 +822,7 @@
     <!-- Сповіщення Toast -->
     <div id="toastContainer" class="toast-container"></div>
 
-    <script src="app.js?v=13.0"></script>
+    <script src="app.js?v=14.0"></script>
 </body>
 </html>
 
