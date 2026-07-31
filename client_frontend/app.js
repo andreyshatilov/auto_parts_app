@@ -1,28 +1,55 @@
+async function loadMyOrders(token) {
+    try {
+        const res = await fetch(`${API_BASE_URL}/orders/my`, {
+            headers: { 'X-Auth-Token': token }
+        });
+        if (!res.ok) return;
+        const orders = await res.json();
+        renderMyOrders(orders);
+        renderServiceTimeline(orders);
+    } catch (err) {
+        console.error(err);
+    }
+}
+
+async function loadMyRequests(token) {
+    try {
+        const res = await fetch(`${API_BASE_URL}/requests/my`, {
+            headers: { 'X-Auth-Token': token }
+        });
+        if (!res.ok) return;
+        const requests = await res.json();
+        renderRequests(requests);
+    } catch (err) {
+        console.error(err);
+    }
+}
+
 function renderGarage(cars) {
     garageCountBadge.textContent = `${cars.length}/10 авто`;
     if (cars.length > 0) {
         requestCarSelect.innerHTML = cars.map(c => `<option value="${c.id}">${escapeHtml(c.brand)} ${escapeHtml(c.model)} (VIN: ${escapeHtml(c.vin)})</option>`).join('');
     } else {
-        requestCarSelect.innerHTML = `<option value="">╨б╨┐╨╛╤З╨░╤В╨║╤Г ╨┤╨╛╨┤╨░╨╣╤В╨╡ авто ╨▓ ╨│╨░╤А╨░╨╢</option>`;
+        requestCarSelect.innerHTML = `<option value="">Спочатку додайте авто в гараж</option>`;
     }
 
     if (cars.length === 0) {
-        garageContainer.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 24px;"> ╨Т╨░╤И ╨│╨░╤А╨░╨╢ ╨┐╨╛╤А╨╛╨╢╨╜╤Ц╨╣. ╨Ф╨╛╨┤╨░╨╣╤В╨╡ ╨┐╨╡╤А╤И╨╡ авто ╨╜╨╕╨╢╤З╨╡ (╨┤╨╛ 10 ╨╝╨░╤И╨╕╨╜).</div>`;
+        garageContainer.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 24px;"> Ваш гараж порожній. Додайте перше авто нижче (до 10 машин).</div>`;
         return;
     }
 
     garageContainer.innerHTML = cars.map(car => {
         const isNoVin = !car.vin || car.vin.startsWith('NOVIN-');
-        const vinDisplay = isNoVin ? '<span style="color:#d97706; font-weight:600;">╨Э╨╡ ╨▓╨║╨░╨╖╨░╨╜╨╛ (╨а╨╡╨║╨╛╨╝╨╡╨╜╨┤╨╛╨▓╨░╨╜╨╛ ╨┤╨╛╨┤╨░╤В╨╕)</span>' : escapeHtml(car.vin);
+        const vinDisplay = isNoVin ? '<span style="color:#d97706; font-weight:600;">Не вказано (Рекомендовано додати)</span>' : escapeHtml(car.vin);
 
-        const genDisplay = car.generation || (car.modification && car.modification.includes('G20') ? car.modification : 'G20 (7-╨╝╨╡ ╨┐╨╛╨║╨╛╨╗╤Ц╨╜╨╜╤П)');
-        const engineDisplay = `${car.engine_code || '2.0L Turbo B48'} ${car.horse_power ? `(${car.horse_power})` : ' (258 ╨║.╤Б.)'}`;
+        const genDisplay = car.generation || (car.modification && car.modification.includes('G20') ? car.modification : 'G20 (7-ме покоління)');
+        const engineDisplay = `${car.engine_code || '2.0L Turbo B48'} ${car.horse_power ? `(${car.horse_power})` : ' (258 к.с.)'}`;
 
         return `
         <div class="garage-card" style="cursor:pointer; transition:transform 0.2s;" onclick="openCarDetailModal(${car.id})">
             <div class="garage-header-flex">
                 <div>
-                    <div class="garage-card-title">${escapeHtml(car.brand)} ${escapeHtml(car.model)} ${car.release_date ? `<span style="font-size:13px; color:var(--primary); font-weight:600;">(${escapeHtml(car.release_date)} ╤А.╨▓.)</span>` : ''}</div>
+                    <div class="garage-card-title">${escapeHtml(car.brand)} ${escapeHtml(car.model)} ${car.release_date ? `<span style="font-size:13px; color:var(--primary); font-weight:600;">(${escapeHtml(car.release_date)} р.в.)</span>` : ''}</div>
                     <div class="garage-card-vin">VIN: ${vinDisplay}</div>
                 </div>
                 <div class="brand-emblem-badge">
@@ -37,28 +64,28 @@ function renderGarage(cars) {
             ` : ''}
 
             <div class="garage-details" style="margin-top:10px;">
-                <div><span class="g-label">╨Я╨Ю╨Ъ╨Ю╨Ы╨Ж╨Э╨Э╨п / ╨Ъ╨г╨Ч╨Ю╨Т</span><div class="g-value">${escapeHtml(genDisplay)}</div></div>
-                <div><span class="g-label">╨а╨Ж╨Ъ ╨Т╨Ш╨Я╨г╨б╨Ъ╨г</span><div class="g-value">${escapeHtml(car.release_date || '2020')} ╤А.╨▓.</div></div>
-                <div><span class="g-label">╨Ф╨Т╨Ш╨У╨г╨Э & ╨Я╨Ю╨в╨г╨Ц╨Э╨Ж╨б╨в╨м</span><div class="g-value">${escapeHtml(engineDisplay)}</div></div>
-                <div><span class="g-label">╨в╨а╨Р╨Э╨б╨Ь╨Ж╨б╨Ж╨п</span><div class="g-value">${escapeHtml(car.transmission_type || '╨Р╨Ъ╨Я╨Я')} ${escapeHtml(car.transmission_code || '(ZF 8HP51)')}</div></div>
+                <div><span class="g-label">ПОКОЛІННЯ / КУЗОВ</span><div class="g-value">${escapeHtml(genDisplay)}</div></div>
+                <div><span class="g-label">РІК ВИПУСКУ</span><div class="g-value">${escapeHtml(car.release_date || '2020')} р.в.</div></div>
+                <div><span class="g-label">ДВИГУН & ПОТУЖНІСТЬ</span><div class="g-value">${escapeHtml(engineDisplay)}</div></div>
+                <div><span class="g-label">ТРАНСМІСІЯ</span><div class="g-value">${escapeHtml(car.transmission_type || 'АКПП')} ${escapeHtml(car.transmission_code || '(ZF 8HP51)')}</div></div>
             </div>
 
             ${isNoVin ? `
                 <div style="margin-top:10px; background:#fffbe6; border:1px solid #ffe58f; padding:8px 12px; border-radius:10px; font-size:12px; display:flex; justify-content:space-between; align-items:center; gap:6px;">
-                    <span style="color:#d48806; font-weight:600;"> ╨Т╨║╨░╨╢╤Ц╤В╤М VIN ╨┤╨╗╤П ╨С╨╛╤А╤В╨╢╤Г╤А╨╜╨░╨╗╤Г ╤В╨░ ╨в╨Ю</span>
-                    <button class="btn btn-primary" style="width:auto; padding:4px 10px; font-size:11px; white-space:nowrap;" onclick="event.stopPropagation(); openVinRecommendationModal(${car.id}, '${escapeHtml(car.brand)} ${escapeHtml(car.model)}')"> ╨Т╨║╨░╨╖╨░╤В╨╕ VIN</button>
+                    <span style="color:#d48806; font-weight:600;"> Вкажіть VIN для Бортжурналу та ТО</span>
+                    <button class="btn btn-primary" style="width:auto; padding:4px 10px; font-size:11px; white-space:nowrap;" onclick="event.stopPropagation(); openVinRecommendationModal(${car.id}, '${escapeHtml(car.brand)} ${escapeHtml(car.model)}')"> Вказати VIN</button>
                 </div>
             ` : ''}
 
             <div style="display:flex; gap:6px; margin-top:10px;" onclick="event.stopPropagation();">
                 <button class="btn btn-secondary" style="font-size:11px; padding:8px; flex:1;" onclick="openCarDetailModal(${car.id})">
-                    ЁЯПОя╕П ╨Ю╨│╨╗╤П╨┤ & ╨Я╨░╤Б╨┐╨╛╤А╤В
+                    👁️ Огляд & Паспорт
                 </button>
                 <button class="btn btn-secondary" style="font-size:11px; padding:8px; flex:1;" onclick="generateTransferCode(${car.id}, '${escapeHtml(car.brand)} ${escapeHtml(car.model)}')">
-                    ЁЯФС PIN ╨┤╨╗╤П ╨┐╤А╨╛╨┤╨░╨╢╤Г
+                    🔑 PIN для продажу
                 </button>
-                <button class="btn btn-delete" style="font-size:11px; padding:8px; width:auto;" title="╨Т╨╕╨┤╨░╨╗╨╕╤В╨╕ ╨╖ ╨│╨░╤А╨░╨╢╨░" onclick="deleteCarFromGarage(${car.id}, '${escapeHtml(car.brand)}', '${escapeHtml(car.model)}', '${escapeHtml(car.vin)}')">
-                    ЁЯЧСя╕П
+                <button class="btn btn-delete" style="font-size:11px; padding:8px; width:auto;" title="Видалити з гаража" onclick="deleteCarFromGarage(${car.id}, '${escapeHtml(car.brand)}', '${escapeHtml(car.model)}', '${escapeHtml(car.vin)}')">
+                    🗑️
                 </button>
             </div>
         </div>
@@ -1311,7 +1338,8 @@ function getBrandEmblem(brandName) {
     // Fallback HTML if image fails to load
     const fallbackHtml = `<div style="display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:12px;background:#f1f5f9;color:#0f172a;font-weight:800;font-size:11px; text-align:center; overflow:hidden; border: 1px solid #e2e8f0; margin:auto;">${b.substring(0,5)}</div>`;
     
-    return `<img src="https://www.car-logos.org/wp-content/uploads/maker/${imgName}.png" alt="${b}" style="width:100%; height:100%; object-fit:contain; border-radius:12px; max-width:48px; max-height:48px;" onerror="this.outerHTML=\`${fallbackHtml}\`">`;
+    const fallbackHtmlSafe = fallbackHtml.replace(/"/g, '&quot;');
+    return `<img src="https://www.car-logos.org/wp-content/uploads/maker/${imgName}.png" alt="${b}" style="width:100%; height:100%; object-fit:contain; border-radius:12px; max-width:48px; max-height:48px;" onerror="this.outerHTML='${fallbackHtmlSafe}'">`;
 }
 
 function openVinRecommendationModal(carId, carName) {
@@ -1453,18 +1481,7 @@ function applyPreset(text) {
 
 
 
-function loadMyRequests(token) {
-    try {
-        const res = await fetch(`${API_BASE_URL}/requests/my`, {
-            headers: { 'X-Auth-Token': token }
-        });
-        if (!res.ok) return;
-        const requests = await res.json();
-        renderRequests(requests);
-    } catch (err) {
-        console.error(err);
-    }
-}
+
 
 /**
  * Renders the active Requests list for the client.
@@ -1610,19 +1627,7 @@ async function submitOrderFromProposal(e, proposalId, carId) {
     }
 }
 
-async function loadMyOrders(token) {
-    try {
-        const res = await fetch(`${API_BASE_URL}/orders/my`, {
-            headers: { 'X-Auth-Token': token }
-        });
-        if (!res.ok) return;
-        const orders = await res.json();
-        renderMyOrders(orders);
-        renderServiceTimeline(orders);
-    } catch (err) {
-        console.error(err);
-    }
-}
+async 
 
 /**
  * Renders the Order History view (completed or processing orders).

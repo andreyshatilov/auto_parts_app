@@ -326,9 +326,6 @@ body {
 #viewGarage {
     padding: 20px 0 100px 0;
     min-height: 100vh;
-    background: 
-        linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(248, 250, 252, 0.8) 100%),
-        url('https://images.unsplash.com/photo-1599054802207-91d346adc120?auto=format&fit=crop&q=80&w=1200') center/cover no-repeat fixed;
 }
 
 /* 🏎️ ПРЕМІУМ КАРТКИ ГАРАЖА З ЛОГОТИПАМИ БРЕНДІВ */
