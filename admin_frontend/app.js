@@ -139,9 +139,10 @@ function setupEventListeners() {
         const msg = document.getElementById('adminChatInput').value.trim();
 
         try {
+            const token = localStorage.getItem('admin_token');
             const res = await fetch(`${API_BASE_URL}/chat/messages?sender_type=manager`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 'Content-Type': 'application/json', 'X-Auth-Token': token },
                 body: JSON.stringify({ request_id: activeAdminChatRequestId, message: msg })
             });
             const data = await res.json();
@@ -325,7 +326,7 @@ function renderRequestsQueue(requests) {
             </div>
 
             <div class="car-footer">
-                <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px;" onclick="openAdminChatModal(${req.id})">
+                <button class="btn btn-secondary" style="padding: 4px 8px; font-size: 11px;" onclick="openAdminChatModal(${req.id}, \`${escapeHtml(req.client_message)}\`)">
                      Чат з клієнтом
                 </button>
                 ${req.status !== 'completed' ? `
@@ -716,7 +717,8 @@ async function handleAddCar() {
     }
 }
 
-async function openAdminChatModal(requestId) {
+async function openAdminChatModal(requestId, initialMessage) {
+    window.currentAdminChatInitialMessage = initialMessage;
     activeAdminChatRequestId = requestId;
     document.getElementById('adminChatRequestId').textContent = requestId;
     adminChatModal.style.display = 'flex';
@@ -732,10 +734,18 @@ async function loadAdminChatMessages(requestId) {
         const res = await fetch(`${API_BASE_URL}/chat/messages/${requestId}`);
         if (!res.ok) return;
         const messages = await res.json();
-        adminChatMessagesContainer.innerHTML = messages.map(m => `
+        
+        const initialMsgHtml = window.currentAdminChatInitialMessage ? `
+            <div style="align-self: flex-start; background: rgba(255,255,255,0.05); padding:12px; border-radius:10px; max-width:90%; font-size:13px; border-left: 3px solid #f59e0b; margin-bottom:10px;">
+                <div style="font-size:10px; color:#f59e0b; margin-bottom:4px; font-weight:700;">ОРИГІНАЛЬНИЙ ЗАПИТ КЛІЄНТА</div>
+                <div>${window.currentAdminChatInitialMessage}</div>
+            </div>` : '';
+            
+        adminChatMessagesContainer.innerHTML = initialMsgHtml + messages.map(m => `
             <div style="align-self: ${m.sender_type === 'manager' ? 'flex-end' : 'flex-start'}; background: ${m.sender_type === 'manager' ? 'rgba(59,130,246,0.3)' : 'rgba(255,255,255,0.1)'}; padding:8px 12px; border-radius:10px; max-width:80%; font-size:13px;">
                 <div style="font-size:10px; color:var(--text-muted);">${m.sender_type === 'manager' ? 'Ви (Експерт)' : 'Клієнт'} • ${formatDate(m.created_at)}</div>
                 <div>${escapeHtml(m.message)}</div>
+                  ${m.attachment_url ? `<div style="margin-top:6px;"><a href="${escapeHtml(m.attachment_url)}" target="_blank"><img src="${escapeHtml(m.attachment_url)}" style="max-width:100%; border-radius:8px;"></a></div>` : ''}
             </div>
         `).join('');
     } catch (err) {
@@ -921,3 +931,42 @@ function prefillAddCarForClient(clientId, clientName) {
     const vinInp = document.getElementById('vinInput');
     if (vinInp) vinInp.focus();
 }
+
+
+// IMAGE UPLOAD LOGIC
+async function handleChatImageUpload(file, callback) {
+    try {
+        showToast('Завантаження фото...', 'info');
+        const formData = new FormData();
+        formData.append('reqtype', 'fileupload');
+        formData.append('fileToUpload', file);
+        const res = await fetch('https://catbox.moe/user/api.php', { method: 'POST', body: formData });
+        if(!res.ok) throw new Error('Помилка завантаження');
+        const url = await res.text();
+        showToast('Фото завантажено!', 'success');
+        callback(url);
+    } catch(err) {
+        showToast('Не вдалося завантажити фото: ' + err.message, 'error');
+    }
+}
+window.handleChatImageUpload = handleChatImageUpload;
+
+
+window.uploadAndSendadminChatInputFile = async function(file) {
+    if(!file || !activeAdminChatRequestId) return;
+    const token = localStorage.getItem(TOKEN_STORAGE_KEY) || localStorage.getItem('admin_token');
+    handleChatImageUpload(file, async (url) => {
+        try {
+            const res = await fetch(`${API_BASE_URL}/chat/messages?sender_type=manager`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-Auth-Token': token },
+                body: JSON.stringify({ request_id: activeAdminChatRequestId, message: '📷 Фото', attachment_url: url })
+            });
+            if(!res.ok) throw new Error('Помилка відправки');
+            if (typeof loadChatMessages === 'function') await loadChatMessages(activeAdminChatRequestId);
+            if (typeof loadAdminChatMessages === 'function') await loadAdminChatMessages(activeAdminChatRequestId);
+        } catch(err) {
+            showToast(err.message, 'error');
+        }
+    });
+};

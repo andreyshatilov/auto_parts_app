@@ -1,3 +1,11 @@
+function applyPreset(text) {
+    document.getElementById('requestText').value = text;
+    switchNavTab('requests');
+    showToast(' Категорію/компонент додано в форму запиту!');
+    const reqForm = document.getElementById('requestForm');
+    if (reqForm) reqForm.scrollIntoView({ behavior: 'smooth' });
+}
+
 async function loadMyOrders(token) {
     try {
         const res = await fetch(`${API_BASE_URL}/orders/my`, {
@@ -1471,13 +1479,7 @@ async function generateTransferCode(carId, carName) {
     }
 }
 
-function applyPreset(text) {
-    document.getElementById('requestText').value = text;
-    switchNavTab('requests');
-    showToast(' Категорію/компонент додано в форму запиту!');
-    const reqForm = document.getElementById('requestForm');
-    if (reqForm) reqForm.scrollIntoView({ behavior: 'smooth' });
-}
+
 
 
 
@@ -1755,6 +1757,7 @@ async function loadChatMessages(requestId) {
             <div style="align-self: ${m.sender_type === 'client' ? 'flex-end' : 'flex-start'}; background: ${m.sender_type === 'client' ? 'rgba(59,130,246,0.3)' : 'rgba(255,255,255,0.1)'}; padding:8px 12px; border-radius:10px; max-width:80%; font-size:13px;">
                 <div style="font-size:10px; color:var(--text-muted);">${m.sender_type === 'client' ? 'Ви' : 'Експерт'} • ${formatDate(m.created_at)}</div>
                 <div>${escapeHtml(m.message)}</div>
+                  ${m.attachment_url ? `<div style="margin-top:6px;"><a href="${escapeHtml(m.attachment_url)}" target="_blank"><img src="${escapeHtml(m.attachment_url)}" style="max-width:100%; border-radius:8px;"></a></div>` : ''}
             </div>
         `).join('');
     } catch (err) {
@@ -2137,3 +2140,44 @@ function init3dCarCanvas(car) {
 window.renderGarage = renderGarage;
 window.showModal = showModal;
 window.hideModal = hideModal;
+
+window.applyPreset = applyPreset;
+
+
+// IMAGE UPLOAD LOGIC
+async function handleChatImageUpload(file, callback) {
+    try {
+        showToast('Завантаження фото...', 'info');
+        const formData = new FormData();
+        formData.append('reqtype', 'fileupload');
+        formData.append('fileToUpload', file);
+        const res = await fetch('https://catbox.moe/user/api.php', { method: 'POST', body: formData });
+        if(!res.ok) throw new Error('Помилка завантаження');
+        const url = await res.text();
+        showToast('Фото завантажено!', 'success');
+        callback(url);
+    } catch(err) {
+        showToast('Не вдалося завантажити фото: ' + err.message, 'error');
+    }
+}
+window.handleChatImageUpload = handleChatImageUpload;
+
+
+window.uploadAndSendchatInputFile = async function(file) {
+    if(!file || !activeChatRequestId) return;
+    const token = localStorage.getItem(TOKEN_STORAGE_KEY) || localStorage.getItem('admin_token');
+    handleChatImageUpload(file, async (url) => {
+        try {
+            const res = await fetch(`${API_BASE_URL}/chat/messages?sender_type=client`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'X-Auth-Token': token },
+                body: JSON.stringify({ request_id: activeChatRequestId, message: '📷 Фото', attachment_url: url })
+            });
+            if(!res.ok) throw new Error('Помилка відправки');
+            if (typeof loadChatMessages === 'function') await loadChatMessages(activeChatRequestId);
+            if (typeof loadAdminChatMessages === 'function') await loadAdminChatMessages(activeChatRequestId);
+        } catch(err) {
+            showToast(err.message, 'error');
+        }
+    });
+};

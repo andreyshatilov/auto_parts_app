@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=25.0">
+    <link rel="stylesheet" href="styles.css?v=27.0">
 </head>
 <body>
     <div class="mobile-frame">
@@ -765,6 +765,8 @@
 
             <form id="chatSendForm" style="display: flex; gap: 8px; margin-top: 10px;">
                 <input type="text" id="chatInput" placeholder="Напишіть повідомлення..." required style="flex: 1;">
+                  <button type="button" class="btn btn-secondary" style="width: 44px; padding: 10px;" onclick="document.getElementById('chatInputFile').click()">📷</button>
+<input type="file" id="chatInputFile" accept="image/*" style="display:none;" onchange="uploadAndSendchatInputFile(this.files[0])">
                 <button type="submit" class="btn btn-accent" style="width: 100px; padding: 10px;">Надіслати</button>
             </form>
         </div>
@@ -1054,7 +1056,7 @@
     <div id="toastContainer" class="toast-container"></div>
 
     <script src="js/car_models.js"></script>
-    <script src="app.js?v=25.0"></script>
+    <script src="app.js?v=27.0"></script>
 </body>
 </html>
 

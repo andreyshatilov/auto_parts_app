@@ -354,13 +354,15 @@
                 <div>
                     <h2>Чат з Клієнтом (Запит #<span id="adminChatRequestId">0</span>)</h2>
                 </div>
-                <button onclick="closeAdminChatModal()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;"></button>
+                <button onclick="closeAdminChatModal()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
             </div>
 
             <div id="adminChatMessagesContainer" style="flex: 1; overflow-y: auto; padding: 12px 0; display: flex; flex-direction: column; gap: 8px;"></div>
 
             <form id="adminChatSendForm" style="display: flex; gap: 8px; margin-top: 10px;">
                 <input type="text" id="adminChatInput" placeholder="Відповідь клієнту..." required style="flex: 1;">
+                  <button type="button" class="btn btn-secondary" style="width: 44px; padding: 10px;" onclick="document.getElementById('adminChatInputFile').click()">📷</button>
+<input type="file" id="adminChatInputFile" accept="image/*" style="display:none;" onchange="uploadAndSendadminChatInputFile(this.files[0])">
                 <button type="submit" class="btn btn-accent" style="width: 100px; padding: 10px;">Надіслати</button>
             </form>
         </div>
@@ -369,6 +371,6 @@
     <!-- Контейнер Toast -->
     <div id="toastContainer" class="toast-container"></div>
 
-    <script src="app.js?v=18.0"></script>
+    <script src="app.js?v=27.0"></script>
 </body>
 </html>
