@@ -112,7 +112,7 @@
                     </button>
                 </div><!-- End of viewGarage -->
                 <!-- ВКЛАДКА 2: ЗАПИТИ ТА ШВИДКІ КОМПЛЕКТИ ТО -->
-                <div id="viewRequests" class="view-content">
+                <div id="viewRequests" class="view-content" style="display: none;">
                     <!-- ВІЗУАЛЬНИЙ КАТАЛОГ ВУЗЛІВ ТА ШВИДКЕ ТО -->
                     <section class="section">
                         <div class="section-header">
@@ -660,7 +660,7 @@
                 </div>
 
                 <!-- ВКЛАДКА 3: МОЇ ЗАМОВЛЕННЯ ТА ТРЕКІНГ НП -->
-                <div id="viewOrders" class="view-content">
+                <div id="viewOrders" class="view-content" style="display: none;">
                     <section class="section">
                         <div class="section-header">
                             <h3>Мої Замовлення та Трекінг НП</h3>
@@ -672,7 +672,7 @@
                 </div>
 
                 <!-- ВКЛАДКА 4: ПРОФІЛЬ ТА НАЛАШТУВАННЯ -->
-                <div id="viewProfile" class="view-content">
+                <div id="viewProfile" class="view-content" style="display: none;">
                     <section class="section">
                         <div class="card">
                             <h4>Особисті Дані Клієнта</h4>
@@ -897,10 +897,6 @@
                         <input type="text" id="clientVinInput" placeholder="17 символів (введіть для автопідбору)">
                         <span class="vin-counter" id="clientVinCounter">0/17</span>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 8px; margin-top: 4px;">
-                        <input type="checkbox" id="noVinCheckbox" style="width: 16px; height: 16px;">
-                        <label for="noVinCheckbox" style="font-size: 13px; font-weight: normal; color: var(--text-muted); margin: 0;">Не знаю VIN-код / Додам пізніше</label>
-                    </div>
                 </div>
 
                 <div class="form-row" style="display:flex; gap:8px;">
@@ -1053,7 +1049,8 @@
     <!-- Сповіщення Toast -->
     <div id="toastContainer" class="toast-container"></div>
 
-    <script src="app.js?v=22.0"></script>
+    <script src="js/car_models.js"></script>
+    <script src="app.js?v=21.0"></script>
 </body>
 </html>
 
