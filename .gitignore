@@ -19,8 +19,37 @@ node_modules/
 package.json
 package-lock.json
 
-# Scratch / Test files
+# Scratch / Test / Debug files
 scratch/
 test_*.js
 test_*.py
 *_extracted.js
+
+# One-off fix/debug scripts (root level)
+fix_*.py
+check_*.py
+modify_*.py
+move*.py
+extract_*.py
+debug_*.py
+compare_*.py
+find_*.py
+force_*.py
+rearrange_*.py
+refactor_*.py
+inspect_*.py
+generate_*.py
+final_*.py
+
+# Backup / working copies
+*_old.js
+*_working.js
+*_working.html
+app_*.js
+index_working.html
+deleted_*.patch
+deleted_*.txt
+
+# Deploy scripts (local only)
+deploy.bat
+deploy.ps1
