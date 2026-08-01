@@ -201,6 +201,7 @@ async function loadCars(searchQuery = '') {
 }
 
 function renderCars(cars) {
+    setAdminCarsCache(cars);
     carsCountEl.textContent = cars.length;
     if (cars.length === 0) {
         carsContainer.innerHTML = `<div style="grid-column: 1/-1; color: var(--text-muted); padding: 20px;"> База авто порожня.</div>`;
@@ -226,6 +227,7 @@ function renderCars(cars) {
             </div>
             <div class="car-footer">
                 <span>ID: #${car.id} | ${car.client_id ? `Власник #${car.client_id}` : 'Без власника'}</span>
+                <button class="btn btn-secondary" style="font-size:11px; padding:4px 8px; margin-right:4px;" onclick="openAdminCarDetailModal(${car.id})">Огляд</button>
                 <button class="btn-delete" onclick="deleteCar(${car.id}, '${car.vin}')">Видалити</button>
             </div>
         </div>
@@ -895,7 +897,8 @@ async function loadGarages(searchQuery = '') {
 
                             <div class="car-footer" style="margin-top: 8px;">
                                 <span style="font-size:11px; color:var(--text-muted);">Додано: ${formatDate(car.created_at)}</span>
-                                <button class="btn-delete" onclick="deleteCar(${car.id}, '${car.vin}')">Видалити</button>
+                                <button class="btn btn-secondary" style="font-size:11px; padding:4px 8px; margin-right:4px;" onclick="openAdminCarDetailModal(${car.id})">Огляд</button>
+                <button class="btn-delete" onclick="deleteCar(${car.id}, '${car.vin}')">Видалити</button>
                             </div>
                         </div>
                     `;
@@ -971,4 +974,72 @@ window.uploadAndSendadminChatInputFile = async function(file) {
             showToast(err.message, 'error');
         }
     });
+};
+
+
+let adminCarsCache = [];
+
+function setAdminCarsCache(cars) {
+    adminCarsCache = cars;
+}
+
+window.openAdminCarDetailModal = async function(carId) {
+    let car = adminCarsCache.find(c => c.id === carId);
+    
+    // If not found in cache, we could fetch it, but usually it is in cache because we just clicked it
+    if (!car) {
+        try {
+            const res = await fetch(`${API_BASE_URL}/cars/` + carId, {
+                headers: { 'X-Admin-Token': localStorage.getItem(ADMIN_TOKEN_KEY) }
+            });
+            if (res.ok) {
+                car = await res.json();
+            }
+        } catch (e) {}
+    }
+
+    if (!car) {
+        showToast('Авто не знайдено', 'error');
+        return;
+    }
+
+    document.getElementById('adminDetailCarTitle').textContent = `${car.brand} ${car.model}`;
+    document.getElementById('adminDetailCarVin').textContent = `VIN: ${car.vin || 'Немає'}`;
+    
+    document.getElementById('adminDetailCarYear').textContent = car.release_date || '-';
+    
+    const genBody = [car.generation, car.body_type].filter(Boolean).join(' / ');
+    document.getElementById('adminDetailCarGen').textContent = genBody || '-';
+    
+    document.getElementById('adminDetailCarEngine').textContent = car.engine_code || '-';
+    document.getElementById('adminDetailCarFuel').textContent = car.fuel_type || '-';
+    document.getElementById('adminDetailCarTrans').textContent = `${car.transmission_type || '-'} ${car.transmission_code ? '('+car.transmission_code+')' : ''}`;
+    document.getElementById('adminDetailCarDrive').textContent = car.drive_type || '-';
+    document.getElementById('adminDetailCarHp').textContent = car.horse_power ? `${car.horse_power} к.с.` : '-';
+    document.getElementById('adminDetailCarColor').textContent = car.color_code || '-';
+    document.getElementById('adminDetailCarPlant').textContent = car.assembly_plant || '-';
+    document.getElementById('adminDetailCarMileage').textContent = car.mileage ? `${car.mileage.toLocaleString('uk-UA')} км` : '-';
+    
+    const notesContainer = document.getElementById('adminDetailCarNotesContainer');
+    if (car.notes) {
+        notesContainer.style.display = 'block';
+        document.getElementById('adminDetailCarNotes').textContent = car.notes;
+    } else {
+        notesContainer.style.display = 'none';
+    }
+
+    const photoImg = document.getElementById('adminDetailCarPhoto');
+    if (car.custom_photo_url) {
+        photoImg.src = car.custom_photo_url;
+        photoImg.style.display = 'block';
+    } else {
+        photoImg.style.display = 'none';
+    }
+
+    const modal = document.getElementById('adminCarDetailModal');
+    modal.style.display = 'flex';
+};
+
+window.closeAdminCarDetailModal = function() {
+    document.getElementById('adminCarDetailModal').style.display = 'none';
 };
