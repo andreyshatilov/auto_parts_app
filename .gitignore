@@ -13,3 +13,14 @@ backend/backups/
 .DS_Store
 .vscode/
 .idea/
+
+# Node.js
+node_modules/
+package.json
+package-lock.json
+
+# Scratch / Test files
+scratch/
+test_*.js
+test_*.py
+*_extracted.js
