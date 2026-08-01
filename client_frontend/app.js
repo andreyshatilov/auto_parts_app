@@ -1526,19 +1526,18 @@ window.openCarDetailModal = function(carId) {
     document.getElementById('detailCarMileage').textContent = `${(car.mileage || 0).toLocaleString('uk-UA')} км`;
 
     const heroImg = document.getElementById('carHeroPhoto');
-    const canvasWrapper = document.getElementById('car3dCanvasWrapper');
-    const customPhotoInput = document.getElementById('customPhotoUrlInput');
-
-    customPhotoInput.value = car.custom_photo_url || '';
+    const logoWrapper = document.getElementById('carLogoPlaceholder');
 
     if (car.custom_photo_url) {
         heroImg.src = car.custom_photo_url;
         heroImg.style.display = 'block';
-        canvasWrapper.style.display = 'none';
+        if(logoWrapper) logoWrapper.style.display = 'none';
     } else {
         heroImg.style.display = 'none';
-        canvasWrapper.style.display = 'flex';
-        setTimeout(() => init3dCarCanvas(car), 50);
+        if(logoWrapper) {
+            logoWrapper.style.display = 'flex';
+            logoWrapper.innerHTML = getBrandEmblem(car.brand);
+        }
     }
 
     document.getElementById('detailPassportBtn').onclick = () => window.open(`${API_BASE_URL}/invoices/car/${car.id}/passport`, '_blank');
