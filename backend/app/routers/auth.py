@@ -87,49 +87,74 @@ def get_current_client(
 def register_client(data: ClientCreate, db: Session = Depends(get_db)):
     """Реєстрація нового клієнта. Створює неактивний акаунт і генерує OTP."""
     try:
-        existing_phone = db.query(Client).filter(Client.phone == data.phone).first()
-        if existing_phone:
-            raise HTTPException(
-                status_code=status.HTTP_400_BAD_REQUEST,
-                detail="Клієнт з таким номером телефону вже існує!"
-            )
-            
-        if data.email:
-            existing_email = db.query(Client).filter(Client.email == data.email).first()
-            if existing_email:
+        existing_client = db.query(Client).filter(Client.phone == data.phone).first()
+        
+        if existing_client:
+            # Якщо клієнт вже має пароль, значить це повноцінний існуючий акаунт
+            if existing_client.hashed_password:
                 raise HTTPException(
                     status_code=status.HTTP_400_BAD_REQUEST,
-                    detail="Клієнт з таким Email вже існує!"
+                    detail="Клієнт з таким номером телефону вже існує!"
                 )
+            else:
+                # Це "старий" клієнт (до введення паролів). Дозволяємо йому "зареєструватися" (оновити дані)
+                if data.email:
+                    existing_email = db.query(Client).filter(Client.email == data.email).first()
+                    if existing_email and existing_email.id != existing_client.id:
+                        raise HTTPException(
+                            status_code=status.HTTP_400_BAD_REQUEST,
+                            detail="Клієнт з таким Email вже існує!"
+                        )
+                
+                existing_client.first_name = data.first_name
+                existing_client.last_name = data.last_name
+                existing_client.email = data.email
+                existing_client.has_messenger = data.has_messenger
+                existing_client.hashed_password = get_password_hash(data.password)
+                existing_client.is_verified = False
+                existing_client.auth_token = f"token_{uuid.uuid4().hex}"
+                
+                db.commit()
+                db.refresh(existing_client)
+                target_client = existing_client
+        else:
+            if data.email:
+                existing_email = db.query(Client).filter(Client.email == data.email).first()
+                if existing_email:
+                    raise HTTPException(
+                        status_code=status.HTTP_400_BAD_REQUEST,
+                        detail="Клієнт з таким Email вже існує!"
+                    )
 
-        token = f"token_{uuid.uuid4().hex}"
-        
-        new_client = Client(
-            first_name=data.first_name,
-            last_name=data.last_name,
-            phone=data.phone,
-            email=data.email,
-            has_messenger=data.has_messenger,
-            hashed_password=get_password_hash(data.password),
-            is_verified=False,
-            auth_token=token
-        )
-        db.add(new_client)
-        db.commit()
-        db.refresh(new_client)
+            token = f"token_{uuid.uuid4().hex}"
+            
+            new_client = Client(
+                first_name=data.first_name,
+                last_name=data.last_name,
+                phone=data.phone,
+                email=data.email,
+                has_messenger=data.has_messenger,
+                hashed_password=get_password_hash(data.password),
+                is_verified=False,
+                auth_token=token
+            )
+            db.add(new_client)
+            db.commit()
+            db.refresh(new_client)
+            target_client = new_client
 
         # Генеруємо OTP
-        if data.email:
+        if target_client.email:
             otp_val = generate_otp()
             otp_entry = OTPCode(
-                email=data.email,
+                email=target_client.email,
                 code=otp_val,
                 expires_at=datetime.utcnow() + timedelta(minutes=15)
             )
             db.add(otp_entry)
             db.commit()
             
-            print(f"========== OTP CODE FOR {data.email} ==========")
+            print(f"========== OTP CODE FOR {target_client.email} ==========")
             print(f"CODE: {otp_val}")
             print(f"=================================================")
 
