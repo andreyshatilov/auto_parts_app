@@ -506,8 +506,21 @@ function setupEventListeners() {
                     has_messenger: hasMsgr
                 })
             });
+            if (!res.ok) {
+                let errorMsg = 'Помилка реєстрації';
+                try {
+                    const data = await res.json();
+                    if (Array.isArray(data.detail)) {
+                        errorMsg = data.detail.map(d => d.msg || d.detail).join(', ');
+                    } else if (data.detail) {
+                        errorMsg = data.detail;
+                    }
+                } catch (e) {
+                    errorMsg = `Сервер тимчасово недоступний (${res.status})`;
+                }
+                throw new Error(errorMsg);
+            }
             const data = await res.json();
-            if (!res.ok) throw new Error(data.detail || 'Помилка реєстрації');
 
             currentRegEmail = email;
             showToast('OTP відправлено на пошту!', 'info');
@@ -526,8 +539,17 @@ function setupEventListeners() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: currentRegEmail, code: code })
             });
+            if (!res.ok) {
+                let errorMsg = 'Помилка OTP';
+                try {
+                    const data = await res.json();
+                    errorMsg = data.detail || errorMsg;
+                } catch (e) {
+                    errorMsg = `Сервер тимчасово недоступний (${res.status})`;
+                }
+                throw new Error(errorMsg);
+            }
             const data = await res.json();
-            if (!res.ok) throw new Error(data.detail || 'Помилка OTP');
             
             localStorage.setItem(TOKEN_STORAGE_KEY, data.auth_token);
             hideModal(document.getElementById('otpModal'));
@@ -548,8 +570,17 @@ function setupEventListeners() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ phone_or_email: phoneOrEmail, password: password })
             });
+            if (!res.ok) {
+                let errorMsg = 'Помилка входу';
+                try {
+                    const data = await res.json();
+                    errorMsg = data.detail || errorMsg;
+                } catch (e) {
+                    errorMsg = `Сервер тимчасово недоступний (${res.status})`;
+                }
+                throw new Error(errorMsg);
+            }
             const data = await res.json();
-            if (!res.ok) throw new Error(data.detail || 'Помилка входу');
 
             localStorage.setItem(TOKEN_STORAGE_KEY, data.auth_token);
             showToast('Успішний вхід!', 'success');
@@ -572,8 +603,17 @@ function setupEventListeners() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: email })
             });
+            if (!res.ok) {
+                let errorMsg = 'Помилка';
+                try {
+                    const data = await res.json();
+                    errorMsg = data.detail || errorMsg;
+                } catch (e) {
+                    errorMsg = `Сервер тимчасово недоступний (${res.status})`;
+                }
+                throw new Error(errorMsg);
+            }
             const data = await res.json();
-            if (!res.ok) throw new Error(data.detail || 'Помилка');
             
             currentResetEmail = email;
             hideModal(document.getElementById('forgotPasswordModal'));
@@ -593,8 +633,17 @@ function setupEventListeners() {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ email: currentResetEmail, code: code, new_password: newPassword })
             });
+            if (!res.ok) {
+                let errorMsg = 'Помилка зміни пароля';
+                try {
+                    const data = await res.json();
+                    errorMsg = data.detail || errorMsg;
+                } catch (e) {
+                    errorMsg = `Сервер тимчасово недоступний (${res.status})`;
+                }
+                throw new Error(errorMsg);
+            }
             const data = await res.json();
-            if (!res.ok) throw new Error(data.detail || 'Помилка зміни пароля');
             
             hideModal(document.getElementById('resetPasswordModal'));
             showToast('Пароль успішно змінено! Увійдіть з новим паролем.', 'success');

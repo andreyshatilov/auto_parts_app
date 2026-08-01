@@ -18,10 +18,19 @@ router = APIRouter(
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 def get_password_hash(password: str):
-    return pwd_context.hash(password)
+    try:
+        return pwd_context.hash(password)
+    except Exception:
+        import bcrypt
+        salt = bcrypt.gensalt()
+        return bcrypt.hashpw(password.encode('utf-8'), salt).decode('utf-8')
 
 def verify_password(plain_password: str, hashed_password: str):
-    return pwd_context.verify(plain_password, hashed_password)
+    try:
+        return pwd_context.verify(plain_password, hashed_password)
+    except Exception:
+        import bcrypt
+        return bcrypt.checkpw(plain_password.encode('utf-8'), hashed_password.encode('utf-8'))
 
 def generate_otp():
     return str(random.randint(100000, 999999))
@@ -77,52 +86,63 @@ def get_current_client(
 @router.post("/register", status_code=status.HTTP_201_CREATED)
 def register_client(data: ClientCreate, db: Session = Depends(get_db)):
     """Реєстрація нового клієнта. Створює неактивний акаунт і генерує OTP."""
-    existing_phone = db.query(Client).filter(Client.phone == data.phone).first()
-    if existing_phone:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Клієнт з таким номером телефону вже існує!"
-        )
+    try:
+        existing_phone = db.query(Client).filter(Client.phone == data.phone).first()
+        if existing_phone:
+            raise HTTPException(
+                status_code=status.HTTP_400_BAD_REQUEST,
+                detail="Клієнт з таким номером телефону вже існує!"
+            )
+            
+        if data.email:
+            existing_email = db.query(Client).filter(Client.email == data.email).first()
+            if existing_email:
+                raise HTTPException(
+                    status_code=status.HTTP_400_BAD_REQUEST,
+                    detail="Клієнт з таким Email вже існує!"
+                )
+
+        token = f"token_{uuid.uuid4().hex}"
         
-    existing_email = db.query(Client).filter(Client.email == data.email).first()
-    if existing_email:
+        new_client = Client(
+            first_name=data.first_name,
+            last_name=data.last_name,
+            phone=data.phone,
+            email=data.email,
+            has_messenger=data.has_messenger,
+            hashed_password=get_password_hash(data.password),
+            is_verified=False,
+            auth_token=token
+        )
+        db.add(new_client)
+        db.commit()
+        db.refresh(new_client)
+
+        # Генеруємо OTP
+        if data.email:
+            otp_val = generate_otp()
+            otp_entry = OTPCode(
+                email=data.email,
+                code=otp_val,
+                expires_at=datetime.utcnow() + timedelta(minutes=15)
+            )
+            db.add(otp_entry)
+            db.commit()
+            
+            print(f"========== OTP CODE FOR {data.email} ==========")
+            print(f"CODE: {otp_val}")
+            print(f"=================================================")
+
+        return {"message": "OTP відправлено на email. Акаунт потребує верифікації."}
+    except HTTPException:
+        db.rollback()
+        raise
+    except Exception as e:
+        db.rollback()
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Клієнт з таким Email вже існує!"
+            detail=f"Помилка створення акаунта: {str(e)}"
         )
-
-    token = f"token_{uuid.uuid4().hex}"
-    
-    new_client = Client(
-        first_name=data.first_name,
-        last_name=data.last_name,
-        phone=data.phone,
-        email=data.email,
-        has_messenger=data.has_messenger,
-        hashed_password=get_password_hash(data.password),
-        is_verified=False,
-        auth_token=token
-    )
-    db.add(new_client)
-    db.commit()
-    db.refresh(new_client)
-
-    # Генеруємо OTP
-    otp_val = generate_otp()
-    otp_entry = OTPCode(
-        email=data.email,
-        code=otp_val,
-        expires_at=datetime.utcnow() + timedelta(minutes=15)
-    )
-    db.add(otp_entry)
-    db.commit()
-    
-    # ТИМЧАСОВИЙ ЛОГ ДЛЯ ТЕСТУВАННЯ БЕЗ SMTP
-    print(f"========== OTP CODE FOR {data.email} ==========")
-    print(f"CODE: {otp_val}")
-    print(f"=================================================")
-
-    return {"message": "OTP відправлено на email. Акаунт потребує верифікації."}
 
 
 @router.post("/verify", response_model=AuthTokenResponse)
