@@ -284,6 +284,13 @@ class ClientCreate(BaseModel):
     has_messenger: bool = True
     shipping_address: Optional[str] = None
 
+    @field_validator("password")
+    @classmethod
+    def validate_password_ascii(cls, v: str) -> str:
+        if not v.isascii():
+            raise ValueError("Пароль повинен містити лише англійські літери (латиницю), цифри та спецсимволи!")
+        return v
+
     @field_validator("phone")
     @classmethod
     def validate_phone(cls, v: str) -> str:
@@ -347,6 +354,13 @@ class ResetPassword(BaseModel):
     email: str
     code: str
     new_password: str
+
+    @field_validator("new_password")
+    @classmethod
+    def validate_new_password_ascii(cls, v: str) -> str:
+        if not v.isascii():
+            raise ValueError("Пароль повинен містити лише англійські літери (латиницю), цифри та спецсимволи!")
+        return v
 
 class LoginRequest(BaseModel):
     phone_or_email: str

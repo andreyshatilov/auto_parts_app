@@ -23,25 +23,48 @@ from app.routers import cars, auth, clients, requests, proposals, transfers, ord
 try:
     Base.metadata.create_all(bind=engine)
     
-    # Auto-migration: ensure new columns exist in cars table in Neon PostgreSQL / SQLite
+    # Auto-migration: ensure new/missing columns exist in PostgreSQL / SQLite
     from sqlalchemy import text
     with engine.connect() as conn:
-        cols = [
-            ("generation", "VARCHAR(50)"),
-            ("body_type", "VARCHAR(50)"),
-            ("fuel_type", "VARCHAR(50)"),
-            ("horse_power", "VARCHAR(50)"),
-            ("color_code", "VARCHAR(50)"),
-            ("assembly_plant", "VARCHAR(100)"),
-            ("mileage", "INTEGER DEFAULT 100000"),
-            ("custom_photo_url", "TEXT")
+        migrations = [
+            ("clients", [
+                ("hashed_password", "VARCHAR(255)"),
+                ("middle_name", "VARCHAR(50)"),
+                ("has_messenger", "BOOLEAN DEFAULT TRUE"),
+                ("shipping_address", "TEXT"),
+                ("is_verified", "BOOLEAN DEFAULT FALSE"),
+                ("auth_token", "VARCHAR(64)"),
+                ("completed_orders_count", "INTEGER DEFAULT 0"),
+                ("registered_at", "TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
+            ]),
+            ("cars", [
+                ("generation", "VARCHAR(50)"),
+                ("body_type", "VARCHAR(50)"),
+                ("fuel_type", "VARCHAR(50)"),
+                ("horse_power", "VARCHAR(50)"),
+                ("color_code", "VARCHAR(50)"),
+                ("assembly_plant", "VARCHAR(100)"),
+                ("mileage", "INTEGER DEFAULT 100000"),
+                ("custom_photo_url", "TEXT")
+            ]),
+            ("order_requests", [
+                ("sub_category", "VARCHAR(100)")
+            ]),
+            ("chat_messages", [
+                ("attachment_url", "VARCHAR(255)")
+            ])
         ]
-        for c_name, c_type in cols:
-            try:
-                conn.execute(text(f"ALTER TABLE cars ADD COLUMN {c_name} {c_type};"))
-                conn.commit()
-            except Exception:
-                conn.rollback()
+        for tbl, cols in migrations:
+            for c_name, c_type in cols:
+                try:
+                    conn.execute(text(f"ALTER TABLE {tbl} ADD COLUMN IF NOT EXISTS {c_name} {c_type};"))
+                    conn.commit()
+                except Exception:
+                    try:
+                        conn.execute(text(f"ALTER TABLE {tbl} ADD COLUMN {c_name} {c_type};"))
+                        conn.commit()
+                    except Exception:
+                        conn.rollback()
 
         # Remove legacy numeric fake test VINs and test data entirely
         try:

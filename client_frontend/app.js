@@ -492,6 +492,7 @@ function setupEventListeners() {
         
         if (password.length < 6) return showToast('Пароль має містити мінімум 6 символів', 'error');
         if (password !== confirmPassword) return showToast('Паролі не співпадають!', 'error');
+        if (!/^[\x00-\x7F]+$/.test(password)) return showToast('Пароль повинен містити лише англійські літери (латиницю), цифри та спецсимволи!', 'error');
 
         try {
             const res = await fetch(`${API_BASE_URL}/auth/register`, {
@@ -627,6 +628,7 @@ function setupEventListeners() {
         const code = document.getElementById('resetCodeInput').value.trim();
         const newPassword = document.getElementById('resetNewPasswordInput').value.trim();
         if(!code || newPassword.length < 6) return showToast('Заповніть всі поля (пароль мін 6 симв)', 'error');
+        if (!/^[\x00-\x7F]+$/.test(newPassword)) return showToast('Пароль повинен містити лише англійські літери (латиницю), цифри та спецсимволи!', 'error');
         try {
             const res = await fetch(`${API_BASE_URL}/auth/reset-password`, {
                 method: 'POST',
