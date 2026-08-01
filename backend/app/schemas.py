@@ -333,3 +333,20 @@ class AuthTokenResponse(BaseModel):
     auth_token: str
     client: ClientResponse
 
+
+
+class VerifyOTP(BaseModel):
+    email: str
+    code: str
+
+class ForgotPassword(BaseModel):
+    email: str
+
+class ResetPassword(BaseModel):
+    email: str
+    code: str
+    new_password: str
+
+class LoginRequest(BaseModel):
+    phone_or_email: str
+    password: str
