@@ -1005,6 +1005,7 @@ window.openAdminCarDetailModal = async function(carId) {
 
     document.getElementById('adminDetailCarTitle').textContent = `${car.brand} ${car.model}`;
     document.getElementById('adminDetailCarVin').textContent = `VIN: ${car.vin || 'Немає'}`;
+    document.getElementById('adminDetailCarModification').textContent = car.modification || '';
     
     document.getElementById('adminDetailCarYear').textContent = car.release_date || '-';
     

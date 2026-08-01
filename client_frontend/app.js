@@ -991,15 +991,17 @@ function getBrandEmblem(brandName) {
     if (!brandName) return '';
     const b = brandName.trim();
     let imgName = b.toLowerCase().replace(/ /g, '-');
-    if (imgName === 'mercedes' || imgName === 'mercedes-benz') imgName = 'mercedes';
+    if (imgName === 'mercedes' || imgName === 'mercedes-benz') imgName = 'mercedes-benz';
     if (imgName === 'vw') imgName = 'volkswagen';
     if (imgName === 'alfa-romeo') imgName = 'alfa-romeo';
+    if (imgName === 'chevrolet') imgName = 'chevrolet';
+    if (imgName === 'land-rover') imgName = 'land-rover';
     
     // Fallback HTML if image fails to load
     const fallbackHtml = `<div style="display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:12px;background:#f1f5f9;color:#0f172a;font-weight:800;font-size:11px; text-align:center; overflow:hidden; border: 1px solid #e2e8f0; margin:auto;">${b.substring(0,5)}</div>`;
     
     const fallbackHtmlSafe = fallbackHtml.replace(/"/g, '&quot;');
-    return `<img src="https://www.car-logos.org/wp-content/uploads/maker/${imgName}.png" alt="${b}" style="width:100%; height:100%; object-fit:contain; border-radius:12px; max-width:48px; max-height:48px;" onerror="this.outerHTML='${fallbackHtmlSafe}'">`;
+    return `<img src="https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/thumb/${imgName}.png" alt="${b}" style="width:100%; height:100%; object-fit:contain; border-radius:12px; max-width:48px; max-height:48px;" onerror="this.outerHTML='${fallbackHtmlSafe}'">`;
 }
 
 function openVinRecommendationModal(carId, carName) {
@@ -1280,8 +1282,6 @@ async function submitOrderFromProposal(e, proposalId, carId) {
         showToast(err.message, 'error');
     }
 }
-
-async 
 
 /**
  * Renders the Order History view (completed or processing orders).
