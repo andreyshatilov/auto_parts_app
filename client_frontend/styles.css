@@ -676,3 +676,8 @@ input:focus, select:focus, textarea:focus {
 .fade-in-view {
     animation: fadeInView 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+.password-wrapper { position: relative; display: flex; align-items: center; width: 100%; } 
+.password-wrapper input { width: 100%; padding-right: 40px !important; } 
+.password-toggle-btn { position: absolute; right: 10px; background: none; border: none; color: var(--text-muted); cursor: pointer; padding: 5px; display: flex; align-items: center; justify-content: center; } 
+.password-toggle-btn:hover { color: var(--primary); }

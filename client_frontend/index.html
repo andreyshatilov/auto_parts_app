@@ -49,7 +49,22 @@
                     
                     <div class="form-group">
                         <label for="regPassword">Пароль <span class="req">*</span></label>
-                        <input type="password" id="regPassword" placeholder="Мінімум 6 символів" required minlength="6">
+                        <div class="password-wrapper">
+                            <input type="password" id="regPassword" placeholder="Мінімум 6 символів" required minlength="6">
+                            <button type="button" class="password-toggle-btn" onclick="togglePassword('regPassword', this)" aria-label="Показати пароль">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="regConfirmPassword">Підтвердіть пароль <span class="req">*</span></label>
+                        <div class="password-wrapper">
+                            <input type="password" id="regConfirmPassword" placeholder="Повторіть пароль" required minlength="6">
+                            <button type="button" class="password-toggle-btn" onclick="togglePassword('regConfirmPassword', this)" aria-label="Показати пароль">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            </button>
+                        </div>
                     </div>
 
                     <div class="form-group checkbox-group">
@@ -72,7 +87,12 @@
                     
                     <div class="form-group">
                         <label for="loginPassword">Пароль <span class="req">*</span></label>
-                        <input type="password" id="loginPassword" placeholder="Ваш пароль" required>
+                        <div class="password-wrapper">
+                            <input type="password" id="loginPassword" placeholder="Ваш пароль" required>
+                            <button type="button" class="password-toggle-btn" onclick="togglePassword('loginPassword', this)" aria-label="Показати пароль">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                            </button>
+                        </div>
                     </div>
 
                     <div style="text-align: right; margin-bottom: 16px;">
@@ -1321,7 +1341,12 @@
             <div style="padding-top: 15px;">
                 <p style="font-size: 14px; margin-bottom: 15px; color: var(--text-muted);">Введіть код з листа та новий пароль.</p>
                 <input type="text" id="resetCodeInput" placeholder="Код скидання" style="width:100%; padding: 12px; margin-bottom: 10px; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;">
-                <input type="password" id="resetNewPasswordInput" placeholder="Новий пароль (мінімум 6 символів)" style="width:100%; padding: 12px; margin-bottom: 15px; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;">
+                <div class="password-wrapper" style="margin-bottom: 15px;">
+                    <input type="password" id="resetNewPasswordInput" placeholder="Новий пароль (мінімум 6 символів)" style="width:100%; padding: 12px; background: rgba(255,255,255,0.05); color: white; border: 1px solid rgba(255,255,255,0.2); border-radius: 8px;">
+                    <button type="button" class="password-toggle-btn" onclick="togglePassword(this)" aria-label="Показати пароль" style="color:white;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
+                    </button>
+                </div>
                 <button class="btn btn-primary" onclick="submitResetPassword()" style="width:100%; padding: 12px;">Зберегти пароль</button>
             </div>
         </div>
