@@ -274,12 +274,13 @@ class ChatMessageResponse(BaseModel):
 
 # --- СХЕМИ КЛІЄНТА ---
 
-class ClientRegister(BaseModel):
+class ClientCreate(BaseModel):
     first_name: str = Field(..., min_length=2, max_length=50)
     last_name: str = Field(..., min_length=2, max_length=50)
     middle_name: Optional[str] = None
     phone: str
     email: Optional[str] = None
+    password: str = Field(..., min_length=6)
     has_messenger: bool = True
     shipping_address: Optional[str] = None
 
