@@ -1822,18 +1822,12 @@ window.addPartFromSubCatalog = function(partName) {
     switchNavTab('request');
 };
 
-window.togglePassword = function(id_or_btn, btn_optional) {
-    let btn, inputId;
-    if (btn_optional) {
-        inputId = id_or_btn;
-        btn = btn_optional;
-    } else {
-        btn = id_or_btn;
-        const wrapper = btn.closest('.password-wrapper');
-        const input = wrapper.querySelector('input');
-        inputId = input.id;
-    }
-    const input = document.getElementById(inputId);
+// --- Password visibility toggle ---
+function togglePassword(btnOrId, btnEl) {
+    var btn = btnEl || btnOrId;
+    var wrapper = btn.closest('.password-wrapper');
+    if (!wrapper) return;
+    var input = wrapper.querySelector('input');
     if (!input) return;
     if (input.type === 'password') {
         input.type = 'text';
@@ -1842,4 +1836,6 @@ window.togglePassword = function(id_or_btn, btn_optional) {
         input.type = 'password';
         btn.innerHTML = '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
     }
-};
+}
+window.togglePassword = togglePassword;
+
