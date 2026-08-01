@@ -154,9 +154,9 @@ def register_client(data: ClientCreate, db: Session = Depends(get_db)):
             db.add(otp_entry)
             db.commit()
             
-            print(f"========== OTP CODE FOR {target_client.email} ==========")
-            print(f"CODE: {otp_val}")
-            print(f"=================================================")
+            print(f"========== OTP CODE FOR {target_client.email} ==========", flush=True)
+            print(f"CODE: {otp_val}", flush=True)
+            print(f"=================================================", flush=True)
 
         return {"message": "OTP відправлено на email. Акаунт потребує верифікації."}
     except HTTPException:
@@ -231,9 +231,9 @@ def forgot_password(data: ForgotPassword, db: Session = Depends(get_db)):
     db.add(otp_entry)
     db.commit()
     
-    print(f"========== RESET PASSWORD OTP FOR {data.email} ==========")
-    print(f"CODE: {otp_val}")
-    print(f"=================================================")
+    print(f"========== RESET PASSWORD OTP FOR {data.email} ==========", flush=True)
+    print(f"CODE: {otp_val}", flush=True)
+    print(f"=================================================", flush=True)
     
     return {"message": "Код для відновлення відправлено на email."}
 
