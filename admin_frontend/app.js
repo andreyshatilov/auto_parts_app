@@ -137,21 +137,24 @@ function setupEventListeners() {
         e.preventDefault();
         if (!activeAdminChatRequestId) return;
         const msg = document.getElementById('adminChatInput').value.trim();
+        if (!msg) return;
 
         try {
-            const token = localStorage.getItem('admin_token');
             const res = await fetch(`${API_BASE_URL}/chat/messages?sender_type=manager`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'X-Auth-Token': token },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ request_id: activeAdminChatRequestId, message: msg })
             });
-            const data = await res.json();
-            if (!res.ok) throw new Error(data.detail || 'Помилка');
+            if (!res.ok) {
+                let errMsg = 'Помилка відправки';
+                try { const d = await res.json(); errMsg = d.detail || errMsg; } catch(e) {}
+                throw new Error(errMsg);
+            }
 
             document.getElementById('adminChatInput').value = '';
             await loadAdminChatMessages(activeAdminChatRequestId);
         } catch (err) {
-            showToast(` ${err.message}`, 'error');
+            showToast(err.message, 'error');
         }
     });
 
@@ -954,12 +957,11 @@ window.handleChatImageUpload = handleChatImageUpload;
 
 window.uploadAndSendadminChatInputFile = async function(file) {
     if(!file || !activeAdminChatRequestId) return;
-    const token = localStorage.getItem(TOKEN_STORAGE_KEY) || localStorage.getItem('admin_token');
     handleChatImageUpload(file, async (url) => {
         try {
             const res = await fetch(`${API_BASE_URL}/chat/messages?sender_type=manager`, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json', 'X-Auth-Token': token },
+                headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ request_id: activeAdminChatRequestId, message: '📷 Фото', attachment_url: url })
             });
             if(!res.ok) throw new Error('Помилка відправки');
