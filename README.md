@@ -213,6 +213,7 @@ auto_parts_app/
 ### Частые ошибки при деплое:
 * **`ModuleNotFoundError`** — забыли добавить библиотеку в `requirements.txt`.
 * **`ImportError`** — имя класса в `schemas.py` не совпадает с тем, что импортируется в роутере.
+* **`(trapped) error reading bcrypt version`** — предупреждение в логах из-за несовместимости `passlib` и `bcrypt` версии 4+. Решается фиксацией `bcrypt==3.2.2` в `requirements.txt`.
 * **Билд проходит, но сервер падает** — смотрите логи на Render, читайте `Traceback` снизу вверх.
 
 ---
