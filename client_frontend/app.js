@@ -317,6 +317,8 @@ function initYearSelect() {
     }
 }
 
+let lastVinDecodeData = null;
+
 function setupEventListeners() {
     let lastDecodedVin = '';
     clientVinInput.addEventListener('input', async (e) => {
@@ -404,7 +406,10 @@ function setupEventListeners() {
                             if (transSelect) transSelect.value = data.transmission;
                         }
 
-                        showToast(` ${data.brand} ${data.model || ''} ${data.release_year ? '(' + data.release_year + ')' : ''} ╤А╨╛╨╖╨┐╤Ц╨╖╨╜╨░╨╜╨╛ ╨╖╨░ VIN!`);
+                        // Зберігаємо повні дані VIN-декодера для використання при створенні авто
+                        lastVinDecodeData = data;
+
+                        showToast(` ${data.brand} ${data.model || ''} ${data.release_year ? '(' + data.release_year + ')' : ''} розпізнано за VIN!`);
                     }
                 }
             } catch (err) {
@@ -459,6 +464,15 @@ function setupEventListeners() {
                     if (decoded.release_year) updatePayload.release_date = decoded.release_year;
                     if (decoded.engine) updatePayload.engine_code = decoded.engine;
                     if (decoded.transmission) updatePayload.transmission_type = decoded.transmission;
+                    if (decoded.generation) updatePayload.generation = decoded.generation;
+                    if (decoded.body_type) updatePayload.body_type = decoded.body_type;
+                    if (decoded.drive_type) updatePayload.drive_type = decoded.drive_type;
+                    if (decoded.horse_power) updatePayload.horse_power = decoded.horse_power;
+                    if (decoded.trim) updatePayload.modification = decoded.trim;
+                    if (decoded.fuel) updatePayload.fuel_type = decoded.fuel;
+                    // Завод збірки
+                    const plantParts = [decoded.plant_city, decoded.plant_country].filter(Boolean);
+                    if (plantParts.length > 0) updatePayload.assembly_plant = plantParts.join(', ');
                 }
 
                 const res = await fetch(`${API_BASE_URL}/cars/${carId}`, {
@@ -737,6 +751,19 @@ function setupEventListeners() {
             transmission_type: document.getElementById('clientTransInput').value || null,
             mileage: mileageVal
         };
+
+        // Додаємо дані з VIN-декодера (серія, привід, потужність, завод, тип кузова, паливо)
+        if (lastVinDecodeData && lastVinDecodeData.is_decoded) {
+            if (lastVinDecodeData.generation && !carData.generation) carData.generation = lastVinDecodeData.generation;
+            if (lastVinDecodeData.body_type && !carData.body_type) carData.body_type = lastVinDecodeData.body_type;
+            if (lastVinDecodeData.drive_type) carData.drive_type = lastVinDecodeData.drive_type;
+            if (lastVinDecodeData.horse_power) carData.horse_power = lastVinDecodeData.horse_power;
+            if (lastVinDecodeData.fuel) carData.fuel_type = lastVinDecodeData.fuel;
+            if (lastVinDecodeData.trim && !carData.modification) carData.modification = lastVinDecodeData.trim;
+            const plantParts = [lastVinDecodeData.plant_city, lastVinDecodeData.plant_country].filter(Boolean);
+            if (plantParts.length > 0) carData.assembly_plant = plantParts.join(', ');
+        }
+
         try {
             const res = await fetch(`${API_BASE_URL}/clients/me/cars`, {
                 method: 'POST',
