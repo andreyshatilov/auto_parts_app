@@ -215,17 +215,36 @@ function switchNavTab(tabName) {
     document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.view-content').forEach(v => v.style.display = 'none');
 
+    const btnGarage = document.getElementById('navTabGarage');
+    const btnRequests = document.getElementById('navTabRequests');
+    const btnChat = document.getElementById('navTabChat');
+    const btnMyRequests = document.getElementById('navTabMyRequests');
+    const btnOrders = document.getElementById('navTabOrders');
+    const btnProfile = document.getElementById('navTabProfile');
+
     if (tabName === 'garage') {
-        document.querySelectorAll('.nav-item')[0].classList.add('active');
+        if (btnGarage) btnGarage.classList.add('active');
         document.getElementById('viewGarage').style.display = 'block';
     } else if (tabName === 'requests') {
-        document.querySelectorAll('.nav-item')[1].classList.add('active');
+        if (btnRequests) btnRequests.classList.add('active');
         document.getElementById('viewRequests').style.display = 'block';
+    } else if (tabName === 'chat') {
+        if (btnChat) btnChat.classList.add('active');
+        document.getElementById('viewChat').style.display = 'block';
+        initTabChatView();
+    } else if (tabName === 'my_requests') {
+        if (btnMyRequests) btnMyRequests.classList.add('active');
+        const v = document.getElementById('viewMyRequests');
+        if (v) v.style.display = 'block';
+        const token = localStorage.getItem(TOKEN_STORAGE_KEY);
+        if (token) loadMyRequests(token);
     } else if (tabName === 'orders') {
-        document.querySelectorAll('.nav-item')[2].classList.add('active');
+        if (btnOrders) btnOrders.classList.add('active');
         document.getElementById('viewOrders').style.display = 'block';
+        const token = localStorage.getItem(TOKEN_STORAGE_KEY);
+        if (token) loadMyOrders(token);
     } else if (tabName === 'profile') {
-        document.querySelectorAll('.nav-item')[3].classList.add('active');
+        if (btnProfile) btnProfile.classList.add('active');
         document.getElementById('viewProfile').style.display = 'block';
     }
 }
@@ -1942,3 +1961,227 @@ function togglePassword(btnOrId, btnEl) {
 }
 window.togglePassword = togglePassword;
 
+
+
+// Helper to select quick presets for simplified request form
+window.selectQuickPreset = function(cardEl, presetText) {
+    document.querySelectorAll('.preset-card-option').forEach(c => {
+        c.style.border = '1.5px solid var(--border-color)';
+        c.style.background = '#f8fafc';
+        const check = c.querySelector('.preset-check');
+        if (check) check.style.display = 'none';
+    });
+    cardEl.style.border = '2px solid #2563eb';
+    cardEl.style.background = '#eff6ff';
+    const check = cardEl.querySelector('.preset-check');
+    if (check) check.style.display = 'inline';
+
+    const reqTextArea = document.getElementById('requestText');
+    if (reqTextArea) {
+        reqTextArea.value = presetText;
+    }
+};
+
+let currentTabChatRequestId = null;
+let cachedRequestsList = [];
+
+// Initialize Chat Tab view
+window.initTabChatView = async function() {
+    const token = localStorage.getItem(TOKEN_STORAGE_KEY);
+    if (!token) return;
+    try {
+        const res = await fetch(`${API_BASE_URL}/requests/my`, {
+            headers: { 'X-Auth-Token': token }
+        });
+        if (!res.ok) return;
+        cachedRequestsList = await res.json();
+        
+        const select = document.getElementById('tabChatRequestSelect');
+        if (!select) return;
+
+        if (cachedRequestsList.length === 0) {
+            select.innerHTML = '<option value="">У вас поки немає підборів</option>';
+            document.getElementById('tabChatMessagesContainer').innerHTML = `
+                <div style="text-align:center; color:var(--text-muted); padding:40px 16px;">
+                    💬 У вас поки немає створених запитів.<br>Створіть запит у вкладці <strong>«Підбір»</strong>!
+                </div>
+            `;
+            return;
+        }
+
+        select.innerHTML = cachedRequestsList.map(r => `
+            <option value="${r.id}" ${currentTabChatRequestId == r.id ? 'selected' : ''}>
+                Запит #${r.id} — ${escapeHtml(r.car ? r.car.brand + ' ' + r.car.model : 'Авто')} (${r.proposal ? '📋 Є КОШТОРИС' : 'В обробці'})
+            </option>
+        `).join('');
+
+        if (!currentTabChatRequestId || !cachedRequestsList.find(r => r.id == currentTabChatRequestId)) {
+            currentTabChatRequestId = cachedRequestsList[0].id;
+        }
+
+        select.value = currentTabChatRequestId;
+        await loadTabChatMessages(currentTabChatRequestId);
+    } catch(err) {
+        console.error('initTabChatView error:', err);
+    }
+};
+
+window.switchChatRequest = async function(reqId) {
+    if (!reqId) return;
+    currentTabChatRequestId = reqId;
+    await loadTabChatMessages(reqId);
+};
+
+// Load messages and render Proposal (Кошторис) inside Chat
+window.loadTabChatMessages = async function(requestId) {
+    if (!requestId) return;
+    const container = document.getElementById('tabChatMessagesContainer');
+    if (!container) return;
+
+    try {
+        const reqObj = cachedRequestsList.find(r => r.id == requestId);
+        const res = await fetch(`${API_BASE_URL}/chat/messages/${requestId}`);
+        let messages = [];
+        if (res.ok) messages = await res.json();
+
+        let html = '';
+
+        // Initial Client Request Header
+        if (reqObj) {
+            html += `
+                <div style="background: #f1f5f9; border: 1px solid #cbd5e1; padding: 12px; border-radius: 12px; font-size: 13px; margin-bottom: 6px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 4px;">
+                        <strong style="color: var(--primary);">🚘 ${escapeHtml(reqObj.car ? reqObj.car.brand + ' ' + reqObj.car.model : 'Авто')}</strong>
+                        <span style="font-size:11px; color:var(--text-muted);">${formatDate(reqObj.created_at)}</span>
+                    </div>
+                    <div style="color: var(--text-main); font-weight: 600;">"${escapeHtml(reqObj.client_message)}"</div>
+                </div>
+            `;
+        }
+
+        // Chat messages
+        messages.forEach(m => {
+            const isMe = m.sender_type === 'client';
+            html += `
+                <div style="align-self: ${isMe ? 'flex-end' : 'flex-start'}; background: ${isMe ? '#dbeafe' : '#ffffff'}; border: 1px solid ${isMe ? '#93c5fd' : '#e2e8f0'}; padding: 10px 14px; border-radius: 14px; max-width: 85%; font-size: 13px; color: var(--text-main); box-shadow: 0 2px 5px rgba(0,0,0,0.03);">
+                    <div style="font-size: 10px; color: var(--text-muted); margin-bottom: 2px; font-weight: 700;">${isMe ? 'Ви' : '👨‍🔧 Експерт МЗ'} • ${formatDate(m.created_at)}</div>
+                    <div>${escapeHtml(m.message)}</div>
+                    ${m.attachment_url ? `<div style="margin-top:6px;"><a href="${escapeHtml(m.attachment_url)}" target="_blank"><img src="${escapeHtml(m.attachment_url)}" style="max-width:100%; border-radius:8px;"></a></div>` : ''}
+                </div>
+            `;
+        });
+
+        // !!! CRITICAL: RENDER PROPOSAL (КОШТОРИС) DIRECTLY IN CHAT !!!
+        if (reqObj && reqObj.proposal) {
+            const prop = reqObj.proposal;
+            html += `
+                <div style="background: #ffffff; border: 2px solid #2563eb; padding: 14px; border-radius: 16px; margin: 10px 0; box-shadow: 0 10px 25px rgba(37,99,235,0.12);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; border-bottom: 1px solid #e2e8f0; padding-bottom: 8px; margin-bottom: 10px;">
+                        <h4 style="font-size: 15px; font-weight: 800; color: #1e40af; margin: 0; display: flex; align-items: center; gap: 6px;">
+                            📋 Кошторис від Експерта #${prop.id}
+                        </h4>
+                        <span style="background: #dbeafe; color: #1d4ed8; font-size: 11px; font-weight: 800; padding: 3px 8px; border-radius: 12px;">ГОТОВО ДО ЗАМОВЛЕННЯ</span>
+                    </div>
+
+                    ${prop.manager_comment ? `<div style="font-size:12px; color:#475569; background:#f8fafc; padding:8px 10px; border-radius:8px; margin-bottom:10px; border-left:3px solid #2563eb;">💬 <strong>Коментар фахівця:</strong> ${escapeHtml(prop.manager_comment)}</div>` : ''}
+
+                    <form onsubmit="submitOrderFromProposal(event, ${prop.id}, ${reqObj.car_id})">
+                        <div style="display:flex; flex-direction:column; gap:8px;">
+                            ${prop.items.map((item, idx) => `
+                                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px;">
+                                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom: 6px;">
+                                        <span style="font-weight: 700; font-size: 13px; color: var(--text-main);">${idx+1}. ${escapeHtml(item.category_name)}</span>
+                                        ${item.oem_number ? `<span style="font-size: 10px; background: #dcfce7; color: #15803d; font-weight: 700; padding: 2px 6px; border-radius: 6px;">OE #${escapeHtml(item.oem_number)}</span>` : ''}
+                                    </div>
+                                    <div style="display:flex; flex-direction:column; gap:4px;">
+                                        ${item.alternatives.map((alt, aIdx) => `
+                                            <label style="display:flex; justify-content:space-between; align-items:center; background:#ffffff; border:1px solid #cbd5e1; padding:8px 10px; border-radius:8px; font-size:12px; cursor:pointer;">
+                                                <div style="display:flex; align-items:center; gap:8px;">
+                                                    <input type="radio" name="item_${item.id}" value="${alt.brand}|${alt.part_number}|${alt.price}|${item.category_name}|${item.oem_number || ''}" ${aIdx === 0 ? 'checked' : ''}>
+                                                    <span><strong>${escapeHtml(alt.brand)}</strong> (${escapeHtml(alt.part_number)})</span>
+                                                </div>
+                                                <span style="color:#16a34a; font-weight:800; font-size:13px;">${alt.price} грн</span>
+                                            </label>
+                                        `).join('')}
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+
+                        <div style="margin-top: 10px; font-size: 12px; display: flex; flex-direction: column; gap: 6px;">
+                            <label style="font-weight:700; color:var(--text-main);">Доставка Новою Поштою:</label>
+                            <input type="text" name="shipping_address" placeholder="м. Київ, Відділення №1" value="${escapeHtml(currentClient?.shipping_address || '')}" required style="padding: 8px 10px; font-size: 12px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff;">
+
+                            <label style="font-weight:700; color:var(--text-main); margin-top: 4px;">Спосіб оплати:</label>
+                            <select name="payment_method" style="padding: 8px 10px; font-size: 12px; border-radius: 8px; border: 1px solid #cbd5e1; background: #fff;">
+                                <option value="cash_on_delivery">Накладений платіж Нової Пошти</option>
+                                <option value="fop_prepayment">Передплата на рахунок ФОП (IBAN)</option>
+                            </select>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 12px; padding: 12px; font-size: 14px; font-weight: 800; border-radius: 10px;">
+                            🛒 Оформити замовлення з кошторису
+                        </button>
+                    </form>
+                </div>
+            `;
+        }
+
+        container.innerHTML = html;
+        container.scrollTop = container.scrollHeight;
+    } catch(err) {
+        console.error('loadTabChatMessages error:', err);
+    }
+};
+
+window.sendTabChatMessage = async function(e) {
+    e.preventDefault();
+    if (!currentTabChatRequestId) {
+        showToast('Оберіть запит для відправки повідомлення', 'error');
+        return;
+    }
+    const input = document.getElementById('tabChatInput');
+    const msg = input.value.trim();
+    if (!msg) return;
+
+    try {
+        const res = await fetch(`${API_BASE_URL}/chat/messages?sender_type=client`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ request_id: currentTabChatRequestId, message: msg })
+        });
+        if (!res.ok) throw new Error('Помилка відправки');
+
+        input.value = '';
+        await loadTabChatMessages(currentTabChatRequestId);
+    } catch(err) {
+        showToast(err.message, 'error');
+    }
+};
+
+window.uploadAndSendTabChatFile = async function(file) {
+    if (!file || !currentTabChatRequestId) return;
+    try {
+        showToast('Завантаження фото...', 'info');
+        const formData = new FormData();
+        formData.append('file', file);
+        const upRes = await fetch(`${API_BASE_URL}/chat/upload-photo`, {
+            method: 'POST',
+            body: formData
+        });
+        if (!upRes.ok) throw new Error('Помилка завантаження фото');
+        const upData = await upRes.json();
+
+        const res = await fetch(`${API_BASE_URL}/chat/messages?sender_type=client`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ request_id: currentTabChatRequestId, message: '📷 Фото', attachment_url: upData.url })
+        });
+        if (!res.ok) throw new Error('Помилка надсилання');
+
+        await loadTabChatMessages(currentTabChatRequestId);
+        showToast('Фото надіслано!');
+    } catch(err) {
+        showToast(err.message, 'error');
+    }
+};
