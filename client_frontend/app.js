@@ -1894,7 +1894,10 @@ const SUB_CATALOGS = {
 };
 
 window.openSubCatalog = function(catKey) {
-    if (!currentDetailCarId) return showToast('Спочатку оберіть авто в гаражі!', 'error');
+    const reqCarSelect = document.getElementById('requestCarSelect');
+    if (!currentDetailCarId && (!reqCarSelect || !reqCarSelect.value)) {
+        return showToast('Спочатку додайте або оберіть авто в гаражі!', 'error');
+    }
     const cat = SUB_CATALOGS[catKey];
     if (!cat) return;
     
@@ -1941,7 +1944,7 @@ window.addPartFromSubCatalog = function(partName) {
     }
     
     showToast('Деталь додано до запиту!', 'success');
-    switchNavTab('request');
+    switchNavTab('requests');
 };
 
 // --- Password visibility toggle ---
