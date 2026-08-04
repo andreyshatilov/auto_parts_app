@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css?v=36.0">
+    <link rel="stylesheet" href="styles.css?v=37.0">
 </head>
 <body>
     <div class="mobile-frame">
@@ -924,123 +924,129 @@
         </div>
     </div>
 
-    <!-- 🚘 МОДАЛЬНЕ ВІКНО: ДОДАТИ АВТО В ГАРАЖ -->
+
+
+    <!-- 🚘 МОДАЛЬНЕ ВІКНО: ДОДАТИ АВТО В ГАРАЖ (Простий зрозумілий інтерфейс) -->
     <div id="addNewCarModal" class="modal-backdrop" style="display: none; align-items:center; justify-content:center; padding:16px;">
-        <div class="card modal-content" style="max-width: 580px; width: 100%; max-height: 90vh; overflow-y: auto; background: var(--bg-card); color: var(--text-main); border-radius: 16px; padding: 20px; position:relative;">
+        <div class="card modal-content" style="max-width: 520px; width: 100%; max-height: 90vh; overflow-y: auto; background: var(--bg-card); color: var(--text-main); border-radius: 16px; padding: 20px; position:relative;">
             <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:12px; margin-bottom:16px;">
                 <div style="display:flex; align-items:center; gap:12px;">
                     <button onclick="closeAddNewCarModal()" class="ios-back-btn">‹ Назад</button>
-                    <h2 style="font-size:18px; font-weight:800; color:var(--text-main); margin:0;">Додати авто в гараж</h2>
+                    <h2 style="font-size:18px; font-weight:800; color:var(--text-main); margin:0;">Додати авто</h2>
                 </div>
             </div>
 
-            <form id="addGarageCarForm" autocomplete="off" style="margin-top: 10px; display:flex; flex-direction:column; gap:10px;">
-                <div class="form-group">
-                    <label for="clientVinInput">VIN-код (17 символів, автозаповнення )</label>
-                    <div class="vin-input-wrapper">
-                        <input type="text" id="clientVinInput" placeholder="17 символів (введіть для автопідбору)">
-                        <span class="vin-counter" id="clientVinCounter">0/17</span>
+            <form id="addGarageCarForm" autocomplete="off" style="margin-top: 10px; display:flex; flex-direction:column; gap:12px;">
+                
+                <!-- ВАРІАНТ 1: ВВЕДЕННЯ VIN (НАЙПРОСТІШЕ) -->
+                <div style="background: #eff6ff; border: 1.5px solid #bfdbfe; border-radius: 12px; padding: 14px;">
+                    <label for="clientVinInput" style="font-weight: 700; color: var(--primary); font-size: 14px; display: flex; justify-content: space-between; align-items: center;">
+                        <span>🔍 За VIN-кодом (Найпростіше)</span>
+                        <span class="vin-counter" id="clientVinCounter" style="font-size:12px; font-weight:600;">0/17</span>
+                    </label>
+                    <div class="vin-input-wrapper" style="margin-top: 6px;">
+                        <input type="text" id="clientVinInput" placeholder="Введіть 17 символів з техпаспорта" style="font-size: 14px; font-weight: 600; padding: 10px 12px; border-radius: 8px; border: 1px solid #93c5fd; background: #ffffff;">
+                    </div>
+                    <div style="font-size: 11px; color: #475569; margin-top: 6px;">
+                        💡 Якщо ввести VIN — марка, модель, рік та двигун заповняться <strong>автоматично</strong>!
                     </div>
                 </div>
 
+                <div style="text-align: center; font-size: 12px; font-weight: 700; color: var(--text-muted); margin: 2px 0;">— АБО ОБЕРІТЬ ВРУЧНУ —</div>
+
+                <!-- ВАРІАНТ 2: МАРКА І МОДЕЛЬ -->
                 <div class="form-row" style="display:flex; gap:8px;">
                     <div class="form-group" style="flex:1;">
-                        <label for="clientBrandSelect">Марка авто <span class="req">*</span></label>
-                        <select id="clientBrandSelect" required>
-                            <option value="">Завантаження марок...</option>
+                        <label for="clientBrandSelect" style="font-size: 13px; font-weight: 700;">Марка <span class="req">*</span></label>
+                        <select id="clientBrandSelect" required style="font-size: 14px; padding: 10px;">
+                            <option value="">Оберіть марку...</option>
                         </select>
                     </div>
                     <div class="form-group" style="flex:1;">
-                        <label for="clientModelSelect">Модель авто <span class="req">*</span></label>
-                        <select id="clientModelSelect" required disabled>
-                            <option value="">Спочатку оберіть марку</option>
+                        <label for="clientModelSelect" style="font-size: 13px; font-weight: 700;">Модель <span class="req">*</span></label>
+                        <select id="clientModelSelect" required disabled style="font-size: 14px; padding: 10px;">
+                            <option value="">Спочатку марка</option>
                         </select>
                     </div>
                 </div>
 
-                <div class="form-row" id="customBrandModelRow" style="display:none; gap:8px; margin-top:8px;">
+                <div class="form-row" id="customBrandModelRow" style="display:none; gap:8px;">
                     <div class="form-group" id="customBrandGroup" style="flex:1; display:none;">
-                        <label for="clientCustomBrandInput">Власний бренд / Марка <span class="req">*</span></label>
-                        <input type="text" id="clientCustomBrandInput" placeholder="наприклад: Lada, Bugatti">
+                        <label for="clientCustomBrandInput" style="font-size: 12px;">Власний бренд <span class="req">*</span></label>
+                        <input type="text" id="clientCustomBrandInput" placeholder="наприклад: Lada">
                     </div>
                     <div class="form-group" id="customModelGroup" style="flex:1; display:none;">
-                        <label for="clientCustomModelInput">Власна модель <span class="req">*</span></label>
-                        <input type="text" id="clientCustomModelInput" placeholder="наприклад: 2107, Chiron">
+                        <label for="clientCustomModelInput" style="font-size: 12px;">Власна модель <span class="req">*</span></label>
+                        <input type="text" id="clientCustomModelInput" placeholder="наприклад: 2107">
                     </div>
                 </div>
 
                 <div class="form-row" style="display:flex; gap:8px;">
                     <div class="form-group" style="flex:1;">
-                        <label for="clientYearSelect">Рік випуску</label>
-                        <select id="clientYearSelect">
+                        <label for="clientYearSelect" style="font-size: 13px;">Рік випуску</label>
+                        <select id="clientYearSelect" style="font-size: 13px; padding: 8px;">
                             <option value="">Не вказано</option>
                         </select>
                     </div>
                     <div class="form-group" style="flex:1;">
-                        <label for="clientFuelSelect">Тип палива</label>
-                        <select id="clientFuelSelect">
-                            <option value="">Не вказано</option>
-                            <option value="Бензин">Бензин</option>
-                            <option value="Дизель">Дизель</option>
-                            <option value="Газ / Бензин (ГБО)">Газ / Бензин (ГБО)</option>
-                            <option value="Гібрид">Гібрид (Hybrid)</option>
-                            <option value="Електро">Електро (EV)</option>
-                        </select>
+                        <label for="clientMileageInput" style="font-size: 13px;">Пробіг (км)</label>
+                        <input type="number" id="clientMileageInput" placeholder="напр. 150000" min="0" style="font-size: 13px; padding: 8px;">
                     </div>
                 </div>
 
-                <div class="form-row" style="display:flex; gap:8px;">
-                    <div class="form-group" style="flex:1;">
-                        <label for="clientBodySelect">Тип кузова</label>
-                        <select id="clientBodySelect">
-                            <option value="">Не вказано</option>
-                            <option value="Седан">Седан</option>
-                            <option value="Хетчбек">Хетчбек</option>
-                            <option value="Універсал">Універсал</option>
-                            <option value="Кросовер / Позашляховик">Кросовер / Позашляховик</option>
-                            <option value="Купе">Купе</option>
-                            <option value="Кабріолет">Кабріолет</option>
-                            <option value="Мінівен">Мінівен</option>
-                            <option value="Пікап">Пікап</option>
-                        </select>
-                    </div>
-                    <div class="form-group" style="flex:1;">
-                        <label for="clientGenInput">Поколення / Код кузова</label>
-                        <input type="text" id="clientGenInput" placeholder="напр. B8, E60, W212, Mk7...">
-                    </div>
-                    <div class="form-group" style="flex:1;">
-                        <label for="clientRestyleSelect">Виконання</label>
-                        <select id="clientRestyleSelect">
-                            <option value="">Не вказано</option>
-                            <option value="Дорестайлінг">Дорестайлінг (Pre-facelift)</option>
-                            <option value="Рестайлінг">Рестайлінг (Facelift / LCI)</option>
-                        </select>
-                    </div>
-                </div>
+                <!-- ДОДАТКОВІ ПОЛЯ СХОВАНІ В ТАБ/АКОРДЕОН ДЛЯ ПРОСТОТИ -->
+                <details style="margin-top: 4px; background: #f8fafc; border: 1px solid var(--border-color); border-radius: 10px; padding: 10px;">
+                    <summary style="font-size: 12px; font-weight: 700; color: var(--primary); cursor: pointer;">➕ Додаткові характеристики (двигун, КПП, пальне)</summary>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 10px;">
+                        <div class="form-row" style="display:flex; gap:8px;">
+                            <div class="form-group" style="flex:1;">
+                                <label for="clientFuelSelect" style="font-size: 11px;">Пальне</label>
+                                <select id="clientFuelSelect" style="font-size: 12px;">
+                                    <option value="">Не вказано</option>
+                                    <option value="Бензин">Бензин</option>
+                                    <option value="Дизель">Дизель</option>
+                                    <option value="Газ / Бензин (ГБО)">Газ / Бензин</option>
+                                    <option value="Гібрид">Гібрид</option>
+                                    <option value="Електро">Електро</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="flex:1;">
+                                <label for="clientBodySelect" style="font-size: 11px;">Кузов</label>
+                                <select id="clientBodySelect" style="font-size: 12px;">
+                                    <option value="">Не вказано</option>
+                                    <option value="Седан">Седан</option>
+                                    <option value="Хетчбек">Хетчбек</option>
+                                    <option value="Універсал">Універсал</option>
+                                    <option value="Кросовер / Позашляховик">Кросовер</option>
+                                    <option value="Купе">Купе</option>
+                                    <option value="Мінівен">Мінівен</option>
+                                </select>
+                            </div>
+                        </div>
 
-                <div class="form-row" style="display:flex; gap:8px;">
-                    <div class="form-group" style="flex:1;">
-                        <label for="clientEngineInput">Двигун / Об'єм</label>
-                        <input type="text" id="clientEngineInput" placeholder="2.0 TFSI, 3.0 TDI...">
-                    </div>
-                    <div class="form-group" style="flex:1;">
-                        <label for="clientTransInput">Тип КПП</label>
-                        <select id="clientTransInput">
-                            <option value="">Не обрано</option>
-                            <option value="АКПП">АКПП (Автомат)</option>
-                            <option value="МКПП">МКПП (Механіка)</option>
-                            <option value="Робот">Робот (DSG)</option>
-                            <option value="Варіатор">Варіатор (CVT)</option>
-                        </select>
-                    </div>
-                    <div class="form-group" style="flex:1;">
-                        <label for="clientMileageInput">Поточний пробіг (км)</label>
-                        <input type="number" id="clientMileageInput" placeholder="напр. 142000" min="0">
-                    </div>
-                </div>
+                        <div class="form-row" style="display:flex; gap:8px;">
+                            <div class="form-group" style="flex:1;">
+                                <label for="clientEngineInput" style="font-size: 11px;">Двигун</label>
+                                <input type="text" id="clientEngineInput" placeholder="2.0L, 1.6..." style="font-size: 12px;">
+                            </div>
+                            <div class="form-group" style="flex:1;">
+                                <label for="clientTransInput" style="font-size: 11px;">КПП</label>
+                                <select id="clientTransInput" style="font-size: 12px;">
+                                    <option value="">Не обрано</option>
+                                    <option value="АКПП">АКПП (Автомат)</option>
+                                    <option value="МКПП">МКПП (Механіка)</option>
+                                </select>
+                            </div>
+                        </div>
 
-                <button type="submit" class="btn btn-primary" style="margin-top:8px;">
-                    <span>Зберегти в Мій Гараж</span>
+                        <input type="hidden" id="clientGenInput">
+                        <input type="hidden" id="clientRestyleSelect">
+                    </div>
+                </details>
+
+                <button type="submit" class="btn btn-primary" style="margin-top:10px; font-size:15px; padding:12px; font-weight:700;">
+                    <span>🚗 Зберегти авто в Гараж</span>
                 </button>
             </form>
         </div>
@@ -1119,127 +1125,7 @@
         </div>
     </div>
 
-    <!-- 🚘 МОДАЛЬНЕ ВІКНО: ДОДАТИ АВТО В ГАРАЖ -->
-    <div id="addNewCarModal" class="modal-backdrop" style="display: none; align-items:center; justify-content:center; padding:16px;">
-        <div class="card modal-content" style="max-width: 580px; width: 100%; max-height: 90vh; overflow-y: auto; background: var(--bg-card); color: var(--text-main); border-radius: 16px; padding: 20px; position:relative;">
-            <div style="display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--border-color); padding-bottom:12px; margin-bottom:16px;">
-                <div style="display:flex; align-items:center; gap:12px;">
-                    <button onclick="closeAddNewCarModal()" class="ios-back-btn">‹ Назад</button>
-                    <h2 style="font-size:18px; font-weight:800; color:var(--text-main); margin:0;">Додати авто в гараж</h2>
-                </div>
-            </div>
 
-            <form id="addGarageCarForm" autocomplete="off" style="margin-top: 10px; display:flex; flex-direction:column; gap:10px;">
-                <div class="form-group">
-                    <label for="clientVinInput">VIN-код (17 символів, автозаповнення )</label>
-                    <div class="vin-input-wrapper">
-                        <input type="text" id="clientVinInput" placeholder="17 символів (введіть для автопідбору)">
-                        <span class="vin-counter" id="clientVinCounter">0/17</span>
-                    </div>
-                </div>
-
-                <div class="form-row" style="display:flex; gap:8px;">
-                    <div class="form-group" style="flex:1;">
-                        <label for="clientBrandSelect">Марка авто <span class="req">*</span></label>
-                        <select id="clientBrandSelect" required>
-                            <option value="">Завантаження марок...</option>
-                        </select>
-                    </div>
-                    <div class="form-group" style="flex:1;">
-                        <label for="clientModelSelect">Модель авто <span class="req">*</span></label>
-                        <select id="clientModelSelect" required disabled>
-                            <option value="">Спочатку оберіть марку</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-row" id="customBrandModelRow" style="display:none; gap:8px; margin-top:8px;">
-                    <div class="form-group" id="customBrandGroup" style="flex:1; display:none;">
-                        <label for="clientCustomBrandInput">Власний бренд / Марка <span class="req">*</span></label>
-                        <input type="text" id="clientCustomBrandInput" placeholder="наприклад: Lada, Bugatti">
-                    </div>
-                    <div class="form-group" id="customModelGroup" style="flex:1; display:none;">
-                        <label for="clientCustomModelInput">Власна модель <span class="req">*</span></label>
-                        <input type="text" id="clientCustomModelInput" placeholder="наприклад: 2107, Chiron">
-                    </div>
-                </div>
-
-                <div class="form-row" style="display:flex; gap:8px;">
-                    <div class="form-group" style="flex:1;">
-                        <label for="clientYearSelect">Рік випуску</label>
-                        <select id="clientYearSelect">
-                            <option value="">Не вказано</option>
-                        </select>
-                    </div>
-                    <div class="form-group" style="flex:1;">
-                        <label for="clientFuelSelect">Тип палива</label>
-                        <select id="clientFuelSelect">
-                            <option value="">Не вказано</option>
-                            <option value="Бензин">Бензин</option>
-                            <option value="Дизель">Дизель</option>
-                            <option value="Газ / Бензин (ГБО)">Газ / Бензин (ГБО)</option>
-                            <option value="Гібрид">Гібрид (Hybrid)</option>
-                            <option value="Електро">Електро (EV)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-row" style="display:flex; gap:8px;">
-                    <div class="form-group" style="flex:1;">
-                        <label for="clientBodySelect">Тип кузова</label>
-                        <select id="clientBodySelect">
-                            <option value="">Не вказано</option>
-                            <option value="Седан">Седан</option>
-                            <option value="Хетчбек">Хетчбек</option>
-                            <option value="Універсал">Універсал</option>
-                            <option value="Кросовер / Позашляховик">Кросовер / Позашляховик</option>
-                            <option value="Купе">Купе</option>
-                            <option value="Кабріолет">Кабріолет</option>
-                            <option value="Мінівен">Мінівен</option>
-                            <option value="Пікап">Пікап</option>
-                        </select>
-                    </div>
-                    <div class="form-group" style="flex:1;">
-                        <label for="clientGenInput">Поколення / Код кузова</label>
-                        <input type="text" id="clientGenInput" placeholder="напр. B8, E60, W212, Mk7...">
-                    </div>
-                    <div class="form-group" style="flex:1;">
-                        <label for="clientRestyleSelect">Виконання</label>
-                        <select id="clientRestyleSelect">
-                            <option value="">Не вказано</option>
-                            <option value="Дорестайлінг">Дорестайлінг (Pre-facelift)</option>
-                            <option value="Рестайлінг">Рестайлінг (Facelift / LCI)</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-row" style="display:flex; gap:8px;">
-                    <div class="form-group" style="flex:1;">
-                        <label for="clientEngineInput">Двигун / Об'єм</label>
-                        <input type="text" id="clientEngineInput" placeholder="2.0 TFSI, 3.0 TDI...">
-                    </div>
-                    <div class="form-group" style="flex:1;">
-                        <label for="clientTransInput">Тип КПП</label>
-                        <select id="clientTransInput">
-                            <option value="">Не обрано</option>
-                            <option value="АКПП">АКПП (Автомат)</option>
-                            <option value="МКПП">МКПП (Механіка)</option>
-                            <option value="Робот">Робот (DSG)</option>
-                            <option value="Варіатор">Варіатор (CVT)</option>
-                        </select>
-                    </div>
-                    <div class="form-group" style="flex:1;">
-                        <label for="clientMileageInput">Поточний пробіг (км)</label>
-                        <input type="number" id="clientMileageInput" placeholder="напр. 142000" min="0">
-                    </div>
-                </div>
-
-                <button type="submit" class="btn btn-primary" style="margin-top:8px;">
-                    <span>Зберегти в Мій Гараж</span>
-                </button>
-            </form>
-        </div>
-    </div>
 
     <!-- Модальне вікно Рекомендації додати VIN-код -->
     <div id="vinRecommendationModal" class="modal-backdrop" style="display: none;">
@@ -1300,7 +1186,7 @@
         </div>
     </div>
     
-    <script src="js/car_models.js?v=36.0"></script>
+    <script src="js/car_models.js?v=37.0"></script>
     <!-- OTP Modal -->
     <div id="otpModal" class="modal-backdrop" style="display: none;">
         <div class="card modal-content" style="max-width: 400px; width: 90%;">
@@ -1352,6 +1238,6 @@
         </div>
     </div>
 
-    <script src="app.js?v=36.0"></script>
+    <script src="app.js?v=37.0"></script>
 </body>
 </html>

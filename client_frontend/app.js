@@ -41,8 +41,34 @@ function renderGarage(cars) {
         requestCarSelect.innerHTML = `<option value="">Спочатку додайте авто в гараж</option>`;
     }
 
+    const addCarBtn = document.querySelector('button[onclick="openAddNewCarModal()"]');
+    if (addCarBtn) {
+        if (cars.length > 0) {
+            addCarBtn.style.border = 'none';
+            addCarBtn.style.background = 'var(--primary)';
+            addCarBtn.style.color = '#fff';
+            addCarBtn.style.padding = '12px';
+            addCarBtn.style.width = '100%';
+            addCarBtn.style.marginTop = '20px';
+            addCarBtn.innerHTML = '<span>+ Додати ще авто</span>';
+        } else {
+            addCarBtn.style.border = '2px dashed var(--primary)';
+            addCarBtn.style.background = 'transparent';
+            addCarBtn.style.color = 'var(--primary)';
+            addCarBtn.style.padding = '16px';
+            addCarBtn.style.width = '100%';
+            addCarBtn.innerHTML = '<span>+ Додати авто</span>';
+        }
+    }
+
     if (cars.length === 0) {
-        garageContainer.innerHTML = `<div style="text-align: center; color: var(--text-muted); padding: 24px;"> Ваш гараж порожній. Додайте перше авто нижче (до 10 машин).</div>`;
+        garageContainer.innerHTML = `
+            <div style="text-align: center; color: var(--text-muted); padding: 32px 16px; background: var(--bg-card); border-radius: 16px; border: 1px solid var(--border-color); margin-top: 12px;">
+                <div style="font-size: 42px; margin-bottom: 8px;">🚗</div>
+                <div style="font-weight: 700; font-size: 16px; color: var(--text-main); margin-bottom: 4px;">У вас поки немає доданих авто</div>
+                <div style="font-size: 13px; color: var(--text-muted);">Натисніть кнопку нижче, щоб додати автомобіль</div>
+            </div>
+        `;
         return;
     }
 

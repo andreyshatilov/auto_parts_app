@@ -34,7 +34,12 @@ const CAR_DATABASE = {
         "Valkyrie"
     ],
     "Audi": [
-        "A1",
+		"80", 
+		"89",
+		"100",
+		"200",
+		"A1",
+		"A2",
         "A3",
         "A4",
         "A4 Allroad",
@@ -71,6 +76,7 @@ const CAR_DATABASE = {
         "RS7",
         "RS Q3",
         "RS Q8",
+		"TTS",
         "TT RS"
     ],
     "Bentley": [
@@ -96,6 +102,7 @@ const CAR_DATABASE = {
         "X6",
         "X7",
         "XM",
+		"Z",
         "Z4",
         "i3",
         "i4",

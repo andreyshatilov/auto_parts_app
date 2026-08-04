@@ -1,6 +1,6 @@
 /* 
  * Міністерство Запчастин — Admin Web Panel Theme
- * Premium Banking Red-Black Light UI Theme (#dc2626 Carmine Red)
+ * Premium Banking Red-Black Light UI Theme (#2563eb Royal Blue)
  */
 
 
@@ -9,9 +9,9 @@
     --bg-card: #ffffff;
     --border-color: #e2e8f0;
     
-    --primary: #dc2626;
-    --primary-dark: #b91c1c;
-    --primary-glow: rgba(220, 38, 38, 0.2);
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --primary-glow: rgba(37, 99, 235, 0.2);
     
     --accent: #0f172a;
     --accent-light: #334155;
@@ -211,7 +211,7 @@ input:focus, select:focus {
 }
 
 .btn-primary {
-    background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
     color: white;
     box-shadow: 0 4px 12px var(--primary-glow);
 }
@@ -269,7 +269,7 @@ input:focus, select:focus {
 }
 
 .badge-engine { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
-.badge-trans { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+.badge-trans { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
 
 .toast-container {
     position: fixed;
