@@ -253,7 +253,7 @@ function switchNavTab(tabName) {
  * Switches between Login and Register tabs on the Authentication screen.
  * @param {string} tabName - 'login' or 'register'.
  */
-function switchAuthTab(tabName) {
+window.switchAuthTab = function(tabName) {
     document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
     document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
     if (tabName === 'register') {
@@ -366,7 +366,7 @@ let lastVinDecodeData = null;
 
 function setupEventListeners() {
     let lastDecodedVin = '';
-    clientVinInput.addEventListener('input', async (e) => {
+    if (clientVinInput) clientVinInput.addEventListener('input', async (e) => {
         let val = e.target.value.replace(/\s+/g, '').toUpperCase();
         e.target.value = val;
         clientVinCounter.textContent = `${val.length}/17`;
@@ -539,7 +539,7 @@ function setupEventListeners() {
 
     let currentRegEmail = '';
 
-    registerForm.addEventListener('submit', async (e) => {
+    if (registerForm) registerForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const fName = document.getElementById('regFirstName').value.trim();
         const lName = document.getElementById('regLastName').value.trim();
@@ -620,7 +620,7 @@ function setupEventListeners() {
         }
     };
 
-    loginForm.addEventListener('submit', async (e) => {
+    if (loginForm) loginForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const phoneOrEmail = document.getElementById('loginPhone').value.trim();
         const password = document.getElementById('loginPassword').value.trim();
@@ -715,7 +715,7 @@ function setupEventListeners() {
         }
     };
 
-    claimPinForm.addEventListener('submit', async (e) => {
+    if (claimPinForm) claimPinForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const pinCode = document.getElementById('pinInput').value.trim();
         const token = localStorage.getItem(TOKEN_STORAGE_KEY);
@@ -736,7 +736,7 @@ function setupEventListeners() {
         }
     });
 
-    addGarageCarForm.addEventListener('submit', async (e) => {
+    if (addGarageCarForm) addGarageCarForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const token = localStorage.getItem(TOKEN_STORAGE_KEY);
 
@@ -845,7 +845,7 @@ function setupEventListeners() {
         }
     });
 
-    requestForm.addEventListener('submit', async (e) => {
+    if (requestForm) requestForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const token = localStorage.getItem(TOKEN_STORAGE_KEY);
         const carId = parseInt(requestCarSelect.value);
@@ -874,7 +874,7 @@ function setupEventListeners() {
         }
     });
 
-    returnForm.addEventListener('submit', async (e) => {
+    if (returnForm) returnForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!activeReturnOrderId) return;
         const token = localStorage.getItem(TOKEN_STORAGE_KEY);
@@ -897,7 +897,7 @@ function setupEventListeners() {
         }
     });
 
-    chatSendForm.addEventListener('submit', async (e) => {
+    if (chatSendForm) chatSendForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         if (!activeChatRequestId) return;
         const token = localStorage.getItem(TOKEN_STORAGE_KEY);
@@ -924,13 +924,14 @@ function setupEventListeners() {
         editForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const token = localStorage.getItem(TOKEN_STORAGE_KEY);
+            const city = document.getElementById('editShippingCity')?.value.trim() || '';
+            const branch = document.getElementById('editShippingBranch')?.value.trim() || '';
+            const shipping = (city && branch) ? `${city}, Відділення ${branch}` : (city || branch || null);
             const payload = {
                 first_name: document.getElementById('editFirstName').value.trim(),
                 last_name: document.getElementById('editLastName').value.trim(),
                 email: document.getElementById('editEmail').value.trim() || null,
-                city = document.getElementById('editShippingCity')?.value.trim() || '',
-                branch = document.getElementById('editShippingBranch')?.value.trim() || '',
-                shipping_address: (city && branch ? `${city}, Відділення ${branch}` : (city || branch || null))
+                shipping_address: shipping
             };
             try {
                 const res = await fetch(`${API_BASE_URL}/clients/me`, {
@@ -1346,7 +1347,7 @@ async function submitOrderFromProposal(e, proposalId, carId) {
 
         if (shippingAddress) {
             currentClient.shipping_address = shippingAddress;
-            userShippingDisplay.textContent = shippingAddress;
+            if (userShippingDisplay) userShippingDisplay.textContent = shippingAddress;
             document.getElementById('profileShipping').textContent = shippingAddress;
         }
 
