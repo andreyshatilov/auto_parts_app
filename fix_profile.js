@@ -1,0 +1,1 @@
+const fs = require('fs'); let c = fs.readFileSync('client_frontend/app.js', 'utf-8'); c = c.replace('showToast(\'Профіль успішно оновлено!\');', 'showToast(\'Профіль успішно оновлено!\');\n                closeEditProfileModal();'); fs.writeFileSync('client_frontend/app.js', c);

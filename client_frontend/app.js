@@ -2114,3 +2114,4 @@ window.uploadAndSendTabChatFile = async function(file) {
         showToast(err.message, 'error');
     }
 };
+
