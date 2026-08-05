@@ -613,6 +613,14 @@ def decode_vin(vin: str = Query(..., min_length=3, max_length=17, description="V
                     if full_series:
                         decoded_result['series'] = full_series
 
+                    # FIX: Make sure BMW series ends up in Model if it's missing,
+                    # so that 5-Series shows up as Model instead of getting lost.
+                    if make and make.upper() == 'BMW' and full_series:
+                        if not decoded_result.get('model'):
+                            decoded_result['model'] = full_series
+                        elif 'SERIES' not in decoded_result['model'].upper() and 'SERIES' in full_series.upper():
+                            decoded_result['model'] = f"{full_series} {decoded_result['model']}"
+
                     # --- Комплектація ---
                     if trim:
                         decoded_result['trim'] = trim

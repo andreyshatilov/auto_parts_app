@@ -143,554 +143,177 @@
                     </button>
                 </div><!-- End of viewGarage -->
                 <!-- ВКЛАДКА 2: ЗАПИТИ ТА ШВИДКІ КОМПЛЕКТИ ТО -->
+                <!-- ВКЛАДКА 2: СПРОЩЕНИЙ ПРОСТИЙ ІНТЕРФЕЙС ПІДБОРУ ДЛЯ ДІДА -->
                 <div id="viewRequests" class="view-content" style="display: none;">
-                    <!-- ВІЗУАЛЬНИЙ КАТАЛОГ ВУЗЛІВ ТА ШВИДКЕ ТО -->
                     <section class="section">
-                        <div class="section-header">
-                            <h3>Вузли та Компоненти Авто</h3>
-                            <span class="cars-badge" style="background:#fef3c7; color:#d97706; border-color:#fde68a;">Швидкий підбір</span>
+                        <div class="section-header" style="margin-bottom: 12px;">
+                            <h3 style="font-size: 18px; font-weight: 800;">Запит на підбір запчастин</h3>
                         </div>
 
-                        <!-- ПІНІНГ ЗВЕРХУ: ШВИДКЕ ТО ТА РІДИНИ -->
-                        <div class="card" style="background: linear-gradient(135deg, #ffffff 0%, #fffbe6 100%); border: 1px solid #fef08a; position:relative; overflow:hidden;">
-                            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                                <div style="display:flex; align-items:center; gap:10px;">
-                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#fef3c7; border-radius:8px;">
-                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M12 28V52C12 54.2 13.8 56 16 56H36C38.2 56 40 54.2 40 52V28C40 25.8 38.2 24 36 24H16C13.8 24 12 25.8 12 28Z" stroke="#b45309" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M22 24V14H28V24" stroke="#b45309" stroke-width="2.5" stroke-linecap="round"/>
-                                            <path d="M34 24L46 16V22L38 28" stroke="#b45309" stroke-width="2.5" stroke-linecap="round"/>
-                                            <rect x="40" y="32" width="14" height="16" rx="2" stroke="#b45309" stroke-width="2.5"/>
-                                        </svg>
-                                    </span>
-                                    <div>
-                                        <h4 style="font-size:15px; font-weight:800; color:#b45309;">Швидке ТО & Всі Рідини</h4>
-                                        <div style="font-size:11px; color:#d97706;">Мастила, фільтри та технічні рідини</div>
-                                    </div>
-                                </div>
-                                <span style="background:#fef3c7; color:#b45309; padding:3px 8px; border-radius:12px; font-size:10px; font-weight:800;">ПІНОВАНО ВГОРІ</span>
-                            </div>
-
-                            <div style="display:flex; flex-wrap:wrap; gap:6px; margin: 10px 0;">
-                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Олива ДВС (Моторне мастило)')">Олива ДВС</span>
-                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Масляний фільтр')">Масляний фільтр</span>
-                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Повітряний фільтр')">Повітряний фільтр</span>
-                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Салонний фільтр (Вугільний)')">Фільтр салону</span>
-                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Паливний фільтр')">Паливний фільтр</span>
-                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Гальмівна рідина DOT4')">Гальмівна рідина</span>
-                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Антифриз G12 / G13')">Антифриз</span>
-                            </div>
-
-                            <button type="button" class="btn btn-primary" style="font-size:12px; padding:10px; background:linear-gradient(135deg, #d97706 0%, #b45309 100%); border:none;" onclick="applyPreset('Повний комплект Швидкого ТО: Масляний, Повітряний, Салонний фільтр, Паливний фільтр, Олива ДВС 5W-30/5W-40 та Антифриз')">
-                                <span>Замовити Повний Комплект Швидкого ТО</span>
-                            </button>
-                        </div>
-
-                        <!-- ОСНОВНІ ВУЗЛИ ТА КАТЕГОРІЇ З ЛОГІЧНИМ ЗБЕРЕЖЕННЯМ МАСЛА У ДВС -->
-                        <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin-top:10px;">
-                            
-                            <!-- 1. Двигун & Олива ДВС -->
-                            <div class="card parts-cat-card" onclick="openSubCatalog(\'engine\')">">
-                                <div class="parts-cat-header">
-                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:8px;">
-                                        <!-- Realistic 4-Cylinder Engine Block with Valve Cover, Pistons, Sump & Pulleys -->
-                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M12 16C12 13.8 13.8 12 16 12H48C50.2 12 52 13.8 52 16V22H12V16Z" stroke="#0f172a" stroke-width="2.5" fill="#f8fafc"/>
-                                            <rect x="26" y="8" width="12" height="4" rx="1" stroke="#0f172a" stroke-width="2" fill="#0f172a"/>
-                                            <path d="M12 22H52V42C52 44.2 50.2 46 48 46H16C13.8 46 12 44.2 12 42V22Z" stroke="#0f172a" stroke-width="2.5" fill="#ffffff"/>
-                                            <rect x="15" y="25" width="7" height="12" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
-                                            <rect x="24" y="27" width="7" height="12" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
-                                            <rect x="33" y="25" width="7" height="12" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
-                                            <rect x="42" y="27" width="7" height="12" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
-                                            <path d="M18.5 37V42M27.5 39V42M36.5 37V42M45.5 39V42" stroke="#0f172a" stroke-width="1.5"/>
-                                            <path d="M16 42H48" stroke="#0f172a" stroke-width="2"/>
-                                            <path d="M18 46L22 54H42L46 46" stroke="#0f172a" stroke-width="2.5" fill="#f8fafc"/>
-                                            <circle cx="8" cy="26" r="3.5" stroke="#0f172a" stroke-width="2"/>
-                                            <circle cx="8" cy="38" r="4.5" stroke="#0f172a" stroke-width="2"/>
-                                            <path d="M8 22.5V33.5" stroke="#0f172a" stroke-width="1.5"/>
-                                            <path d="M52 24H58V28H52M52 32H58V36H52" stroke="#0f172a" stroke-width="2"/>
-                                        </svg>
-                                    </span>
-                                    <div>
-                                        <div class="cat-title">Двигун & Олива</div>
-                                        <div class="cat-sub">Мастило, ГРМ, помпа</div>
-                                    </div>
-                                </div>
-                                <div class="cat-chips-preview">
-                                    <span>Олива ДВС</span>
-                                    <span>ГРМ</span>
-                                    <span>Помпа</span>
-                                </div>
-                            </div>
-
-                            <!-- 2. Гальмівна система -->
-                            <div class="card parts-cat-card" onclick="openSubCatalog(\'engine\')">">
-                                <div class="parts-cat-header">
-                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:8px;">
-                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="32" cy="32" r="22" stroke="#0f172a" stroke-width="2.5" fill="#ffffff"/>
-                                            <circle cx="32" cy="32" r="14" stroke="#0f172a" stroke-width="1.5"/>
-                                            <circle cx="32" cy="32" r="7" stroke="#0f172a" stroke-width="2"/>
-                                            <circle cx="32" cy="27" r="1.2" fill="#0f172a"/>
-                                            <circle cx="37" cy="30" r="1.2" fill="#0f172a"/>
-                                            <circle cx="35" cy="36" r="1.2" fill="#0f172a"/>
-                                            <circle cx="29" cy="36" r="1.2" fill="#0f172a"/>
-                                            <circle cx="27" cy="30" r="1.2" fill="#0f172a"/>
-                                            <circle cx="20" cy="20" r="1" fill="#0f172a"/>
-                                            <circle cx="44" cy="44" r="1" fill="#0f172a"/>
-                                            <circle cx="20" cy="44" r="1" fill="#0f172a"/>
-                                            <circle cx="44" cy="20" r="1" fill="#0f172a"/>
-                                            <path d="M22 10C22 10 32 6 44 10C48 14 50 20 50 26C42 26 36 24 22 18V10Z" stroke="#0f172a" stroke-width="2.5" fill="#f1f5f9"/>
-                                        </svg>
-                                    </span>
-                                    <div>
-                                        <div class="cat-title">Гальмівна система</div>
-                                        <div class="cat-sub">Диски, колодки, супорти</div>
-                                    </div>
-                                </div>
-                                <div class="cat-chips-preview">
-                                    <span>Диски</span>
-                                    <span>Колодки</span>
-                                    <span>Рідина</span>
-                                </div>
-                            </div>
-
-                            <!-- 3. Ходова та Підвіска -->
-                            <div class="card parts-cat-card" onclick="openSubCatalog(\'brakes\')">">
-                                <div class="parts-cat-header">
-                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:8px;">
-                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <rect x="26" y="6" width="12" height="5" rx="1" stroke="#0f172a" stroke-width="2"/>
-                                            <line x1="32" y1="11" x2="32" y2="48" stroke="#0f172a" stroke-width="2.5"/>
-                                            <path d="M22 16C22 16 42 18 42 22C42 26 22 26 22 30C22 34 42 34 42 38C42 42 22 42 22 46" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
-                                            <rect x="27" y="34" width="10" height="18" rx="1" stroke="#0f172a" stroke-width="2" fill="#ffffff"/>
-                                            <circle cx="32" cy="56" r="3.5" stroke="#0f172a" stroke-width="2"/>
-                                            <path d="M12 56H28M36 56H52" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
-                                        </svg>
-                                    </span>
-                                    <div>
-                                        <div class="cat-title">Ходова & Підвіска</div>
-                                        <div class="cat-sub">Амортизатори, важелі</div>
-                                    </div>
-                                </div>
-                                <div class="cat-chips-preview">
-                                    <span>Амортизатори</span>
-                                    <span>Важелі</span>
-                                </div>
-                            </div>
-
-                            <!-- 4. Електрика & Запалювання -->
-                            <div class="card parts-cat-card" onclick="openSubCatalog(\'suspension\')">">
-                                <div class="parts-cat-header">
-                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:8px;">
-                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <rect x="18" y="6" width="6" height="5" rx="1" stroke="#0f172a" stroke-width="2"/>
-                                            <path d="M17 11H25V24H17V11Z" stroke="#0f172a" stroke-width="2"/>
-                                            <line x1="15" y1="15" x2="27" y2="15" stroke="#0f172a" stroke-width="1"/>
-                                            <line x1="15" y1="19" x2="27" y2="19" stroke="#0f172a" stroke-width="1"/>
-                                            <path d="M14 24H28V32H14V24Z" stroke="#0f172a" stroke-width="2"/>
-                                            <rect x="16" y="32" width="10" height="16" stroke="#0f172a" stroke-width="2"/>
-                                            <path d="M21 48V54H25" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
-                                            <rect x="36" y="24" width="20" height="24" rx="2" stroke="#0f172a" stroke-width="2"/>
-                                            <rect x="40" y="20" width="4" height="4" fill="#0f172a"/>
-                                            <rect x="48" y="20" width="4" height="4" fill="#0f172a"/>
-                                        </svg>
-                                    </span>
-                                    <div>
-                                        <div class="cat-title">Електрика & Свічки</div>
-                                        <div class="cat-sub">Свічки, АКБ, катушки</div>
-                                    </div>
-                                </div>
-                                <div class="cat-chips-preview">
-                                    <span>Свічки</span>
-                                    <span>АКБ</span>
-                                    <span>Катушки</span>
-                                </div>
-                            </div>
-
-                            <!-- 5. Охолодження & Клімат -->
-                            <div class="card parts-cat-card" onclick="openSubCatalog(\'electrical\')">">
-                                <div class="parts-cat-header">
-                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:8px;">
-                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <rect x="8" y="14" width="48" height="36" rx="3" stroke="#0f172a" stroke-width="2.5" fill="#ffffff"/>
-                                            <path d="M16 14V50M24 14V50M32 14V50M40 14V50M48 14V50" stroke="#0f172a" stroke-width="1" stroke-dasharray="2 2"/>
-                                            <circle cx="32" cy="32" r="13" stroke="#0f172a" stroke-width="2" fill="#ffffff"/>
-                                            <circle cx="32" cy="32" r="3" fill="#0f172a"/>
-                                            <path d="M32 19C35 23 35 28 32 28" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
-                                            <path d="M32 45C29 41 29 36 32 36" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
-                                            <path d="M19 32C23 29 28 29 28 32" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
-                                            <path d="M45 32C41 35 36 35 36 32" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
-                                        </svg>
-                                    </span>
-                                    <div>
-                                        <div class="cat-title">Охолодження & Клімат</div>
-                                        <div class="cat-sub">Радіатори, термостат</div>
-                                    </div>
-                                </div>
-                                <div class="cat-chips-preview">
-                                    <span>Антифриз</span>
-                                    <span>Термостат</span>
-                                </div>
-                            </div>
-
-                            <!-- 6. Трансмісія & Зчеплення -->
-                            <div class="card parts-cat-card" onclick="openSubCatalog(\'cooling\')">">
-                                <div class="parts-cat-header">
-                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:8px;">
-                                        <!-- Realistic Transmission Gearbox Housing & Clutch Friction Disc Assembly -->
-                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="20" cy="34" r="17" stroke="#0f172a" stroke-width="2" stroke-dasharray="3 2" fill="#ffffff"/>
-                                            <circle cx="20" cy="34" r="12" stroke="#0f172a" stroke-width="1.5"/>
-                                            <circle cx="20" cy="34" r="5" stroke="#0f172a" stroke-width="2"/>
-                                            <rect x="18" y="24" width="4" height="2.5" rx="0.5" fill="#0f172a"/>
-                                            <rect x="18" y="41.5" width="4" height="2.5" rx="0.5" fill="#0f172a"/>
-                                            <path d="M30 20H56C58.2 20 60 21.8 60 24V44C60 46.2 58.2 48 56 48H30V20Z" stroke="#0f172a" stroke-width="2.5" fill="#f8fafc"/>
-                                            <line x1="20" y1="34" x2="56" y2="34" stroke="#0f172a" stroke-width="2.5"/>
-                                            <line x1="32" y1="42" x2="54" y2="42" stroke="#0f172a" stroke-width="2"/>
-                                            <rect x="34" y="27" width="5" height="14" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
-                                            <rect x="34" y="38" width="5" height="8" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
-                                            <rect x="42" y="25" width="6" height="18" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
-                                            <rect x="42" y="39" width="6" height="6" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
-                                            <rect x="50" y="29" width="5" height="10" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
-                                            <path d="M44 20V12" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
-                                            <path d="M44 12L49 7" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
-                                            <circle cx="51" cy="5" r="3" stroke="#0f172a" stroke-width="2" fill="#0f172a"/>
-                                        </svg>
-                                    </span>
-                                    <div>
-                                        <div class="cat-title">Трансмісія & Зчеплення</div>
-                                        <div class="cat-sub">Олива КПП, зчеплення</div>
-                                    </div>
-                                </div>
-                                <div class="cat-chips-preview">
-                                    <span>Олива КПП</span>
-                                    <span>Зчеплення</span>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- Хронологічна Сервісна книжка обслуговування -->
-                    <section class="section" style="margin-top: 16px;">
-                        <div class="section-header">
-                            <h3>Хронологія Сервісної Книжки</h3>
-                        </div>
-                        <div class="timeline" id="serviceTimelineContainer">
-                            <div class="timeline-item">
-                                <div class="timeline-dot"></div>
-                                <div style="font-size: 12px; color: var(--text-muted);">Історія обслуговування заповнюється після першого замовлення</div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <!-- Прийняти авто за PIN-кодом -->
-                    <section class="section" style="margin-top: 16px;">
-                        <div class="card claim-card">
-                            <h4>Прийняти куплене авто за PIN-кодом</h4>
-                            <p class="card-desc">Введіть 6-значний код від продавця для переносу авто та всієї його сервісної книжки</p>
-                            
-                            <form id="claimPinForm" style="display: flex; gap: 8px; margin-top: 10px;">
-                                <input type="text" id="pinInput" placeholder="748-291" required style="font-family: monospace; text-transform: uppercase; flex: 1;">
-                                <button type="submit" class="btn btn-accent" style="width: 120px; padding: 10px;">Прийняти</button>
-                            </form>
-                        </div>
-                    </section>
-                    <section class="section" style="margin-top: 16px;">
-                        <div class="card action-card">
-                            <h4>Замовити підбір запчастин експерту</h4>
-                            <p class="card-desc">Опишіть деталі або оберіть готовий комплект нижче</p>
-                            
-                            <form id="requestForm" autocomplete="off" style="margin-top:10px; display:flex; flex-direction:column; gap:10px;">
+                        <div class="card" style="padding: 18px; border-radius: 16px;">
+                            <form id="requestForm" autocomplete="off" style="display:flex; flex-direction:column; gap:14px;">
+                                
                                 <div class="form-group">
-                                    <label for="requestCarSelect">Оберіть авто з гаража <span class="req">*</span></label>
-                                    <select id="requestCarSelect" required>
-                                        <option value="">Спочатку додайте авто в гараж</option>
+                                    <label for="requestCarSelect" style="font-size: 14px; font-weight: 700; color: var(--primary);">1. Оберіть ваше авто з Гаража <span class="req">*</span></label>
+                                    <select id="requestCarSelect" required style="font-size: 14px; padding: 12px; border-radius: 10px; font-weight: 600;">
+                                        <option value="">Завантаження авто...</option>
                                     </select>
                                 </div>
 
-                                <div class="form-group">
-                                    <label for="requestText">Текст запиту <span class="req">*</span></label>
-                                    <textarea id="requestText" rows="3" placeholder="наприклад: передні гальмівні диски та масляний фільтр" required></textarea>
+                                <div style="font-size: 14px; font-weight: 700; color: var(--text-main); margin-top: 4px;">2. Що саме потрібно підібрати?</div>
+
+                                <div style="display: flex; flex-direction: column; gap: 10px;">
+                                    
+                                    <div onclick="selectQuickPreset(this, 'Швидке ТО: Олива ДВС, Масляний, Повітряний, Салонний фільтри, Антифриз')" class="preset-card-option" style="background: #eff6ff; border: 2px solid #2563eb; border-radius: 12px; padding: 12px 14px; cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+                                        <div style="display: flex; align-items: center; gap: 12px;">
+                                            <span style="font-size: 26px;">🛢️</span>
+                                            <div>
+                                                <div style="font-weight: 800; font-size: 15px; color: #1e40af;">Швидке ТО & Всі Рідини</div>
+                                                <div style="font-size: 12px; color: #3b82f6;">Мастило, фільтри, антифриз</div>
+                                            </div>
+                                        </div>
+                                        <span class="preset-check" style="font-size: 18px; font-weight: 800; color: #2563eb; display: none;">✓</span>
+                                    </div>
+
+                                    <div onclick="selectQuickPreset(this, 'Гальмівна система: Передні та Задні гальмівні диски і колодки')" class="preset-card-option" style="background: #f8fafc; border: 1.5px solid var(--border-color); border-radius: 12px; padding: 12px 14px; cursor: pointer; display: flex; align-items: center; justify-content: space-between;">
+                                        <div style="display: flex; align-items: center; gap: 12px;">
+                                            <span style="font-size: 26px;">🛑</span>
+                                            <div>
+                                                <div style="font-weight: 800; font-size: 15px; color: var(--text-main);">Гальма (Перед / Зад)</div>
+                                                <div style="font-size: 12px; color: var(--text-muted);">Диски та колодки</div>
+                                            </div>
+                                        </div>
+                                        <span class="preset-check" style="font-size: 18px; font-weight: 800; color: #2563eb; display: none;">✓</span>
+                                    </div>
+
+                                    <div style="background: #f8fafc; border: 1.5px solid var(--border-color); border-radius: 12px; padding: 14px;">
+                                        <label for="requestText" style="font-weight: 700; font-size: 14px; color: var(--text-main); display: block; margin-bottom: 6px;">
+                                            ✏️ Інше (напишіть словами, що потрібно) <span class="req">*</span>
+                                        </label>
+                                        <textarea id="requestText" rows="3" placeholder="Наприклад: потрібні передні амортизатори та стійки стабілізатора..." required style="font-size: 14px; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color); width: 100%; font-family: inherit;"></textarea>
+                                        <div style="font-size: 11px; color: var(--text-muted); margin-top: 4px;">
+                                            💡 Пишіть просто як є — експерт розбереться і підбере точний варіант.
+                                        </div>
+                                    </div>
+
                                 </div>
 
-                                <!-- Пресети швидких комплектів ТО -->
-                                <div style="display:flex; gap:6px; flex-wrap:wrap;">
-                                    <button type="button" class="btn btn-secondary" style="padding:6px 10px; font-size:11px; width:auto;" onclick="applyPreset('Комплект ТО: Масляний, Повітряний, Салонний фільтр та Олива 5w-40')">Комплект ТО</button>
-                                    <button type="button" class="btn btn-secondary" style="padding:6px 10px; font-size:11px; width:auto;" onclick="applyPreset('Гальмівна система: Передні диски та передні колодки')">Гальма</button>
-                                    <button type="button" class="btn btn-secondary" style="padding:6px 10px; font-size:11px; width:auto;" onclick="applyPreset('Ходова частина: Сійки стабілізатора та сайлентблоки')">Ходова</button>
+                                <!-- ХМАРКИ КАТЕГОРІЙ -->
+                                <div style="margin-top: 10px;">
+                                    <div style="font-size: 13px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px;">Або оберіть вузол для підбору:</div>
+                                    <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px;">
+                                        
+                                        <div class="card parts-cat-card" style="padding: 10px; border-radius: 10px; cursor: pointer; background: #ffffff; border: 1px solid var(--border-color);" onclick="openSubCatalog('engine')">
+                                            <div style="display: flex; align-items: center; gap: 8px;">
+                                                <span style="font-size: 20px;">⚙️</span>
+                                                <div>
+                                                    <div style="font-weight: 800; font-size: 12px; color: var(--text-main);">Двигун & Олива</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="card parts-cat-card" style="padding: 10px; border-radius: 10px; cursor: pointer; background: #ffffff; border: 1px solid var(--border-color);" onclick="openSubCatalog('brakes')">
+                                            <div style="display: flex; align-items: center; gap: 8px;">
+                                                <span style="font-size: 20px;">🛑</span>
+                                                <div>
+                                                    <div style="font-weight: 800; font-size: 12px; color: var(--text-main);">Гальма</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="card parts-cat-card" style="padding: 10px; border-radius: 10px; cursor: pointer; background: #ffffff; border: 1px solid var(--border-color);" onclick="openSubCatalog('suspension')">
+                                            <div style="display: flex; align-items: center; gap: 8px;">
+                                                <span style="font-size: 20px;">🔩</span>
+                                                <div>
+                                                    <div style="font-weight: 800; font-size: 12px; color: var(--text-main);">Ходова</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="card parts-cat-card" style="padding: 10px; border-radius: 10px; cursor: pointer; background: #ffffff; border: 1px solid var(--border-color);" onclick="openSubCatalog('transmission')">
+                                            <div style="display: flex; align-items: center; gap: 8px;">
+                                                <span style="font-size: 20px;">⚙️</span>
+                                                <div>
+                                                    <div style="font-weight: 800; font-size: 12px; color: var(--text-main);">Трансмісія</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="card parts-cat-card" style="padding: 10px; border-radius: 10px; cursor: pointer; background: #ffffff; border: 1px solid var(--border-color);" onclick="openSubCatalog('electrical')">
+                                            <div style="display: flex; align-items: center; gap: 8px;">
+                                                <span style="font-size: 20px;">⚡</span>
+                                                <div>
+                                                    <div style="font-weight: 800; font-size: 12px; color: var(--text-main);">Електрика</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="card parts-cat-card" style="padding: 10px; border-radius: 10px; cursor: pointer; background: #ffffff; border: 1px solid var(--border-color);" onclick="openSubCatalog('cooling')">
+                                            <div style="display: flex; align-items: center; gap: 8px;">
+                                                <span style="font-size: 20px;">❄️</span>
+                                                <div>
+                                                    <div style="font-weight: 800; font-size: 12px; color: var(--text-main);">Охолодження</div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
                                 </div>
 
-                                <button type="submit" class="btn btn-accent" id="sendRequestBtn" style="margin-top:4px;">
-                                    <span>Надіслати запит експерту</span>
+                                <button type="submit" class="btn btn-primary" style="font-size: 16px; padding: 14px; border-radius: 12px; font-weight: 800; margin-top: 10px;">
+                                    <span>🚀 Надіслати запит експерту</span>
                                 </button>
                             </form>
                         </div>
                     </section>
-
-                    <!-- ШВИДКИЙ ПІДБІР З КАТЕГОРІЯМИ ТА ІКОНКАМИ -->
-                    <section class="section" style="margin-top: 16px;">
-                        <div class="card" style="padding: 14px; background: rgba(254, 243, 199, 0.4); border: 1px solid #fde047;">
-                            <div style="display:flex; align-items:center; justify-content:space-between;">
-                                <div style="display:flex; align-items:center; gap:8px;">
-                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#fef3c7; border-radius:8px;">
-                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M12 28V52C12 54.2 13.8 56 16 56H36C38.2 56 40 54.2 40 52V28C40 25.8 38.2 24 36 24H16C13.8 24 12 25.8 12 28Z" stroke="#b45309" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                                            <path d="M22 24V14H28V24" stroke="#b45309" stroke-width="2.5" stroke-linecap="round"/>
-                                            <path d="M34 24L46 16V22L38 28" stroke="#b45309" stroke-width="2.5" stroke-linecap="round"/>
-                                            <rect x="40" y="32" width="14" height="16" rx="2" stroke="#b45309" stroke-width="2.5"/>
-                                        </svg>
-                                    </span>
-                                    <div>
-                                        <h4 style="font-size:15px; font-weight:800; color:#b45309;">Швидке ТО & Всі Рідини</h4>
-                                        <div style="font-size:11px; color:#d97706;">Мастила, фільтри та технічні рідини</div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div style="display:flex; flex-wrap:wrap; gap:6px; margin: 10px 0;">
-                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Олива ДВС (Моторне мастило)')">Олива ДВС</span>
-                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Масляний фільтр')">Масляний фільтр</span>
-                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Повітряний фільтр')">Повітряний фільтр</span>
-                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Салонний фільтр (Вугільний)')">Фільтр салону</span>
-                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Паливний фільтр')">Паливний фільтр</span>
-                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Гальмівна рідина DOT4')">Гальмівна рідина</span>
-                                <span class="chip-item" onclick="applyPreset('Швидке ТО: Антифриз G12 / G13')">Антифриз</span>
-                            </div>
-
-                            <button type="button" class="btn btn-primary" style="font-size:12px; padding:10px; background:linear-gradient(135deg, #d97706 0%, #b45309 100%); border:none;" onclick="applyPreset('Повний комплект Швидкого ТО: Масляний, Повітряний, Салонний фільтр, Паливний фільтр, Олива ДВС 5W-30/5W-40 та Антифриз')">
-                                <span>Замовити Повний Комплект Швидкого ТО</span>
-                            </button>
+                </div>
+                <div id="viewChat" class="view-content" style="display: none;">
+                    <section class="section">
+                        <div class="section-header" style="margin-bottom: 10px; display:flex; justify-content:space-between; align-items:center;">
+                            <h3 style="font-size: 18px; font-weight: 800; margin:0;">💬 Чат з експертом</h3>
+                            <span class="badge badge-engine" id="chatStatusBadge">Онлайн</span>
                         </div>
 
-                        <!-- ОСНОВНІ ВУЗЛИ ТА КАТЕГОРІЇ -->
-                        <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:10px; margin-top:10px;">
+                        <!-- Вибір активного запиту/діалогу -->
+                        <div style="margin-bottom: 12px;">
+                            <label for="tabChatRequestSelect" style="font-size: 12px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 4px;">Оберіть тему діалогу / запиту:</label>
+                            <select id="tabChatRequestSelect" onchange="switchChatRequest(this.value)" style="width:100%; font-size:13px; font-weight:700; padding:10px; border-radius:10px; border:1px solid var(--border-color); background:var(--bg-card); color:var(--text-main);">
+                                <option value="">Завантаження діалогів...</option>
+                            </select>
+                        </div>
+
+                        <!-- Контейнер повідомлень та кошторису -->
+                        <div class="card" style="padding: 12px; border-radius: 16px; min-height: 380px; display: flex; flex-direction: column; justify-content: space-between;">
                             
-                            <!-- 1. Двигун & Олива ДВС -->
-                            <div class="card parts-cat-card" onclick="openSubCatalog(\'transmission\')">">
-                                <div class="parts-cat-header">
-                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:8px;">
-                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <path d="M12 16C12 13.8 13.8 12 16 12H48C50.2 12 52 13.8 52 16V22H12V16Z" stroke="#0f172a" stroke-width="2.5" fill="#f8fafc"/>
-                                            <rect x="26" y="8" width="12" height="4" rx="1" stroke="#0f172a" stroke-width="2" fill="#0f172a"/>
-                                            <path d="M12 22H52V42C52 44.2 50.2 46 48 46H16C13.8 46 12 44.2 12 42V22Z" stroke="#0f172a" stroke-width="2.5" fill="#ffffff"/>
-                                            <rect x="15" y="25" width="7" height="12" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
-                                            <rect x="24" y="27" width="7" height="12" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
-                                            <rect x="33" y="25" width="7" height="12" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
-                                            <rect x="42" y="27" width="7" height="12" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
-                                            <path d="M18.5 37V42M27.5 39V42M36.5 37V42M45.5 39V42" stroke="#0f172a" stroke-width="1.5"/>
-                                            <path d="M16 42H48" stroke="#0f172a" stroke-width="2"/>
-                                            <path d="M18 46L22 54H42L46 46" stroke="#0f172a" stroke-width="2.5" fill="#f8fafc"/>
-                                            <circle cx="8" cy="26" r="3.5" stroke="#0f172a" stroke-width="2"/>
-                                            <circle cx="8" cy="38" r="4.5" stroke="#0f172a" stroke-width="2"/>
-                                            <path d="M8 22.5V33.5" stroke="#0f172a" stroke-width="1.5"/>
-                                            <path d="M52 24H58V28H52M52 32H58V36H52" stroke="#0f172a" stroke-width="2"/>
-                                        </svg>
-                                    </span>
-                                    <div>
-                                        <div class="cat-title">Двигун & Олива</div>
-                                        <div class="cat-sub">Мастило, ГРМ, помпа</div>
-                                    </div>
-                                </div>
-                                <div class="cat-chips-preview">
-                                    <span>Олива ДВС</span>
-                                    <span>ГРМ</span>
-                                    <span>Помпа</span>
+                            <div id="tabChatMessagesContainer" style="display: flex; flex-direction: column; gap: 10px; max-height: 52vh; overflow-y: auto; padding-right: 4px;">
+                                <div style="text-align: center; color: var(--text-muted); padding: 40px 10px;">
+                                    💬 Оберіть запит зверху для перегляду діалогу та кошторису
                                 </div>
                             </div>
 
-                            <!-- 2. Гальмівна система -->
-                            <div class="card parts-cat-card" onclick="applyPreset('Категорія ГАЛЬМА: Передні/Задні гальмівні диски, Колодки, Супорти, Шланги, Рідина DOT4')">
-                                <div class="parts-cat-header">
-                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:8px;">
-                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="32" cy="32" r="22" stroke="#0f172a" stroke-width="2.5" fill="#ffffff"/>
-                                            <circle cx="32" cy="32" r="14" stroke="#0f172a" stroke-width="1.5"/>
-                                            <circle cx="32" cy="32" r="7" stroke="#0f172a" stroke-width="2"/>
-                                            <circle cx="32" cy="27" r="1.2" fill="#0f172a"/>
-                                            <circle cx="37" cy="30" r="1.2" fill="#0f172a"/>
-                                            <circle cx="35" cy="36" r="1.2" fill="#0f172a"/>
-                                            <circle cx="29" cy="36" r="1.2" fill="#0f172a"/>
-                                            <circle cx="27" cy="30" r="1.2" fill="#0f172a"/>
-                                            <circle cx="20" cy="20" r="1" fill="#0f172a"/>
-                                            <circle cx="44" cy="44" r="1" fill="#0f172a"/>
-                                            <circle cx="20" cy="44" r="1" fill="#0f172a"/>
-                                            <circle cx="44" cy="20" r="1" fill="#0f172a"/>
-                                            <path d="M22 10C22 10 32 6 44 10C48 14 50 20 50 26C42 26 36 24 22 18V10Z" stroke="#0f172a" stroke-width="2.5" fill="#f1f5f9"/>
-                                        </svg>
-                                    </span>
-                                    <div>
-                                        <div class="cat-title">Гальмівна система</div>
-                                        <div class="cat-sub">Диски, колодки, супорти</div>
-                                    </div>
-                                </div>
-                                <div class="cat-chips-preview">
-                                    <span>Диски</span>
-                                    <span>Колодки</span>
-                                    <span>Рідина</span>
-                                </div>
-                            </div>
-
-                            <!-- 3. Ходова та Підвіска -->
-                            <div class="card parts-cat-card" onclick="applyPreset('Категорія ХОДОВА: Амортизатори, Сайлентблоки, Важелі, Стійки стабілізатора, Ступичні підшипники')">
-                                <div class="parts-cat-header">
-                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:8px;">
-                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <rect x="26" y="6" width="12" height="5" rx="1" stroke="#0f172a" stroke-width="2"/>
-                                            <line x1="32" y1="11" x2="32" y2="48" stroke="#0f172a" stroke-width="2.5"/>
-                                            <path d="M22 16C22 16 42 18 42 22C42 26 22 26 22 30C22 34 42 34 42 38C42 42 22 42 22 46" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
-                                            <rect x="27" y="34" width="10" height="18" rx="1" stroke="#0f172a" stroke-width="2" fill="#ffffff"/>
-                                            <circle cx="32" cy="56" r="3.5" stroke="#0f172a" stroke-width="2"/>
-                                            <path d="M12 56H28M36 56H52" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
-                                        </svg>
-                                    </span>
-                                    <div>
-                                        <div class="cat-title">Ходова & Підвіска</div>
-                                        <div class="cat-sub">Амортизатори, важелі</div>
-                                    </div>
-                                </div>
-                                <div class="cat-chips-preview">
-                                    <span>Амортизатори</span>
-                                    <span>Важелі</span>
-                                </div>
-                            </div>
-
-                            <!-- 4. Електрика & Запалювання -->
-                            <div class="card parts-cat-card" onclick="applyPreset('Категорія ЕЛЕКТРИКА: Свічки запалювання, АКБ, Катушки запалювання, Генератор, Стартер, Датчики')">
-                                <div class="parts-cat-header">
-                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:8px;">
-                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <rect x="18" y="6" width="6" height="5" rx="1" stroke="#0f172a" stroke-width="2"/>
-                                            <path d="M17 11H25V24H17V11Z" stroke="#0f172a" stroke-width="2"/>
-                                            <line x1="15" y1="15" x2="27" y2="15" stroke="#0f172a" stroke-width="1"/>
-                                            <line x1="15" y1="19" x2="27" y2="19" stroke="#0f172a" stroke-width="1"/>
-                                            <path d="M14 24H28V32H14V24Z" stroke="#0f172a" stroke-width="2"/>
-                                            <rect x="16" y="32" width="10" height="16" stroke="#0f172a" stroke-width="2"/>
-                                            <path d="M21 48V54H25" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
-                                            <rect x="36" y="24" width="20" height="24" rx="2" stroke="#0f172a" stroke-width="2"/>
-                                            <rect x="40" y="20" width="4" height="4" fill="#0f172a"/>
-                                            <rect x="48" y="20" width="4" height="4" fill="#0f172a"/>
-                                        </svg>
-                                    </span>
-                                    <div>
-                                        <div class="cat-title">Електрика & Свічки</div>
-                                        <div class="cat-sub">Свічки, АКБ, катушки</div>
-                                    </div>
-                                </div>
-                                <div class="cat-chips-preview">
-                                    <span>Свічки</span>
-                                    <span>АКБ</span>
-                                    <span>Катушки</span>
-                                </div>
-                            </div>
-
-                            <!-- 5. Охолодження & Клімат -->
-                            <div class="card parts-cat-card" onclick="applyPreset('Категорія ОХОЛОДЖЕННЯ: Радіатор охолодження, Радіатор печки/кондиціонера, Термостат, Антифриз, Фреон')">
-                                <div class="parts-cat-header">
-                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:8px;">
-                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <rect x="8" y="14" width="48" height="36" rx="3" stroke="#0f172a" stroke-width="2.5" fill="#ffffff"/>
-                                            <path d="M16 14V50M24 14V50M32 14V50M40 14V50M48 14V50" stroke="#0f172a" stroke-width="1" stroke-dasharray="2 2"/>
-                                            <circle cx="32" cy="32" r="13" stroke="#0f172a" stroke-width="2" fill="#ffffff"/>
-                                            <circle cx="32" cy="32" r="3" fill="#0f172a"/>
-                                            <path d="M32 19C35 23 35 28 32 28" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
-                                            <path d="M32 45C29 41 29 36 32 36" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
-                                            <path d="M19 32C23 29 28 29 28 32" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
-                                            <path d="M45 32C41 35 36 35 36 32" stroke="#0f172a" stroke-width="2" stroke-linecap="round"/>
-                                        </svg>
-                                    </span>
-                                    <div>
-                                        <div class="cat-title">Охолодження & Клімат</div>
-                                        <div class="cat-sub">Радіатори, термостат</div>
-                                    </div>
-                                </div>
-                                <div class="cat-chips-preview">
-                                    <span>Антифриз</span>
-                                    <span>Термостат</span>
-                                </div>
-                            </div>
-
-                            <!-- 6. Трансмісія & Зчеплення -->
-                            <div class="card parts-cat-card" onclick="applyPreset('Категорія ТРАНСМІСІЯ: Олива КПП, Комплект зчеплення, Маховик, Фільтр АКПП, ШРУС / Приводи')">
-                                <div class="parts-cat-header">
-                                    <span class="cat-icon" style="width:36px; height:36px; display:inline-flex; align-items:center; justify-content:center; background:#f1f5f9; border-radius:8px;">
-                                        <svg width="28" height="28" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                            <circle cx="20" cy="34" r="17" stroke="#0f172a" stroke-width="2" stroke-dasharray="3 2" fill="#ffffff"/>
-                                            <circle cx="20" cy="34" r="12" stroke="#0f172a" stroke-width="1.5"/>
-                                            <circle cx="20" cy="34" r="5" stroke="#0f172a" stroke-width="2"/>
-                                            <rect x="18" y="24" width="4" height="2.5" rx="0.5" fill="#0f172a"/>
-                                            <rect x="18" y="41.5" width="4" height="2.5" rx="0.5" fill="#0f172a"/>
-                                            <path d="M30 20H56C58.2 20 60 21.8 60 24V44C60 46.2 58.2 48 56 48H30V20Z" stroke="#0f172a" stroke-width="2.5" fill="#f8fafc"/>
-                                            <line x1="20" y1="34" x2="56" y2="34" stroke="#0f172a" stroke-width="2.5"/>
-                                            <line x1="32" y1="42" x2="54" y2="42" stroke="#0f172a" stroke-width="2"/>
-                                            <rect x="34" y="27" width="5" height="14" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
-                                            <rect x="34" y="38" width="5" height="8" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
-                                            <rect x="42" y="25" width="6" height="18" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
-                                            <rect x="42" y="39" width="6" height="6" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
-                                            <rect x="50" y="29" width="5" height="10" rx="1" stroke="#0f172a" stroke-width="1.5" fill="#f1f5f9"/>
-                                            <path d="M44 20V12" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
-                                            <path d="M44 12L49 7" stroke="#0f172a" stroke-width="2.5" stroke-linecap="round"/>
-                                            <circle cx="51" cy="5" r="3" stroke="#0f172a" stroke-width="2" fill="#0f172a"/>
-                                        </svg>
-                                    </span>
-                                    <div>
-                                        <div class="cat-title">Трансмісія & Зчеплення</div>
-                                        <div class="cat-sub">Олива КПП, зчеплення</div>
-                                    </div>
-                                </div>
-                                <div class="cat-chips-preview">
-                                    <span>Олива КПП</span>
-                                    <span>Зчеплення</span>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section class="section" style="margin-top: 16px;">
-                        <div class="section-header">
-                            <h3>Каталог запчастин за категоріями</h3>
-                        </div>
-                        <div class="card" style="padding:14px;">
-                            <div style="display:grid; grid-template-columns: repeat(2, 1fr); gap:8px;">
-                                <div style="background:#f8fafc; border:1px solid var(--border-color); padding:10px; border-radius:10px; cursor:pointer;" onclick="applyPreset('Категорія [ТО та Мастила]: Масляний, Салонний, Повітряний фільтр, Олива 5W-30 / 5W-40')">
-                                    <div style="font-weight:700; font-size:13px; color:var(--text-main);">ТО та Мастила</div>
-                                    <div style="font-size:11px; color:var(--text-muted);">Фільтри, олії, рідини</div>
-                                </div>
-                                <div style="background:#f8fafc; border:1px solid var(--border-color); padding:10px; border-radius:10px; cursor:pointer;" onclick="applyPreset('Категорія [Гальмівна система]: Передні та задні диски, колодки, супорти')">
-                                    <div style="font-weight:700; font-size:13px; color:var(--text-main);">Гальмівна система</div>
-                                    <div style="font-size:11px; color:var(--text-muted);">Диски, колодки, супорти</div>
-                                </div>
-                                <div style="background:#f8fafc; border:1px solid var(--border-color); padding:10px; border-radius:10px; cursor:pointer;" onclick="applyPreset('Категорія [Ходова та Підвіска]: Амортизатори, важелі, сайлентблоки, стійки')">
-                                    <div style="font-weight:700; font-size:13px; color:var(--text-main);">Ходова та Підвіска</div>
-                                    <div style="font-size:11px; color:var(--text-muted);">Амортизатори, важелі</div>
-                                </div>
-                                <div style="background:#f8fafc; border:1px solid var(--border-color); padding:10px; border-radius:10px; cursor:pointer;" onclick="applyPreset('Категорія [Двигун та ГРМ]: Ланцюг / Ремінь ГРМ, помпа, прокладки')">
-                                    <div style="font-weight:700; font-size:13px; color:var(--text-main);">Двигун та ГРМ</div>
-                                    <div style="font-size:11px; color:var(--text-muted);">Комплекти ГРМ, помпи</div>
-                                </div>
-                                <div style="background:#f8fafc; border:1px solid var(--border-color); padding:10px; border-radius:10px; cursor:pointer;" onclick="applyPreset('Категорія [Електрика та Запалювання]: Свічки запалювання, акумулятор, катушки')">
-                                    <div style="font-weight:700; font-size:13px; color:var(--text-main);">Електрика</div>
-                                    <div style="font-size:11px; color:var(--text-muted);">Свічки, АКБ, катушки</div>
-                                </div>
-                                <div style="background:#f8fafc; border:1px solid var(--border-color); padding:10px; border-radius:10px; cursor:pointer;" onclick="applyPreset('Категорія [Охолодження та Клімат]: Радіатор, термостат, антифриз')">
-                                    <div style="font-weight:700; font-size:13px; color:var(--text-main);">Охолодження</div>
-                                    <div style="font-size:11px; color:var(--text-muted);">Радіатори, термостати</div>
-                                </div>
-                            </div>
-                        </div>
-                    </section>
-
-                    <section class="section" style="margin-top: 16px;">
-                        <div class="section-header">
-                            <h3>Мої Запити та Коштописи</h3>
-                        </div>
-                        <div id="requestsHistoryContainer">
-                            <div class="loading-state">Завантаження...</div>
+                            <!-- Форма відправки повідомлення в чаті -->
+                            <form id="tabChatSendForm" onsubmit="sendTabChatMessage(event)" style="display: flex; gap: 8px; margin-top: 12px; border-top: 1px solid var(--border-color); padding-top: 10px;">
+                                <input type="file" id="tabChatFileInput" style="display:none;" onchange="uploadAndSendTabChatFile(this.files[0])">
+                                <button type="button" class="btn btn-secondary" onclick="document.getElementById('tabChatFileInput').click()" title="Прикріпити фото" style="padding: 8px 12px; font-size: 16px;">📷</button>
+                                <input type="text" id="tabChatInput" placeholder="Напишіть повідомлення експерту..." required style="flex: 1; font-size: 14px; padding: 10px; border-radius: 10px; border: 1px solid var(--border-color); background: var(--bg-page); color: var(--text-main);">
+                                <button type="submit" class="btn btn-primary" style="padding: 10px 16px; font-size: 14px; font-weight: 700;">Надіслати</button>
+                            </form>
                         </div>
                     </section>
                 </div>
 
-                <!-- ВКЛАДКА 3: МОЇ ЗАМОВЛЕННЯ ТА ТРЕКІНГ НП -->
+                <!-- ВКЛАДКА 4: МОЇ ПІДБОРИ (ІСТОРІЯ ЗАПИТІВ) -->
+                <div id="viewMyRequests" class="view-content" style="display: none;">
+                    <section class="section">
+                        <div class="section-header">
+                            <h3 style="font-size: 18px; font-weight: 800;">📋 Мої Підбори та Кошториси</h3>
+                        </div>
+                        <div id="requestsHistoryContainer">
+                            <div class="loading-state">Завантаження історіі запитів...</div>
+                        </div>
+                    </section>
+                </div>
+
                 <div id="viewOrders" class="view-content" style="display: none;">
                     <section class="section">
                         <div class="section-header">
@@ -1108,95 +731,18 @@
     <!-- Сповіщення Toast -->
     <div id="toastContainer" class="toast-container"></div>
 
-    <!-- SubCatalog Modal -->
-    <div id="subCatalogModal" class="modal-backdrop" style="display: none;">
-        <div class="card modal-content" style="max-width: 400px; width: 90%;">
-            <div class="card-header" style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
-                <h2 id="subCatalogTitle">Категорія</h2>
-                <button onclick="hideModal(document.getElementById('subCatalogModal'))" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
-            </div>
-                    <input type="email" id="editEmail" placeholder="client@example.com">
-                </div>
-
-                <div class="form-group">
-                    <label for="editShippingCity">Місто (Нова Пошта)</label>
-                    <input type="text" id="editShippingCity" placeholder="Київ">
-                </div>
-                <div class="form-group">
-                    <label for="editShippingBranch">Відділення Нової Пошти</label>
-                    <input type="text" id="editShippingBranch" placeholder="№1">
-                </div>
-
-                <button type="submit" class="btn btn-primary" style="margin-top: 6px;">
-                    <span>Зберегти зміни</span>
-                </button>
-            </form>
-        </div>
-    </div>
-
-
-
-    <!-- Модальне вікно Рекомендації додати VIN-код -->
-    <div id="vinRecommendationModal" class="modal-backdrop" style="display: none;">
-        <div class="card modal-content" style="max-width: 480px; width: 92%;">
-            <div class="card-header" style="display: flex; justify-content: space-between; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
-                <div>
-                    <h2 style="font-size:17px; color:var(--text-main);"> Рекомендація: Вкажіть VIN-код</h2>
-                    <p id="vinModalCarName" style="font-size:12px; color:var(--text-muted);">Для вашого автомобіля</p>
-                </div>
-                <button onclick="closeVinRecommendationModal()" style="background:none; border:none; color:var(--text-muted); font-size:22px; cursor:pointer; font-weight:bold;"></button>
-            </div>
-
-            <div style="margin: 14px 0; font-size: 13px; color: var(--text-muted); line-height: 1.5;">
-                <p style="margin-bottom: 10px; color: var(--text-main); font-weight: 600;">
-                    Вказівка 17-значного VIN-коду відкриє доступ до цифрового автосервісу:
-                </p>
-                <div style="background: #f8fafc; border: 1px solid var(--border-color); padding: 12px; border-radius: 12px; display: flex; flex-direction: column; gap: 8px;">
-                    <div> <strong>Сервісний бортжурнал:</strong> збереження повної історії замін та ремонту.</div>
-                    <div> <strong>Графік Планового ТО:</strong> автоматичний контроль інтервалів мастил, фільтрів та ГРМ.</div>
-                    <div> <strong>100% точний підбір:</strong> автоматичний вибір запчастин без ризику помилки.</div>
-                </div>
-            </div>
-
-            <form id="addVinForm" style="display:flex; flex-direction:column; gap:12px;">
-                <input type="hidden" id="addVinCarId">
-                <div class="form-group">
-                    <label for="addVinInput">Введіть 17 символів VIN-коду</label>
-                    <div class="vin-input-wrapper">
-                        <input type="text" id="addVinInput" placeholder="17 символів" maxlength="17" required>
-                        <span class="vin-counter" id="addVinCounter">0/17</span>
-                    </div>
-                </div>
-
-                <div style="display:flex; gap:8px;">
-                    <button type="submit" class="btn btn-primary" style="flex:1;">
-                        <span>Зберегти VIN-код</span>
-                    </button>
-                    <button type="button" onclick="closeVinRecommendationModal()" class="btn btn-secondary" style="width: auto; padding: 10px 14px;">
-                        <span>Закрити</span>
-                    </button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- Сповіщення Toast -->
-    <div id="toastContainer" class="toast-container"></div>
 
     <!-- SubCatalog Modal -->
     <div id="subCatalogModal" class="modal-backdrop" style="display: none;">
-        <div class="card modal-content" style="max-width: 400px; width: 90%;">
-            <div class="card-header" style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">
-                <h2 id="subCatalogTitle">Категорія</h2>
-                <button onclick="hideModal(document.getElementById('subCatalogModal'))" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;">✕</button>
+        <div class="card modal-content" style="max-width: 420px; width: 90%; background: #ffffff;">
+            <div class="card-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">
+                <h2 id="subCatalogTitle" style="font-size: 18px; font-weight: 800; color: var(--text-main); margin: 0;">Категорія</h2>
+                <button type="button" onclick="hideModal(document.getElementById('subCatalogModal'))" style="background:none; border:none; color:var(--text-muted); font-size:22px; cursor:pointer; font-weight:bold;">✕</button>
             </div>
-            <div id="subCatalogList" style="display: flex; flex-direction: column; gap: 8px; margin-top: 16px; max-height: 60vh; overflow-y: auto;">
-            </div>
+            <div id="subCatalogList" style="display: flex; flex-direction: column; gap: 8px; margin-top: 16px; max-height: 60vh; overflow-y: auto;"></div>
         </div>
     </div>
-    
-    <script src="js/car_models.js?v=39.0"></script>
-    <!-- OTP Modal -->
+
     <div id="otpModal" class="modal-backdrop" style="display: none;">
         <div class="card modal-content" style="max-width: 400px; width: 90%;">
             <div class="card-header" style="display: flex; justify-content: space-between; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">

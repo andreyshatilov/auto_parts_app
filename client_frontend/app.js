@@ -57,7 +57,7 @@ function renderGarage(cars) {
             addCarBtn.style.color = 'var(--primary)';
             addCarBtn.style.padding = '16px';
             addCarBtn.style.width = '100%';
-            addCarBtn.innerHTML = '<span>+ Додати авто</span>';
+            addCarBtn.innerHTML = '<span>+ Додати авто (VIN або фото)</span>';
         }
     }
 
@@ -76,7 +76,7 @@ function renderGarage(cars) {
         const isNoVin = !car.vin || car.vin.startsWith('NOVIN-');
         const vinDisplay = isNoVin ? '<span style="color:#d97706; font-weight:600;">Не вказано (Рекомендовано додати)</span>' : escapeHtml(car.vin);
 
-        const genDisplay = car.generation || (car.modification && car.modification.includes('G20') ? car.modification : 'G20 (7-ме покоління)');
+        const genDisplay = car.generation || car.modification || (car.series ? car.series : 'Не вказано');
         const engineDisplay = `${car.engine_code || '2.0L Turbo B48'} ${car.horse_power ? `(${car.horse_power})` : ' (258 к.с.)'}`;
 
         return `
@@ -928,7 +928,9 @@ function setupEventListeners() {
                 first_name: document.getElementById('editFirstName').value.trim(),
                 last_name: document.getElementById('editLastName').value.trim(),
                 email: document.getElementById('editEmail').value.trim() || null,
-                shipping_address: document.getElementById('editShipping').value.trim() || null
+                city = document.getElementById('editShippingCity')?.value.trim() || '',
+                branch = document.getElementById('editShippingBranch')?.value.trim() || '',
+                shipping_address: (city && branch ? `${city}, Відділення ${branch}` : (city || branch || null))
             };
             try {
                 const res = await fetch(`${API_BASE_URL}/clients/me`, {
@@ -1072,7 +1074,7 @@ function getBrandEmblem(brandName) {
     // Fallback HTML if image fails to load
     const fallbackHtml = `<div style="display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:12px;background:#f1f5f9;color:#0f172a;font-weight:800;font-size:11px; text-align:center; overflow:hidden; border: 1px solid #e2e8f0; margin:auto;">${b.substring(0,5)}</div>`;
     
-    const fallbackHtmlSafe = fallbackHtml.replace(/"/g, '&quot;');
+    const fallbackHtmlSafe = fallbackHtml.replace(/'/g, '&apos;').replace(/"/g, '&quot;');
     return `<img src="https://raw.githubusercontent.com/filippofilip95/car-logos-dataset/master/logos/thumb/${imgName}.png" alt="${b}" style="width:100%; height:100%; object-fit:contain; border-radius:12px; max-width:48px; max-height:48px;" onerror="this.outerHTML='${fallbackHtmlSafe}'">`;
 }
 
@@ -1188,7 +1190,7 @@ function closeVinRecommendationModal() {
 }
 
 
-async function generateTransferCode(carId, carName) {
+window.generateTransferCode = async function(carId, carName) {
     const token = localStorage.getItem(TOKEN_STORAGE_KEY);
     try {
         const res = await fetch(`${API_BASE_URL}/transfers/generate-code`, {
@@ -1462,14 +1464,12 @@ function closeReturnModal() {
 }
 
 async function openChatModal(requestId) {
-    activeChatRequestId = requestId;
-    document.getElementById('chatRequestId').textContent = requestId;
-    showModal(chatModal);
-    await loadChatMessages(requestId);
+    switchNavTab('chat');
+    switchChatRequest(requestId);
 }
 
 function closeChatModal() {
-    hideModal(chatModal);
+    // Kept for backward compatibility if called
 }
 
 async function loadChatMessages(requestId) {
@@ -1570,53 +1570,67 @@ let currentDetailCarId = null;
 let currentDetailCarObj = null;
 
 window.openCarDetailModal = function(carId) {
-    if (!currentClient || !currentClient.cars) return;
-    const car = currentClient.cars.find(c => c.id === carId);
-    if (!car) return;
+    try {
+        if (!currentClient || !currentClient.cars) return;
+        const car = currentClient.cars.find(c => c.id === carId);
+        if (!car) return;
 
-    currentDetailCarId = carId;
-    currentDetailCarObj = car;
+        currentDetailCarId = carId;
+        currentDetailCarObj = car;
 
-    const displayVin = car.vin || 'Не вказано';
+        const displayVin = car.vin || 'Не вказано';
 
-    document.getElementById('detailCarTitle').textContent = `${car.brand} ${car.model}`;
-    document.getElementById('detailCarVinBadge').textContent = `VIN: ${displayVin}`;
-    document.getElementById('detailCarBrandEmblem').innerHTML = getBrandEmblem(car.brand);
+        const safeSetText = (id, text) => { const el = document.getElementById(id); if (el) el.textContent = text; };
+        const safeSetHtml = (id, html) => { const el = document.getElementById(id); if (el) el.innerHTML = html; };
 
-    const genDisplay = car.generation ? car.generation : (car.body_type ? car.body_type : '-');
-    document.getElementById('detailCarGeneration').textContent = genDisplay;
-    document.getElementById('detailCarYear').textContent = car.release_date ? `${car.release_date} р.в.` : '-';
-    
-    const engineDisplay = car.engine_code || '-';
-    const hpDisplay = car.horse_power || '-';
-    document.getElementById('detailCarEngine').textContent = `${engineDisplay} | ${hpDisplay}`;
-    
-    document.getElementById('detailCarFuel').textContent = `${car.fuel_type || '-'} | ${car.drive_type || '-'}`;
-    document.getElementById('detailCarTrans').textContent = `${car.transmission_type || '-'} ${car.transmission_code ? `(${car.transmission_code})` : ''}`;
-    document.getElementById('detailCarColor').textContent = car.color_code || '-';
-    document.getElementById('detailCarPlant').textContent = car.assembly_plant || '-';
-    document.getElementById('detailCarMileage').textContent = `${(car.mileage || 0).toLocaleString('uk-UA')} км`;
+        safeSetText('detailCarTitle', `${car.brand} ${car.model}`);
+        safeSetText('detailCarVinBadge', `VIN: ${displayVin}`);
+        safeSetHtml('detailCarBrandEmblem', getBrandEmblem(car.brand));
 
-    const heroImg = document.getElementById('carHeroPhoto');
-    const logoWrapper = document.getElementById('carLogoPlaceholder');
+        const genDisplay = car.generation ? car.generation : (car.body_type ? car.body_type : '-');
+        safeSetText('detailCarGeneration', genDisplay);
+        safeSetText('detailCarYear', car.release_date ? `${car.release_date} р.в.` : '-');
+        
+        const engineDisplay = car.engine_code || '-';
+        const hpDisplay = car.horse_power || '-';
+        safeSetText('detailCarEngine', `${engineDisplay} | ${hpDisplay}`);
+        
+        safeSetText('detailCarFuel', `${car.fuel_type || '-'} | ${car.drive_type || '-'}`);
+        safeSetText('detailCarTrans', `${car.transmission_type || '-'} ${car.transmission_code ? `(${car.transmission_code})` : ''}`);
+        safeSetText('detailCarColor', car.color_code || '-');
+        safeSetText('detailCarPlant', car.assembly_plant || '-');
+        
+        const mileageStr = car.mileage ? Number(car.mileage).toLocaleString('uk-UA') : '0';
+        safeSetText('detailCarMileage', `${mileageStr} км`);
 
-    if (car.custom_photo_url) {
-        heroImg.src = car.custom_photo_url;
-        heroImg.style.display = 'block';
-        if(logoWrapper) logoWrapper.style.display = 'none';
-    } else {
-        heroImg.style.display = 'none';
-        if(logoWrapper) {
-            logoWrapper.style.display = 'flex';
-            logoWrapper.innerHTML = getBrandEmblem(car.brand);
+        const heroImg = document.getElementById('carHeroPhoto');
+        const logoWrapper = document.getElementById('carLogoPlaceholder');
+
+        if (car.custom_photo_url) {
+            if(heroImg) { heroImg.src = car.custom_photo_url; heroImg.style.display = 'block'; }
+            if(logoWrapper) logoWrapper.style.display = 'none';
+        } else {
+            if(heroImg) heroImg.style.display = 'none';
+            if(logoWrapper) {
+                logoWrapper.style.display = 'flex';
+                logoWrapper.innerHTML = getBrandEmblem(car.brand);
+            }
         }
+
+        const btnPass = document.getElementById('detailPassportBtn');
+        if(btnPass) btnPass.onclick = () => window.open(`${API_BASE_URL}/invoices/car/${car.id}/passport`, '_blank');
+        
+        const btnPin = document.getElementById('detailPinBtn');
+        if(btnPin) btnPin.onclick = () => generateTransferCode(car.id, `${car.brand} ${car.model}`);
+        
+        const btnDel = document.getElementById('detailDeleteBtn');
+        if(btnDel) btnDel.onclick = () => deleteCarFromGarage(car.id, car.brand, car.model, car.vin);
+
+        const modal = document.getElementById('carDetailModal');
+        if(modal) showModal(modal);
+    } catch(e) {
+        console.error("openCarDetailModal error:", e);
     }
-
-    document.getElementById('detailPassportBtn').onclick = () => window.open(`${API_BASE_URL}/invoices/car/${car.id}/passport`, '_blank');
-    document.getElementById('detailPinBtn').onclick = () => generateTransferCode(car.id, `${car.brand} ${car.model}`);
-    document.getElementById('detailDeleteBtn').onclick = () => deleteCarFromGarage(car.id, car.brand, car.model, car.vin);
-
-    showModal(document.getElementById('carDetailModal'));
 };
 
 window.closeCarDetailModal = function() {
@@ -1735,95 +1749,6 @@ window.uploadCustomCarPhoto = async function(file) {
     } else {
         showToast('Система завантаження тимчасово недоступна.', 'error');
     }
-};
-
-
-const catalogStructure = {
-    engine: {
-        title: "Двигун & Олива",
-        items: [
-            "Мастило моторне", "Фільтр масляний", "Комплект ГРМ", "Помпа водяна", 
-            "Прокладка ГБЦ", "Прокладка клапанної кришки", "Сальники", "Поршневі кільця", 
-            "Вкладиші", "Опорні подушки двигуна"
-        ]
-    },
-    brakes: {
-        title: "Гальмівна система",
-        items: [
-            "Гальмівні колодки (передні)", "Гальмівні колодки (задні)", 
-            "Гальмівні диски (передні)", "Гальмівні диски (задні)",
-            "Гальмівна рідина", "Ремкомплект супорта", "Гальмівні шланги", "Трос ручника"
-        ]
-    },
-    suspension: {
-        title: "Ходова & Підвіска",
-        items: [
-            "Амортизатори (передні)", "Амортизатори (задні)", 
-            "Стійки стабілізатора", "Втулки стабілізатора", 
-            "Важелі підвіски", "Сайлентблоки", "Кульові опори", 
-            "Ступичні підшипники", "Пружини"
-        ]
-    },
-    electrical: {
-        title: "Електрика & Свічки",
-        items: [
-            "Свічки запалювання", "Свічки розжарювання", 
-            "Акумулятор (АКБ)", "Котушка запалювання", 
-            "Високовольтні дроти", "Генератор", "Стартер", "Лампи"
-        ]
-    },
-    cooling: {
-        title: "Охолодження & Клімат",
-        items: [
-            "Радіатор охолодження", "Антифриз", "Термостат", 
-            "Вентилятор радіатора", "Радіатор кондиціонера", 
-            "Фреон", "Фільтр салону", "Компресор кондиціонера"
-        ]
-    },
-    transmission: {
-        title: "Трансмісія & Зчеплення",
-        items: [
-            "Мастило КПП", "Мастило АКПП", "Комплект зчеплення", 
-            "Маховик", "Вижимний підшипник", "ШРУС (Граната)", 
-            "Піввісь", "Підвісний підшипник", "Сальники приводу"
-        ]
-    }
-};
-
-window.openSubCatalog = function(categoryKey) {
-    const data = catalogStructure[categoryKey];
-    if(!data) return;
-
-    document.getElementById('subCatalogTitle').innerText = data.title;
-    
-    const listContainer = document.getElementById('subCatalogList');
-    listContainer.innerHTML = '';
-    
-    // Add "All Category" button
-    const allBtn = document.createElement('button');
-    allBtn.style = 'padding:12px; background:var(--primary); color:white; border:none; border-radius:8px; font-weight:600; cursor:pointer; text-align:left; font-size:14px;';
-    allBtn.innerText = '➡️ ' + data.title + ' (Весь вузол)';
-    allBtn.onclick = () => {
-        applyPreset(data.title);
-        hideModal(document.getElementById('subCatalogModal'));
-    };
-    listContainer.appendChild(allBtn);
-
-    // Add individual items
-    data.items.forEach(item => {
-        const btn = document.createElement('button');
-        btn.style = 'padding:12px; background:#f1f5f9; color:var(--text-main); border:none; border-radius:8px; font-weight:500; cursor:pointer; text-align:left; font-size:14px; transition:background 0.2s;';
-        btn.innerText = item;
-        btn.onmouseover = () => btn.style.background = '#e2e8f0';
-        btn.onmouseout = () => btn.style.background = '#f1f5f9';
-        btn.onclick = () => {
-            applyPreset(item);
-            hideModal(document.getElementById('subCatalogModal'));
-        };
-        listContainer.appendChild(btn);
-    });
-    
-    showModal(document.getElementById('subCatalogModal'));
 };
 
 
